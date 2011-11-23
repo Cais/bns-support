@@ -144,6 +144,7 @@ function get_pluginsused() {
                 }
             }
         }
+        /** @noinspection PhpUndefinedVariableInspection */
         if ( ! $plugins_dir || !$plugin_files ) {
             return $wp_plugins;
         }
@@ -269,17 +270,17 @@ add_action( 'widgets_init', 'load_BNS_Support_Widget' );
 
 class BNS_Support_Widget extends WP_Widget {
         function BNS_Support_Widget() {
-                /* Widget settings. */
+                /** Widget settings */
                 $widget_ops = array( 'classname' => 'bns-support', 'description' => __( 'Widget to display and share common helpful support details.' ) );
-                /* Widget control settings. */
+                /** Widget control settings */
                 $control_ops = array( 'width' => 200, 'id_base' => 'bns-support' );
-                /* Create the widget. */
+                /** Create the widget */
                 $this->WP_Widget( 'bns-support', 'BNS Support', $widget_ops, $control_ops );
         }
 
-        function widget( $args, $instance ) {
+        function widget( $args, $instance) {
                 extract( $args );
-                /* User-selected settings. */
+                /** User-selected settings */
                 $title        = apply_filters( 'widget_title', $instance['title'] );
                 $blog_admin   = $instance['blog_admin'];
                 $show_plugins = $instance['show_plugins'];
@@ -290,14 +291,19 @@ class BNS_Support_Widget extends WP_Widget {
                     /**
                      * @todo Change to conditional based on capability not `user_level`
                      */
+                    /** @noinspection PhpUndefinedFieldInspection */
                     if ( ( !$blog_admin ) || ( $current_user->user_level == '10' ) ) {
                         echo '<div class="bns-support">'; /* CSS wrapper */
 
-                        /* Before widget (defined by themes). */
+                        /** @var    $before_widget  string - defined by theme */
                         echo $before_widget;
-
-                        /* Title of widget (before and after defined by themes). */
+                        /** Widget $title, $before_widget, and $after_widget defined by theme */
                         if ( $title )
+                            /**
+                             * @var $before_title   string - defined by theme
+                             * @var $after_title    string - defined by theme
+                             */
+                            /** @noinspection PhpUndefinedVariableInspection */
                             echo $before_title . $title . $after_title;
 
                         /* Start - Display support information */
@@ -331,12 +337,15 @@ class BNS_Support_Widget extends WP_Widget {
 
                         if ( function_exists( 'is_multisite' ) && is_multisite() ) {
                             $current_site = get_current_site();
+                            /** @noinspection PhpUndefinedFieldInspection */
                             $home_domain = 'http://' . $current_site->domain . $current_site->path;
                             /**
                              * @todo Change to conditional based on capability not `user_level`
                              */
+                            /** @noinspection PhpUndefinedFieldInspection */
                             if ( $current_user->user_level < 10 ) {
                                 /* If multisite is "true" then direct ALL users to main site administrator */
+                                /** @noinspection PhpUndefinedFieldInspection */
                                 echo '<li>Please review with your main site administrator at <a href="' . $home_domain . '">' . $current_site->site_name . '</a> for additional assistance.</li>';
                             } else {
                                 echo 'You are the Admin';
@@ -365,7 +374,7 @@ class BNS_Support_Widget extends WP_Widget {
                             echo '<h6>Compliments of <a href="http://buynowshop.com/wordpress-services" target="_blank">WordPress Services</a> at <a href="http://buynowshop.com" target="_blank">BuyNowShop.com</a></h6>';
                         }
 
-                        /* After widget (defined by themes). */
+                        /** @var $after_widget string - defined by theme */
                         echo $after_widget;
 
                         echo '</div> <!-- .bns-support -->'; /* end CSS wrapper */
