@@ -76,6 +76,8 @@ Please stay current with your WordPress installation, your active theme, and you
 * released ...
 * confirmed compatible with WordPress version 3.3
 * added PHPDoc style documentation
+* added `BNS Support TextDomain` i18n support
+* added `Enqueue Plugin Scripts and Styles`
 
 = 1.0 =
 * released June 2011

@@ -48,12 +48,40 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * Last revised November 23, 2011
  */
 
+/**
+ * BNS Support TextDomain
+ * Make plugin text available for translation (i18n)
+ *
+ * @package:    BNS_Support
+ * @since:      0.6
+ *
+ * @internal    Note: Translation files are expected to be found in the plugin root folder / directory.
+ */
+load_plugin_textdomain( 'bns-support' );
+// End: BNS Support TextDomain
+
+/**
+ * Check installed WordPress version for compatibility
+ *
+ * @package     BNS_Inline_Asides
+ * @since       0.1
+ * @internal    Version 2.8 being used in reference to ...
+ *
+ * @version     1.1
+ * Last revised November 23, 2011
+ * Re-write to be i18n compatible
+ *
+ * @todo Check version requirements
+ */
 global $wp_version;
-$exit_message = 'BNS Support requires WordPress version 2.8 or newer. <a href="http://codex.wordpress.org/Upgrading_WordPress">Please Update!</a>';
+$exit_message = __( 'BNS Support requires WordPress version 2.8 or newer. <a href="http://codex.wordpress.org/Upgrading_WordPress">Please Update!</a>', 'bns-support' );
 if ( version_compare( $wp_version, "2.8", "<" ) ) {
     exit ( $exit_message );
 }
 
+/**
+ * @todo Find another way to display active plugins without throwing offset errors like Lester Chan's code does currently
+ */
 /* ---- Credit to Lester Chan's WP-PluginsUsed ---- */
 /* ---- http://lesterchan.net/portfolio/programming/php/#wp-pluginsused ---- */
 ### Define: Show Plugin Version Number?
@@ -63,7 +91,7 @@ define('PLUGINSUSED_SHOW_VERSION', true);
 $pluginsused_hidden_plugins = array();
 
 ### Function: WordPress Get Plugin Data
-function get_pluginsused_data($plugin_file) {
+function get_pluginsused_data( $plugin_file ) {
         $plugin_data = implode( '', file( $plugin_file ) );
         preg_match( "|Plugin Name:(.*)|i", $plugin_data, $plugin_name );
         preg_match( "|Plugin URI:(.*)|i", $plugin_data, $plugin_uri );
@@ -211,13 +239,27 @@ function display_pluginsused( $type, $display = false ) {
 }
 /* ---- Above credit to Lester Chan's plugin WP-PluginsUsed ---- */
 
-// Add BNS Support Scripts and Styles
+/**
+ * Enqueue Plugin Scripts and Styles
+ *
+ * Adds plugin stylesheet and allows for custom stylesheet to be added by end-user.
+ *
+ * @package BNS_Support
+ * @since   1.0
+ * @version 1.1
+ *
+ * Last revised November 23, 2011
+ */
 function BNS_Support_Scripts_and_Styles() {
-        /* Scripts */
-        /* Styles */
-        wp_enqueue_style( 'BNS-Support-Style', plugin_dir_url( __FILE__ ) . 'bns-support-style.css', array(), '1.0', 'screen' );
+        /* Enqueue Scripts */
+        /* Enqueue Styles */
+        wp_enqueue_style( 'BNS-Support-Style', plugin_dir_url( __FILE__ ) . 'bns-support-style.css', array(), '1.1', 'screen' );
+        if ( is_readable( plugin_dir_path( __FILE__ ) . 'bns-support-custom-style.css' ) ) { // Only enqueue if available
+            wp_enqueue_style( 'BNS-Support-Custom-Style', plugin_dir_url( __FILE__ ) . 'bns-support-custom-style.css', array(), '1.1', 'screen' );
+        }
 }
 add_action( 'wp_enqueue_scripts', 'BNS_Support_Scripts_and_Styles' );
+// End: Enqueue Plugin Scripts and Styles
 
 /** Register widget */
 function load_BNS_Support_Widget() {
