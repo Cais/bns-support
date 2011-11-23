@@ -1,0 +1,30 @@
+/*  This file is part of BNS Support
+
+    Copyright 2009-2011  Edward Caissie  (email : edward.caissie@gmail.com)
+
+    BNS Support is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License, version 2, as
+    published by the Free Software Foundation.
+    
+    You may NOT assume that you can use any other version of the GPL.
+
+    BNS Support is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+/* CSS Document for WordPress plugin: BNS Support */
+div.bns-support {text-align: left;}
+div.bns-support h6 {
+  font-family:italic;
+  font-size:x-small;
+  font-weight:normal;
+  margin-bottom: 0;
+  text-align:center;
+}
+/* Last revised June 4, 2011 version 1.0 */
