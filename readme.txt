@@ -81,6 +81,7 @@ Please stay current with your WordPress installation, your active theme, and you
 * replaced Lester Chan's code with the (nearly identical) 'Plugin Lister' code by Paul G Getty
 * added corrections to 'Plugin Lister' code
 * removed 'Plugin Lister' options and excess/unneeded code
+* removed 'Plugin Lister' description
 * To-DO: merge 'Plugin Lister' code completely into plugin
 
 = 1.0 =
