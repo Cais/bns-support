@@ -80,165 +80,390 @@ if ( version_compare( $wp_version, "2.8", "<" ) ) {
 }
 
 /**
- * @todo Find another way to display active plugins without throwing offset errors like Lester Chan's code does currently
+ * @todo Find way to display active plugins with links ...
  */
-/* ---- Credit to Lester Chan's WP-PluginsUsed ---- */
-/* ---- http://lesterchan.net/portfolio/programming/php/#wp-pluginsused ---- */
-### Define: Show Plugin Version Number?
-define('PLUGINSUSED_SHOW_VERSION', true);
 
-### Variable: Plugins To Hide?
-$pluginsused_hidden_plugins = array();
+/** ------------------------------------------------------------------------- */
+/**
+ * Plugin Lister
+ * - Thanks to a GPL-compatible license, Plugin Lister by Paul G Getty is being
+ * included in its entirety.
+ *
+ * @package BNS_Support
+ * @since 1.9.1
+ *
+ *
+ * @subpackage Plugin_Lister
+ * @link http://wordpress.org/extend/plugins/wp-plugin-lister/
+ * @version 2.1.0
+ *
+ * @author Paul G Petty
+ * @link http://paulgriffinpetty.com
+ *
+ * @todo completely merge, strip out excess, and re-write(?) 'Plugin Lister'
+ */
 
-### Function: WordPress Get Plugin Data
-function get_pluginsused_data( $plugin_file ) {
-        $plugin_data = implode( '', file( $plugin_file ) );
-        preg_match( "|Plugin Name:(.*)|i", $plugin_data, $plugin_name );
-        preg_match( "|Plugin URI:(.*)|i", $plugin_data, $plugin_uri );
-        preg_match( "|Description:(.*)|i", $plugin_data, $description );
-        preg_match( "|Author:(.*)|i", $plugin_data, $author_name );
-        preg_match( "|Author URI:(.*)|i", $plugin_data, $author_uri );
-        if ( preg_match( "|Version:(.*)|i", $plugin_data, $version ) ) {
-            $version = trim( $version[1] );
-        } else {
-            $version = '';
+define("PluginListerVersion", "2.1.0");
+
+$PluginListerOptions = array(
+    'title' => '',
+    'description' => '',
+    'show_theme_data' => 'off'
+);
+
+define("PluginListerOptions", serialize($PluginListerOptions));
+
+function wp_list_all_active_plugins() {
+
+    if(!function_exists('get_plugin_data')){
+
+    	function get_plugin_data( $plugin_file, $markup = true, $translate = true ) {
+    		// We don't need to write to the file, so just open for reading.
+    		$fp = fopen($plugin_file, 'r');
+
+    		// Pull only the first 8kiB of the file in.
+    		$plugin_data = fread( $fp, 8192 );
+
+    		// PHP will close file handle, but we are good citizens.
+    		fclose($fp);
+
+    		preg_match( '|Plugin Name:(.*)$|mi', $plugin_data, $name );
+    		preg_match( '|Plugin URI:(.*)$|mi', $plugin_data, $uri );
+    		preg_match( '|Version:(.*)|i', $plugin_data, $version );
+    		preg_match( '|Description:(.*)$|mi', $plugin_data, $description );
+    		preg_match( '|Author:(.*)$|mi', $plugin_data, $author_name );
+    		preg_match( '|Author URI:(.*)$|mi', $plugin_data, $author_uri );
+    		preg_match( '|Text Domain:(.*)$|mi', $plugin_data, $text_domain );
+    		preg_match( '|Domain Path:(.*)$|mi', $plugin_data, $domain_path );
+
+    		foreach ( array( 'name', 'uri', 'version', 'description', 'author_name', 'author_uri', 'text_domain', 'domain_path' ) as $field ) {
+    			if ( !empty( ${$field} ) )
+    				${$field} = trim(${$field}[1]);
+    			else
+    				${$field} = '';
+    		}
+
+    		$plugin_data = array(
+    					'Name' => $name, 'Title' => $name, 'PluginURI' => $uri, 'Description' => $description,
+    					'Author' => $author_name, 'AuthorURI' => $author_uri, 'Version' => $version,
+    					'TextDomain' => $text_domain, 'DomainPath' => $domain_path
+    					);
+    		if ( $markup || $translate )
+    			$plugin_data = _get_plugin_data_markup_translate($plugin_data, $markup, $translate);
+    		return $plugin_data;
+    	}
+
+    }
+
+    if(!function_exists('_get_plugin_data_markup_translate')){
+
+    	function _get_plugin_data_markup_translate($plugin_data, $markup = true, $translate = true) {
+
+    		//Translate fields
+    		if( $translate && ! empty($plugin_data['TextDomain']) ) {
+    			if( ! empty( $plugin_data['DomainPath'] ) )
+                    load_plugin_textdomain($plugin_data['TextDomain'], dirname($plugin_file). $plugin_data['DomainPath']);
+    			else
+    				load_plugin_textdomain($plugin_data['TextDomain'], dirname($plugin_file));
+
+    			foreach ( array('Name', 'PluginURI', 'Description', 'Author', 'AuthorURI', 'Version') as $field )
+    				$plugin_data[ $field ] = translate($plugin_data[ $field ], $plugin_data['TextDomain']);
+    		}
+
+    		//Apply Markup
+    		if ( $markup ) {
+    			if ( ! empty($plugin_data['PluginURI']) && ! empty($plugin_data['Name']) )
+    				$plugin_data['Title'] = '<a href="' . $plugin_data['PluginURI'] . '" title="' . __( 'Visit plugin homepage' ) . '">' . $plugin_data['Name'] . '</a>';
+    			else
+    				$plugin_data['Title'] = $plugin_data['Name'];
+
+    			if ( ! empty($plugin_data['AuthorURI']) )
+    				$plugin_data['Author'] = '<a href="' . $plugin_data['AuthorURI'] . '" title="' . __( 'Visit author homepage' ) . '">' . $plugin_data['Author'] . '</a>';
+
+    			$plugin_data['Description'] = wptexturize( $plugin_data['Description'] );
+    			if( ! empty($plugin_data['Author']) )
+    				$plugin_data['Description'] .= ' <cite>' . sprintf( __('By %s'), $plugin_data['Author'] ) . '.</cite>';
+    		}
+
+    		$plugins_allowedtags = array('a' => array('href' => array(),'title' => array()),'abbr' => array('title' => array()),'acronym' => array('title' => array()),'code' => array(),'em' => array(),'strong' => array());
+
+    		// Sanitize all displayed data
+    		$plugin_data['Title']       = wp_kses($plugin_data['Title'], $plugins_allowedtags);
+    		$plugin_data['Version']     = wp_kses($plugin_data['Version'], $plugins_allowedtags);
+    		$plugin_data['Description'] = wp_kses($plugin_data['Description'], $plugins_allowedtags);
+    		$plugin_data['Author']      = wp_kses($plugin_data['Author'], $plugins_allowedtags);
+
+    		return $plugin_data;
+    	}
+
+    }
+
+	$p = get_option('active_plugins');
+
+    $plugin_list = "";
+
+    $PluginListerOptionsStorage = getAdminOptions();
+
+    if ($PluginListerOptionsStorage['title'] != "") {
+        $plugin_list .= "<h3>".$PluginListerOptionsStorage['title']."</h3>";
+    }
+
+    if ($PluginListerOptionsStorage['description'] != "") {
+        $plugin_list .= "<p>".$PluginListerOptionsStorage['description']."</p>";
+    }
+
+	$plugin_list .= "<ul>";
+
+	foreach ($p as $q) {
+
+		$d = get_plugin_data( WP_PLUGIN_DIR."/".$q , false , false );
+
+		$plugin_list .= "<li>";
+		$plugin_list .= "<h4><a href='".$d['PluginURI']."' target='_new'>".$d['Title']."</a> (Version: ".$d['Version'].")</h4>";
+		$plugin_list .= "<p>";
+
+		$plugin_list .= $d['Description'];
+
+		if ($d['AuthorURI'] != "") {
+		  $plugin_list .= "<br /><em>Created by:</em> <a href='".$d['AuthorURI']."' target='_new'>".$d['Author']."</a>";
+		} else {
+    		$plugin_list .= "<br /><em>Created by:</em> ".$d['Author'];
+		}
+
+		$plugin_list .= "</p>";
+		$plugin_list .= "</li>";
+
+	}
+
+    // http://codex.wordpress.org/Function_Reference/get_theme_data
+    // need to add option to show this:
+
+    if ($PluginListerOptionsStorage['show_theme_data'] == "on") {
+
+        $theme_file = get_bloginfo( "stylesheet_url" );
+
+        if ($theme_file != "") {
+
+            $theme_data = get_theme_data( $theme_file );
+
+        	$plugin_list .= "<li class='theme_data'>";
+
+    		$plugin_list .= "<h4><a href='".$theme_data['URI']."' target='_new'>".$theme_data['Title']."</a> (Version: ".$theme_data['Version'].")</h4>";
+    		$plugin_list .= "<p>";
+
+    		$plugin_list .= $theme_data['Description'];
+
+    		if ($theme_data['Author'] != "") {
+    		  $plugin_list .= "<br /><em>Created by:</em> <a href='".$theme_data['URI']."' target='_new'>".$theme_data['Author']."</a>";
+    		} else {
+        		$plugin_list .= "<br /><em>Created by:</em> ".$theme_data['Author'];
+    		}
+
+    		$plugin_list .= "</p>";
+            $plugin_list .= "</li>";
+
         }
-        $plugin_name = trim( $plugin_name[1] );
-        $plugin_uri = trim( $plugin_uri[1] );
-        $description = wptexturize( trim( $description[1] ) );
-        $author = trim( $author_name[1] );
-        $author_uri = trim( $author_uri[1] );
-        return array( 'Plugin_Name' => $plugin_name, 'Plugin_URI' => $plugin_uri, 'Description' => $description, 'Author' => $author, 'Author_URI' => $author_uri, 'Version' => $version );
+
+    }
+
+	$plugin_list .= "</ul>";
+
+    echo $plugin_list;
+
 }
 
-### Function: WordPress Get Plugins
-function get_pluginsused() {
-        global $wp_plugins;
-        if ( isset( $wp_plugins ) ) {
-            return $wp_plugins;
-        }
-        $wp_plugins = array();
-        $plugin_root = WP_PLUGIN_DIR;
-        $plugins_dir = @ dir( $plugin_root );
-        if ( $plugins_dir ) {
-            while ( ( $file = $plugins_dir->read() ) !== false ) {
-                if ( substr( $file, 0, 1 ) == '.' ) {
-                    continue;
-                }
-                if ( is_dir( $plugin_root.'/'.$file ) ) {
-                    $plugins_subdir = @ dir( $plugin_root.'/'.$file );
-                    if ( $plugins_subdir ) {
-                        while ( ( $subfile = $plugins_subdir->read() ) !== false ) {
-                            if ( substr( $subfile, 0, 1 ) == '.' ) {
-                                continue;
-                            }
-                            if ( substr( $subfile, -4 ) == '.php' ) {
-                                $plugin_files[] = "$file/$subfile";
-                            }
-                        }
-                    }
-                } else {
-                    if ( substr( $file, -4 ) == '.php' ) {
-                        $plugin_files[] = $file;
-                    }
-                }
-            }
-        }
-        /** @noinspection PhpUndefinedVariableInspection */
-        if ( ! $plugins_dir || !$plugin_files ) {
-            return $wp_plugins;
-        }
-        foreach ( $plugin_files as $plugin_file ) {
-            if ( !is_readable( "$plugin_root/$plugin_file" ) ) {
-                continue;
-            }
-            $plugin_data = get_pluginsused_data( "$plugin_root/$plugin_file" );
-            if ( empty( $plugin_data['Plugin_Name'] ) ) {
-                continue;
-            }
-            $wp_plugins[plugin_basename( $plugin_file )] = $plugin_data;
-        }
-        uasort( $wp_plugins, create_function( '$a, $b', 'return strnatcasecmp( $a["Plugin_Name"], $b["Plugin_Name"] );' ) );
-        return $wp_plugins;
-}
+function PluginLister_init() {
 
-### Function: Process Plugins Used
-function process_pluginsused() {
-        global $plugins_used, $pluginsused_hidden_plugins;
-        if ( empty( $plugins_used ) ) {
-            $plugins_used = array();
-            $active_plugins = get_option( 'active_plugins' );
-            $plugins = get_pluginsused();
-            $plugins_allowedtags = array( 'a' => array( 'href' => array(),'title' => array() ),'abbr' => array( 'title' => array() ),'acronym' => array( 'title' => array() ),'code' => array(),'em' => array(),'strong' => array() );
-            foreach ( $plugins as $plugin_file => $plugin_data ) {
-                if ( ! in_array( $plugin_data['Plugin_Name'], $pluginsused_hidden_plugins ) ) {
-                    $plugin_data['Plugin_Name'] = wp_kses( $plugin_data['Plugin_Name'], $plugins_allowedtags );
-                    $plugin_data['Plugin_URI'] = wp_kses( $plugin_data['Plugin_URI'], $plugins_allowedtags );
-                    $plugin_data['Description'] = wp_kses( $plugin_data['Description'], $plugins_allowedtags );
-                    $plugin_data['Author'] = wp_kses( $plugin_data['Author'], $plugins_allowedtags );
-                    $plugin_data['Author_URI'] = wp_kses( $plugin_data['Author_URI'], $plugins_allowedtags );
-                    if ( PLUGINSUSED_SHOW_VERSION ) {
-                        $plugin_data['Version'] = wp_kses( $plugin_data['Version'], $plugins_allowedtags );
+    $PluginListerOptionsStorage = getAdminOptions();
+
+    if (isset($_POST['title'])) {
+        $PluginListerOptionsStorage['title'] = $_POST['title'];
+    }
+
+    if (isset($_POST['description'])) {
+        $PluginListerOptionsStorage['description'] = $_POST['description'];
+    }
+
+    if (isset($_POST['show_theme_data'])) {
+        $PluginListerOptionsStorage['show_theme_data'] = "on";
+    } else {
+        $PluginListerOptionsStorage['show_theme_data'] = "off";
+    }
+
+    update_option( 'adminOptionsName', $PluginListerOptionsStorage );
+
+    $PluginLister_title           = $PluginListerOptionsStorage['title'];
+    $PluginLister_description     = $PluginListerOptionsStorage['description'];
+    $PluginLister_show_theme_data = $PluginListerOptionsStorage['show_theme_data'];
+
+    // Admin UI starts
+
+        ?>
+
+        <style type="text/css">
+
+        #PluginLister {
+            margin:5px 15px;
+        }
+
+        #PluginListerDescription,
+        #PluginListerForm,
+        #PluginListerPreview {
+            width:550px;
+            margin:5px 0;
+            padding:5px;
+            background:#fff;
+            border:1px solid #eee;
+            -moz-border-radius:4px;
+            -webkit-border-radius:4px;
+        }
+
+        #PluginLister_preview_link {
+            margin-left:10px;
+        }
+
+        #PluginListerPreview {
+            display:none;
+        }
+
+        </style>
+
+        <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+        <script type="text/javascript"> if (!jQuery) google.load( "jquery","1.3.2" ); </script>
+        <script type="text/javascript">
+
+        function PluginLister_preview() {
+
+            jQuery("#PluginListerPreview").toggle();
+
+            var show = "Show Preview";
+            var hide = "Hide Preview";
+            var labl = jQuery("#PluginLister_preview_link");
+
+            (labl.text() == show) ? labl.text( hide ) : labl.text( show );
+
+        }
+
+        </script>
+
+        <h2>Plugin Lister, version: <?php echo PluginListerVersion; ?></h2>
+
+        <div id="PluginLister">
+
+            <p id="PluginListerDescription">
+
+                This plugin lets you share a list of all the plugins your blog is using.<br />
+                <br />
+                Currently the only way to get the list to display is to use a PHP execution
+                plugin that allows PHP to work in your posts; or you can add the PHP code
+                below directly to a WordPress Theme template for your site.<br />
+                <br />
+                <code>&lt;?php wp_list_all_active_plugins(); ?&gt;</code>
+
+            </p>
+
+            <form id="PluginListerForm" method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>&time=<?php echo time(); ?>">
+
+                <?php
+                //wp_nonce_field('PluginLister_nonce');
+                ?>
+
+                <fieldset class="PluginListerOptions">
+
+                    <label for="title"><strong>Title</strong> (that appears above list &amp; is optional)</label> <br />
+                    <input type="text" name="title" value="<?php echo $PluginLister_title; ?>" /> <br />
+
+                    <br />
+                    <br />
+                    <label for="description"><strong>Description</strong> (that appears between title and list &amp; is optional)</label> <br />
+                    <textarea name="description"><?php echo $PluginLister_description; ?></textarea> <br />
+
+                    <br />
+                    <br />
+                    <label for="description"><strong>Show Theme Info</strong> (as the last item in the list)</label> <br />
+                    <?php
+                    if ($PluginListerOptionsStorage['show_theme_data'] != "on") {
+                        echo '<input type="checkbox" name="show_theme_data" />';
                     } else {
-                        $plugin_data['Version'] = '';
+                        echo '<input type="checkbox" name="show_theme_data" checked="checked" />';
                     }
-                    if ( ! empty( $active_plugins ) && in_array( $plugin_file, $active_plugins ) ) {
-                        $plugins_used['active'][] = $plugin_data;
-                    } else {
-                        $plugins_used['inactive'][] = $plugin_data;
-                    }
-                }
-            }
-        }
+                    echo " (Currently this feature is turned ".$PluginListerOptionsStorage['show_theme_data'].")";
+                    ?> <br />
+
+                </fieldset>
+
+                <div class="submit">
+                    <input type="submit" value="Update Options" />
+                </div>
+
+            </form>
+
+            <a href="javascript:void(0)" onclick="PluginLister_preview()" id="PluginLister_preview_link">Show Preview</a> of your list.
+
+            <div id="PluginListerPreview">
+
+                <?php
+                wp_list_all_active_plugins();
+                ?>
+
+            </div>
+
+        </div>
+
+        <?php
+
+    // Admin UI ends
+
 }
 
-### Function: Display Plugins
-function display_pluginsused( $type, $display = false ) {
-        global $plugins_used;
-        $temp = '';
-        if ( empty( $plugins_used ) ) {
-            process_pluginsused();
+function getAdminOptions() {
+
+    $PluginListerOptions = unserialize(PluginListerOptions);
+
+    $PluginListerOptionsStorage = get_option( 'adminOptionsName' );
+
+    if (!empty($PluginListerOptionsStorage)) {
+        foreach ($PluginListerOptionsStorage as $key => $option) {
+            $PluginListerOptions[$key] = $option;
         }
-        if ( $type == 'stats' ) {
-            $total_active_pluginsused = sizeof( $plugins_used['active'] );
-            $total_inactive_pluginsused = sizeof( $plugins_used['inactive'] );
-            $total_pluginsused = ( $total_active_pluginsused+$total_inactive_pluginsused );
-            $temp = sprintf( _n( 'There is <strong>%s</strong> plugin used:', 'There are <strong>%s</strong> plugins used:', $total_pluginsused ), number_format_i18n( $total_pluginsused ) ) . ' ' . sprintf( _n( '<strong>%s active plugin</strong>','<strong>%s active plugins</strong>', $total_active_pluginsused ), number_format_i18n($total_active_pluginsused)).' '.__('and', 'wp-pluginsused').' '.sprintf(_n('<strong>%s inactive plugin</strong>.', '<strong>%s inactive plugins</strong>.', $total_inactive_pluginsused ), number_format_i18n( $total_inactive_pluginsused ) );
-        } else if ( $type == 'active' ) {
-            if ( $plugins_used['active'] ) {
-                foreach ( $plugins_used['active'] as $active_plugins ) {
-                    $active_plugins['Plugin_Name'] = strip_tags( $active_plugins['Plugin_Name'] );
-                    $active_plugins['Plugin_URI'] = strip_tags( $active_plugins['Plugin_URI'] );
-                    $active_plugins['Description'] = strip_tags( $active_plugins['Description'] );
-                    $active_plugins['Version'] = strip_tags( $active_plugins['Version'] );
-                    $active_plugins['Author'] = strip_tags( $active_plugins['Author'] );
-                    $active_plugins['Author_URI'] = strip_tags( $active_plugins['Author_URI'] );
-                    $active_plugins['Version'] = strip_tags( $active_plugins['Version'] );
-                    /* $temp .= '<p><img src="'.plugins_url('wp-pluginsused/images/plugin_active.gif').'" alt="'.$active_plugins['Plugin_Name'].' '.$active_plugins['Version'].'" title="'.$active_plugins['Plugin_Name'].' '.$active_plugins['Version'].'" style="vertical-align: middle;" />&nbsp;&nbsp;<strong><a href="'.$active_plugins['Plugin_URI'].'" title="'.$active_plugins['Plugin_Name'].' '.$active_plugins['Version'].'">'.$active_plugins['Plugin_Name'].' '.$active_plugins['Version'].'</a></strong><br /><strong>&raquo; '.$active_plugins['Author'].' (<a href="'.$active_plugins['Author_URI'].'" title="'.$active_plugins['Author'].'">'.__('url', 'wp-pluginsused').'</a>)</strong><br />'.$active_plugins['Description'].'</p>'; */
-                    $temp .= '<p class="bns-support-active-plugin-item"><strong><a href="' . $active_plugins['Plugin_URI'] . '" title="' . $active_plugins['Plugin_Name'] . ' ' . $active_plugins['Version'] . '">' . $active_plugins['Plugin_Name'] . ' ' . $active_plugins['Version'] . '</a></strong><br />by ' .$active_plugins['Author'] . ' (<a href="' . $active_plugins['Author_URI'] . '" title="' . $active_plugins['Author'] . '">' . __( 'url' ) . '</a>)</p>';
-                }
-            }
-        } else{
-            if ( $plugins_used['inactive'] ) {
-                foreach ( $plugins_used['inactive'] as $inactive_plugins ) {
-                    $inactive_plugins['Plugin_Name'] = strip_tags( $inactive_plugins['Plugin_Name'] );
-                    $inactive_plugins['Plugin_URI'] = strip_tags( $inactive_plugins['Plugin_URI'] );
-                    $inactive_plugins['Description'] = strip_tags( $inactive_plugins['Description'] );
-                    $inactive_plugins['Version'] = strip_tags( $inactive_plugins['Version'] );
-                    $inactive_plugins['Author'] = strip_tags( $inactive_plugins['Author'] );
-                    $inactive_plugins['Author_URI'] = strip_tags( $inactive_plugins['Author_URI'] );
-                    $inactive_plugins['Version'] = strip_tags( $inactive_plugins['Version'] );
-                    $temp .= '<p><img src="' . plugins_url( 'wp-pluginsused/images/plugin_inactive.gif' ) . '" alt="' . $inactive_plugins['Plugin_Name'] . ' ' . $inactive_plugins['Version'] . '" title="' . $inactive_plugins['Plugin_Name'] . ' ' . $inactive_plugins['Version'] . '" style="vertical-align: middle;" />&nbsp;&nbsp;<strong><a href="' . $inactive_plugins['Plugin_URI'] . '" title="' . $inactive_plugins['Plugin_Name'] . ' ' . $inactive_plugins['Version'] . '">' . $inactive_plugins['Plugin_Name'] . ' ' . $inactive_plugins['Version'] . '</a></strong><br /><strong>&raquo; ' . $inactive_plugins['Author'] . ' (<a href="' . $inactive_plugins['Author_URI'] . '" title="' . $inactive_plugins['Author'] . '">' . __( 'url' ) . '</a>)</strong><br />' . $inactive_plugins['Description'] . '</p>';
-                }
-            }
-        }
-        if ( $display ) {
-            echo $temp;
-        } else {
-            return $temp;
-        }
+    }
+
+    update_option( 'adminOptionsName', $PluginListerOptions);
+
+    return $PluginListerOptions;
+
 }
-/* ---- Above credit to Lester Chan's plugin WP-PluginsUsed ---- */
+
+function PluginLister_deactivate() {
+
+    $PluginListerOptions = unserialize(PluginListerOptions);
+
+    foreach ($PluginListerOptions as $key => $option) {
+        delete_option( $PluginListerOptions[$key] );
+    }
+
+}
+
+function PluginLister_plugin_actions( $links, $file ) {
+    $settings_link = '<a href="' . admin_url( 'options-general.php?page=' . "PluginListerCore.php4" ) . '">' . __('Settings') . '</a>';
+    array_unshift( $links, $settings_link );
+    return $links;
+}
+
+function PluginLister_ap() {
+    if (function_exists('add_options_page')) {
+        add_options_page('Plugin Lister', 'Plugin Lister', 'manage_options', basename(__FILE__), 'PluginLister_init');
+    }
+}
+
+add_action('admin_menu', 'PluginLister_ap');
+
+add_action('wp-plugin-lister/plugin_lister.php', 'PluginLister_init');
+
+register_deactivation_hook('wp-plugin-lister/plugin_lister.php', 'PluginLister_deactivate');
+
+add_action('activate_plugin_lister.php', 'wp_list_all_active_plugins');
+/** ------------------------------------------------------------------------- */
 
 /**
  * Enqueue Plugin Scripts and Styles
@@ -358,13 +583,18 @@ class BNS_Support_Widget extends WP_Widget {
                              */
                             $user_role = array_shift($user_roles);
                             echo '<li><strong>Current User Role</strong>: ' . $user_role . '</li>';
-                            /* ---- Active Plugins ---- */
-                            /* Code credit to Lester Chan's plugin at http://lesterchan.net/portfolio/programming/php/#wp-pluginsused */
+
+                            /**
+                             * @todo Display Active Plugins
+                             */
                             if ( $show_plugins ) {
                                 echo '<li><strong>Active Plugins</strong>:';
-                                display_pluginsused( 'active', $display = true );
+                                echo 'Still a Work in Bacon ... er, Progress.';
                                 echo '</li>';
+
+                                wp_list_all_active_plugins();
                             }
+                            
                         }
                         echo '</ul>';
                         /* End - Display support information */
