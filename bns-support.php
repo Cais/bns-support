@@ -197,7 +197,7 @@ add_action( 'widgets_init', 'load_BNS_Support_Widget' );
 class BNS_Support_Widget extends WP_Widget {
         function BNS_Support_Widget() {
                 /** Widget settings */
-                $widget_ops = array( 'classname' => 'bns-support', 'description' => __( 'Widget to display and share common helpful support details.' ) );
+                $widget_ops = array( 'classname' => 'bns-support', 'description' => __( 'Widget to display and share common helpful support details.', 'bns-support' ) );
                 /** Widget control settings */
                 $control_ops = array( 'width' => 200, 'id_base' => 'bns-support' );
                 /** Create the widget */
@@ -232,45 +232,40 @@ class BNS_Support_Widget extends WP_Widget {
                             /** @noinspection PhpUndefinedVariableInspection */
                             echo $before_title . $title . $after_title;
 
-                        /* Start - Display support information */
+                        /** Start displaying BNS Support information */
                         echo '<ul>';
 
-                        /* ---- Blog URL ---- */
+                        /** Blog URL */
                         echo '<li><strong>URL</strong>: ' . get_bloginfo( 'url' ) . '</li>';
 
-                        /* ---- WordPress Version ---- */
+                        /** Versions for various major factors */
                         global $wp_version;
-                        echo '<li><strong>WordPress Version:</strong> ' . $wp_version . '</li>';
-                        echo '<li><strong>PHP version:</strong> ' . phpversion() . '</li>';
-                        echo '<li><strong>MySQL version:</strong> ' . mysqli_get_client_info() . '</li>';
-                        echo '<li><strong>Multisite Enabled:</strong> ' . ( ( function_exists( 'is_multisite' ) && is_multisite() ) ? 'True' : 'False' ) . '</li>';
+                        echo '<li><strong>' . __( 'WordPress Version:', 'bns-support' ) . '</strong>' . ' ' . $wp_version . '</li>';
+                        echo '<li><strong>' . __( 'PHP version:', 'bns-support' ) . '</strong>' . ' ' . phpversion() . '</li>';
+                        echo '<li><strong>' . __( 'MySQL version:', 'bns-support' ) . '</strong> ' . ' ' . mysqli_get_client_info() . '</li>';
+                        echo '<li><strong>' . __( 'Multisite Enabled:', 'bns-support' ) . '</strong> ' . ' ' . ( ( function_exists( 'is_multisite' ) && is_multisite() ) ? __( 'True', 'bns-support' ) : __( 'False', 'bns-support' ) ) . '</li>';
 
-                        /* ---- Child Theme with Version and Parent Theme with Version ---- */
-                        $theme_version = ''; /* Clear variable */
-                        /* Get details of the theme / child theme */
+                        /** Theme Display with Parent/Child-Theme recognition */
                         $blog_css_url = get_stylesheet_directory() . '/style.css';
                         $my_theme_data = get_theme_data( $blog_css_url );
                         $parent_blog_css_url = get_template_directory() . '/style.css';
                         $parent_theme_data = get_theme_data( $parent_blog_css_url );
-                        /* Create and append to string to be displayed */
-                        $theme_version .= $my_theme_data['Name'] . ' v' . $my_theme_data['Version'];
-                        if ( $blog_css_url != $parent_blog_css_url ) {
-                            $theme_version .= ' a child of the ' . $parent_theme_data['Name'] . ' theme v' . $parent_theme_data['Version'];
+                        if ( is_child_theme() ) {
+                            printf( __( '<li><strong>Theme:</strong> %1$s v%2$s a child-theme of %3$s v%4$s</li>', 'bns-support' ), $my_theme_data['Name'], $my_theme_data['Version'], $parent_theme_data['Name'], $parent_theme_data['Version'] );
+                        } else {
+                            printf( __( '<li><strong>Theme:</strong> %1$s v%2$s</li>', 'bns-support' ), $my_theme_data['Name'], $my_theme_data['Version'] );
                         }
-
-                        /* Display string */
-                        echo '<li><strong>Theme</strong>: ' . $theme_version . '</li>';
 
                         if ( function_exists( 'is_multisite' ) && is_multisite() ) {
                             $current_site = get_current_site();
                             /** @noinspection PhpUndefinedFieldInspection */
                             $home_domain = 'http://' . $current_site->domain . $current_site->path;
                             /**
-                             * @todo Change to conditional based on capability not `user_level`
+                             * @todo Change to conditional based on `user_capability` not `user_level`
                              */
                             /** @noinspection PhpUndefinedFieldInspection */
                             if ( $current_user->user_level < 10 ) {
-                                /* If multisite is "true" then direct ALL users to main site administrator */
+                                /** If multisite is "true" then direct ALL users to main site administrator */
                                 /** @noinspection PhpUndefinedFieldInspection */
                                 echo '<li>Please review with your main site administrator at <a href="' . $home_domain . '">' . $current_site->site_name . '</a> for additional assistance.</li>';
                             } else {

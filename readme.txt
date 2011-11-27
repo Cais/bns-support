@@ -82,6 +82,8 @@ Please stay current with your WordPress installation, your active theme, and you
 * added corrections to 'Plugin Lister' code
 * removed 'Plugin Lister' options and excess/unneeded code
 * removed 'Plugin Lister' description
+* completely merged, stripped out excess, and re-wrote (as needed) 'Plugin Lister' code
+* re-wrote Parent/Child-Theme Version code
 
 = 1.0 =
 * released June 2011
