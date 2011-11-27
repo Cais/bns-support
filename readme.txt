@@ -78,6 +78,7 @@ Please stay current with your WordPress installation, your active theme, and you
 * added PHPDoc style documentation
 * added `BNS Support TextDomain` i18n support
 * added `Enqueue Plugin Scripts and Styles`
+* added i18n support
 * replaced Lester Chan's code with the (nearly identical) 'Plugin Lister' code by Paul G Getty
 * added corrections to 'Plugin Lister' code
 * removed 'Plugin Lister' options and excess/unneeded code

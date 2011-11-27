@@ -65,23 +65,17 @@ load_plugin_textdomain( 'bns-support' );
  *
  * @package     BNS_Inline_Asides
  * @since       0.1
- * @internal    Version 2.8 being used in reference to ...
+ * @internal    Version 3.0 being used in reference to `is_child_theme`
  *
  * @version     1.1
  * Last revised November 23, 2011
  * Re-write to be i18n compatible
- *
- * @todo Check version requirements
  */
 global $wp_version;
-$exit_message = __( 'BNS Support requires WordPress version 2.8 or newer. <a href="http://codex.wordpress.org/Upgrading_WordPress">Please Update!</a>', 'bns-support' );
-if ( version_compare( $wp_version, "2.8", "<" ) ) {
+$exit_message = __( 'BNS Support requires WordPress version 3.0 or newer. <a href="http://codex.wordpress.org/Upgrading_WordPress">Please Update!</a>', 'bns-support' );
+if ( version_compare( $wp_version, "3.0", "<" ) ) {
     exit ( $exit_message );
 }
-
-/**
- * @todo Find way to display active plugins with links ...
- */
 
 /** ------------------------------------------------------------------------- */
 /**
@@ -213,7 +207,8 @@ class BNS_Support_Widget extends WP_Widget {
                 $credits      = $instance['credits'];
 
                 global $current_user;
-                if ( ( is_user_logged_in() ) ) { /* Must be logged in */
+                /** Must be logged in */
+                if ( ( is_user_logged_in() ) ) {
                     /**
                      * @todo Change to conditional based on capability not `user_level`
                      */
@@ -266,10 +261,9 @@ class BNS_Support_Widget extends WP_Widget {
                             /** @noinspection PhpUndefinedFieldInspection */
                             if ( $current_user->user_level < 10 ) {
                                 /** If multisite is "true" then direct ALL users to main site administrator */
-                                /** @noinspection PhpUndefinedFieldInspection */
-                                echo '<li>Please review with your main site administrator at <a href="' . $home_domain . '">' . $current_site->site_name . '</a> for additional assistance.</li>';
+                                echo '<li>' . sprintf( __( 'Please review with your main site administrator at %1$s for additional assistance.', 'bns-support' ), '<a href="' . $home_domain . '">' . $current_site->site_name . '</a>' ) . '</li>';
                             } else {
-                                echo 'You are the Admin';
+                                echo '<li>' . __( 'You are the Admin!', 'bns-support') . '</li>';
                             }
                         } else {
                             /* ---- Current User Level ---- */
@@ -278,26 +272,21 @@ class BNS_Support_Widget extends WP_Widget {
                              * @todo Re-write to show all roles of current user
                              */
                             $user_role = array_shift($user_roles);
-                            echo '<li><strong>Current User Role</strong>: ' . $user_role . '</li>';
+                            echo '<li>' . sprintf( __( '<strong>Current User Role</strong>: %1$s ', 'bns-support' ), $user_role ) . '</li>';
 
-                            /**
-                             * @todo Display Active Plugins
-                             */
                             if ( $show_plugins ) {
-                                echo '<li><strong>Active Plugins</strong>:';
-                                echo 'Still a Work in Bacon ... er, Progress.';
-                                echo '</li>';
+                                echo '<li><strong>' . __( 'Active Plugins:', 'bns-support') . '</strong></li>';
 
                                 wp_list_all_active_plugins();
                             }
                             
                         }
                         echo '</ul>';
-                        /* End - Display support information */
+                        // End - Display BNS Support information
 
-                        /* Gratuitous self-promotion */
+                        /** Gratuitous self-promotion */
                         if ( $credits ) {
-                            echo '<h6>Compliments of <a href="http://buynowshop.com/wordpress-services" target="_blank">WordPress Services</a> at <a href="http://buynowshop.com" target="_blank">BuyNowShop.com</a></h6>';
+                            echo '<h6>' . sprintf( __( 'Compliments of %1$s at %2$s', 'bns-support' ), '<a href="http://buynowshop.com/wordpress-services" target="_blank">WordPress Services</a>', '<a href="http://buynowshop.com" target="_blank">BuyNowShop.com</a>' ) . '</h6>';
                         }
 
                         /** @var $after_widget string - defined by theme */
@@ -329,27 +318,27 @@ class BNS_Support_Widget extends WP_Widget {
                 $instance = wp_parse_args( ( array ) $instance, $defaults ); ?>
 
                 <p>
-                    <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
+                    <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', 'bns-support' ); ?></label>
                     <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo $instance['title']; ?>" />
                 </p>
 
                 <p>
                     <input class="checkbox" type="checkbox" <?php checked( ( bool ) $instance['blog_admin'], true ); ?> id="<?php echo $this->get_field_id( 'blog_admin' ); ?>" name="<?php echo $this->get_field_name( 'blog_admin' ); ?>" />
-                    <label for="<?php echo $this->get_field_id( 'blog_admin' ); ?>"><?php _e( 'Only show to administrators?' ); ?></label>
+                    <label for="<?php echo $this->get_field_id( 'blog_admin' ); ?>"><?php _e( 'Only show to administrators?', 'bns-support' ); ?></label>
                 </p>
 
                 <hr />
 
                 <p>
                     <input class="checkbox" type="checkbox" <?php checked( ( bool ) $instance['show_plugins'], true ); ?> id="<?php echo $this->get_field_id( 'show_plugins' ); ?>" name="<?php echo $this->get_field_name( 'show_plugins' ); ?>" />
-                    <label for="<?php echo $this->get_field_id( 'show_plugins' ); ?>"><?php _e( 'Show active plugins?' ); ?></label>
+                    <label for="<?php echo $this->get_field_id( 'show_plugins' ); ?>"><?php _e( 'Show active plugins?', 'bns-support' ); ?></label>
                 </p>
 
                 <hr />
 
                 <p>
                     <input class="checkbox" type="checkbox" <?php checked( ( bool ) $instance['credits'], true ); ?> id="<?php echo $this->get_field_id( 'credits' ); ?>" name="<?php echo $this->get_field_name( 'credits' ); ?>" />
-                    <label for="<?php echo $this->get_field_id( 'credits' ); ?>"><?php _e( 'Show complimentary link to ' ); ?></label><a href="http://buynowshop.com/">BuyNowShop.com</a>?
+                    <label for="<?php echo $this->get_field_id( 'credits' ); ?>"><?php _e( 'Show complimentary link to ', 'bns-support' ); ?></label><a href="http://buynowshop.com/">BuyNowShop.com</a>?
                 </p>
 
                 <?php }
