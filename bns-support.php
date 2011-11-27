@@ -85,43 +85,31 @@ if ( version_compare( $wp_version, "2.8", "<" ) ) {
 
 /** ------------------------------------------------------------------------- */
 /**
- * Plugin Lister
- * - Thanks to a GPL-compatible license, Plugin Lister by Paul G Getty is being
- * included in its entirety.
- *
- * @package BNS_Support
- * @since 1.9.1
- *
- *
- * @subpackage Plugin_Lister
+ * WP List All Active Plugins
  * @link http://wordpress.org/extend/plugins/wp-plugin-lister/
- * @version 2.1.0
- *
  * @author Paul G Petty
  * @link http://paulgriffinpetty.com
  *
- * @todo completely merge, strip out excess, and re-write(?) 'Plugin Lister'
+ * Some of the functionality of Paul G Getty's Plugin Lister code has been used
+ * to replace the old code by Lester Chan
+ *
+ * @package BNS_Support
+ * @since 1.9.1
+ * Completely merge, strip out excess, and re-write (as needed) 'Plugin Lister'
+ *
+ * @todo Fix any remaining issues as needed
  */
-
-$PluginListerOptions = array(
-                            'title' => '',
-                            'description' => '',
-                            'show_theme_data' => 'off'
-                        );
-
-define( 'PluginListerOptions', serialize( $PluginListerOptions ) );
-
 function wp_list_all_active_plugins() {
         if ( ! function_exists( 'get_plugin_data' ) ) {
-            function get_plugin_data( $plugin_file, $markup = true, $translate = true ) {
+            function get_plugin_data( $plugin_file ) {
                     // We don't need to write to the file, so just open for reading.
                     $fp = fopen( $plugin_file, 'r' );
 
-                    // Pull only the first 8kiB of the file in.
+                    // Pull only the first 8kB of the file in.
                     $plugin_data = fread( $fp, 8192 );
 
                     // PHP will close file handle, but we are good citizens.
-                    fclose($fp);
+                    fclose( $fp );
 
                     preg_match( '|Plugin Name:(.*)$|mi', $plugin_data, $name );
                     preg_match( '|Plugin URI:(.*)$|mi', $plugin_data, $uri );
@@ -140,97 +128,42 @@ function wp_list_all_active_plugins() {
                     }
 
                     $plugin_data = array(
-                                        'Name' => $name,
-                                        'Title' => $name,
-                                        'PluginURI' => $uri,
-                                        'Description' => $description,
-                                        'Author' => $author_name,
-                                        'AuthorURI' => $author_uri,
-                                        'Version' => $version,
-                                        'TextDomain' => $text_domain,
-                                        'DomainPath' => $domain_path
+                                        'Name'          => $name,
+                                        'Title'         => $name,
+                                        'PluginURI'     => $uri,
+                                        'Description'   => $description,
+                                        'Author'        => $author_name,
+                                        'AuthorURI'     => $author_uri,
+                                        'Version'       => $version,
+                                        'TextDomain'    => $text_domain,
+                                        'DomainPath'    => $domain_path
                                     );
-                    if ( $markup || $translate )
-                        $plugin_data = _get_plugin_data_markup_translate( $plugin_data, $markup, $translate );
 
                     return $plugin_data;
             }
         }
 
-        if ( ! function_exists( '_get_plugin_data_markup_translate' ) ) {
-            function _get_plugin_data_markup_translate( $plugin_data, $markup = true, $translate = true ) {
-                    //Translate fields
-                    if( $translate && ! empty( $plugin_data['TextDomain'] ) ) {
-                        if( ! empty( $plugin_data['DomainPath'] ) )
-                            load_plugin_textdomain( $plugin_data['TextDomain'], dirname( $plugin_file ). $plugin_data['DomainPath'] );
-                        else
-                            load_plugin_textdomain( $plugin_data['TextDomain'], dirname($plugin_file) );
+        $p = get_option( 'active_plugins' );
 
-                        foreach ( array('Name', 'PluginURI', 'Description', 'Author', 'AuthorURI', 'Version') as $field )
-                            $plugin_data[ $field ] = translate($plugin_data[ $field ], $plugin_data['TextDomain']);
-                    }
-
-                    //Apply Markup
-                    if ( $markup ) {
-                        if ( ! empty( $plugin_data['PluginURI'] ) && ! empty( $plugin_data['Name'] ) )
-                            $plugin_data['Title'] = '<a href="' . $plugin_data['PluginURI'] . '" title="' . __( 'Visit plugin homepage' ) . '">' . $plugin_data['Name'] . '</a>';
-                        else
-                            $plugin_data['Title'] = $plugin_data['Name'];
-
-                        if ( ! empty($plugin_data['AuthorURI']) )
-                            $plugin_data['Author'] = '<a href="' . $plugin_data['AuthorURI'] . '" title="' . __( 'Visit author homepage' ) . '">' . $plugin_data['Author'] . '</a>';
-
-                        $plugin_data['Description'] = wptexturize( $plugin_data['Description'] );
-                        if( ! empty( $plugin_data['Author'] ) )
-                            $plugin_data['Description'] .= ' <cite>' . sprintf( __('By %s'), $plugin_data['Author'] ) . '.</cite>';
-                    }
-
-                    $plugins_allowedtags = array(
-                                                'a'         => array(
-                                                                    'href' => array(),
-                                                                    'title' => array()
-                                                                    ),
-                                                'abbr'      => array(
-                                                                    'title' => array()
-                                                                    ),
-                                                'acronym'   => array(
-                                                                    'title' => array()
-                                                                    ),
-                                                'code'      => array(),
-                                                'em'        => array(),
-                                                'strong'    => array()
-                                                );
-
-                    // Sanitize all displayed data
-                    $plugin_data['Title']       = wp_kses( $plugin_data['Title'], $plugins_allowedtags );
-                    $plugin_data['Version']     = wp_kses( $plugin_data['Version'], $plugins_allowedtags );
-                    $plugin_data['Description'] = wp_kses( $plugin_data['Description'], $plugins_allowedtags );
-                    $plugin_data['Author']      = wp_kses( $plugin_data['Author'], $plugins_allowedtags );
-
-                    return $plugin_data;
-            }
-        }
-
-        $p = get_option('active_plugins');
-
-        $plugin_list = "";
-        $plugin_list .= "<ul>";
-            foreach ($p as $q) {
-                $d = get_plugin_data( WP_PLUGIN_DIR . "/" . $q , false , false );
-                $plugin_list .= "<li>";
-                    $plugin_list .= "<h4><a href='" . $d['PluginURI'] . "' target='_new'>" . $d['Title'] . "</a></h4>";
-                    $plugin_list .= "Version: " . $d['Version'];
-                    if ($d['AuthorURI'] != "") {
-                        $plugin_list .= " by: <a href='".$d['AuthorURI']."' target='_new'>".$d['Author']."</a>";
+        $plugin_list = '';
+        $plugin_list .= '<ul>';
+            foreach ( $p as $q ) {
+                $d = get_plugin_data( WP_PLUGIN_DIR . '/' . $q );
+                $plugin_list .= '<li>';
+                    $plugin_list .= __( '<strong><a href="' . $d['PluginURI'] . '">' . $d['Title'] . ' ' . $d['Version'] . '</a></strong>', 'bns-support' ) . '<br />';
+                    /** Serious hack ... the following line tests if the above preg_match failed and wrote the conditional check instead of the AuthorURI to the variable
+                     * @todo sort out where the root issue is for this
+                     */
+                    if ( substr( $d['AuthorURI'], 0, 8 ) !== '(.*)$|mi' ) {
+                        $plugin_list .= sprintf( __( 'by %1$s (<a href="' . $d['AuthorURI'] . '">url</a>)', 'bns-support' ), $d['Author'] ) . '<br />';
                     } else {
-                        $plugin_list .= " by: ".$d['Author'];
+                        $plugin_list .= sprintf( __( 'by %1$s', 'bns-support' ), $d['Author'] ) . '<br />';
                     }
-                $plugin_list .= "</li>";
+                $plugin_list .= '</li>';
             }
         $plugin_list .= '</ul>';
         echo $plugin_list;
 }
-add_action('activate_plugin_lister.php', 'wp_list_all_active_plugins');
 /** ------------------------------------------------------------------------- */
 
 /**
