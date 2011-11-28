@@ -45,7 +45,7 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * The license for this software can also likely be found here:
  * http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Last revised November 23, 2011
+ * Last revised November 27, 2011
  */
 
 /**
@@ -145,8 +145,9 @@ function wp_list_all_active_plugins() {
                 $d = get_plugin_data( WP_PLUGIN_DIR . '/' . $q );
                 $plugin_list .= '<li>';
                     $plugin_list .= __( '<strong><a href="' . $d['PluginURI'] . '">' . $d['Title'] . ' ' . $d['Version'] . '</a></strong>', 'bns-support' ) . '<br />';
+                    // if ($d['AuthorURI'] != "") {
                     /** Serious hack ... the following line tests if the above preg_match failed and wrote the conditional check instead of the AuthorURI to the variable
-                     * @todo sort out where the root issue is for this
+                     * @todo sort out where the root issue is for this; original coded commented out above does not work as expected
                      */
                     if ( substr( $d['AuthorURI'], 0, 8 ) !== '(.*)$|mi' ) {
                         $plugin_list .= sprintf( __( 'by %1$s (<a href="' . $d['AuthorURI'] . '">url</a>)', 'bns-support' ), $d['Author'] ) . '<br />';
