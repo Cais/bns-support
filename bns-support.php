@@ -63,7 +63,7 @@ load_plugin_textdomain( 'bns-support' );
 /**
  * Check installed WordPress version for compatibility
  *
- * @package     BNS_Inline_Asides
+ * @package     BNS_Support
  * @since       0.1
  * @internal    Version 3.0 being used in reference to `is_child_theme`
  *
