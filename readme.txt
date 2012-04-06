@@ -73,6 +73,7 @@ Please stay current with your WordPress installation, your active theme, and you
 
 == Changelog ==
 = 1.1.1 =
+* Added conditional checks for WordPress 3.4 deprecation of `get_theme_data`
 * confirmed compatible with WordPress 3.4
 
 = 1.1 =

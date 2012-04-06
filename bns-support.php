@@ -45,7 +45,9 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * The license for this software can also likely be found here:
  * http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Last revised November 27, 2011
+ * Last revised April 6, 2012
+ * @version 1.1.1
+ * Added conditional checks for WordPress 3.4 deprecation of `get_theme_data`
  */
 
 /**
@@ -242,14 +244,38 @@ class BNS_Support_Widget extends WP_Widget {
                         echo '<li><strong>' . __( 'Multisite Enabled:', 'bns-support' ) . '</strong> ' . ' ' . ( ( function_exists( 'is_multisite' ) && is_multisite() ) ? __( 'True', 'bns-support' ) : __( 'False', 'bns-support' ) ) . '</li>';
 
                         /** Theme Display with Parent/Child-Theme recognition */
-                        $blog_css_url = get_stylesheet_directory() . '/style.css';
-                        $my_theme_data = get_theme_data( $blog_css_url );
-                        $parent_blog_css_url = get_template_directory() . '/style.css';
-                        $parent_theme_data = get_theme_data( $parent_blog_css_url );
-                        if ( is_child_theme() ) {
-                            printf( __( '<li><strong>Theme:</strong> %1$s v%2$s a child-theme of %3$s v%4$s</li>', 'bns-support' ), $my_theme_data['Name'], $my_theme_data['Version'], $parent_theme_data['Name'], $parent_theme_data['Version'] );
+                        /**
+                         * Test what version of WordPress is installed ...
+                         * @todo optimize in the future for WordPress 3.4-beta1 and higher
+                         * @todo ... in other words, remove deprecated `get_theme_data` calls
+                         */
+                        if ( version_compare( $wp_version, "3.4-alpha", "<" ) ) {
+                            $blog_css_url = get_stylesheet_directory() . '/style.css';
+                            $my_theme_data = get_theme_data( $blog_css_url );
+                            $parent_blog_css_url = get_template_directory() . '/style.css';
+                            $parent_theme_data = get_theme_data( $parent_blog_css_url );
+                            if ( is_child_theme() ) {
+                                printf( __( '<li><strong>Theme:</strong> %1$s v%2$s a child-theme of %3$s v%4$s</li>', 'bns-support' ), $my_theme_data['Name'], $my_theme_data['Version'], $parent_theme_data['Name'], $parent_theme_data['Version'] );
+                            } else {
+                                printf( __( '<li><strong>Theme:</strong> %1$s v%2$s</li>', 'bns-support' ), $my_theme_data['Name'], $my_theme_data['Version'] );
+                            }
                         } else {
-                            printf( __( '<li><strong>Theme:</strong> %1$s v%2$s</li>', 'bns-support' ), $my_theme_data['Name'], $my_theme_data['Version'] );
+                            /** @var $active_theme_data - array object containing the current theme's data */
+                            $active_theme_data = wp_get_theme();
+                            if ( is_child_theme() ) {
+                                /** @var $parent_theme_data - array object containing the Parent Theme's data */
+                                $parent_theme_data = $active_theme_data->parent();
+                                /** @noinspection PhpUndefinedMethodInspection - IDE commentary */
+                                printf( __( '<li><strong>Theme:</strong> %1$s v%2$s a Child-Theme of %3$s v%4$s</li>', 'bns-support' ),
+                                    $active_theme_data->get( 'Name' ),
+                                    $active_theme_data->get( 'Version' ),
+                                    $parent_theme_data->get( 'Name' ),
+                                    $parent_theme_data->get( 'Version' ) );
+                            } else {
+                                printf( __( '<li><strong>Theme:</strong> %1$s v%2$s</li>', 'bns-support' ),
+                                    $active_theme_data->get( 'Name' ),
+                                    $active_theme_data->get( 'Version' ) );
+                            }
                         }
 
                         if ( function_exists( 'is_multisite' ) && is_multisite() ) {
@@ -344,4 +370,3 @@ class BNS_Support_Widget extends WP_Widget {
 
                 <?php }
 } // End class BNS_Support_Widget
-?>
