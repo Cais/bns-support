@@ -236,7 +236,10 @@ class BNS_Support_Widget extends WP_Widget {
                         /** Blog URL */
                         echo '<li><strong>URL</strong>: ' . get_bloginfo( 'url' ) . '</li>';
 
-                        /** Versions for various major factors */
+                        /**
+                         * Versions for various major factors
+                         * @todo Review `mysqli_get_client_info` usage
+                         */
                         global $wp_version;
                         echo '<li><strong>' . __( 'WordPress Version:', 'bns-support' ) . '</strong>' . ' ' . $wp_version . '</li>';
                         echo '<li><strong>' . __( 'PHP version:', 'bns-support' ) . '</strong>' . ' ' . phpversion() . '</li>';
