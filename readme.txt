@@ -76,7 +76,7 @@ Please stay current with your WordPress installation, your active theme, and you
 == Changelog ==
 = 1.2 =
 * Required version set to 3.4
-* Remove deprecated calls to wp_get_theme
+* Remove deprecated calls to `get_theme_data`
 * Changed user role testing to capability testing
 * Documentation and code format updates
 
