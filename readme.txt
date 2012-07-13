@@ -5,6 +5,8 @@ Tags: support, widget, multisite compatible
 Requires at least: 3.4
 Tested up to: 3.4
 Stable tag: 1.2
+License: GNU General Public License v2
+License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
 Widget to display and share common helpful support details.
 
@@ -75,6 +77,7 @@ Please stay current with your WordPress installation, your active theme, and you
 = 1.2 =
 * Required version set to 3.4
 * Remove deprecated calls to wp_get_theme
+* Changed user role testing to capability testing
 * Documentation and code format updates
 
 = 1.1.1 =

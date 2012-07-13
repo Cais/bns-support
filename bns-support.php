@@ -214,11 +214,7 @@ class BNS_Support_Widget extends WP_Widget {
         global $current_user;
         /** Must be logged in */
         if ( ( is_user_logged_in() ) ) {
-            /**
-             * @todo Change to conditional based on capability not `user_level`
-             */
-            /** @noinspection PhpUndefinedFieldInspection */
-            if ( ( !$blog_admin ) || ( $current_user->user_level == '10' ) ) {
+            if ( ( ! $blog_admin ) || ( current_user_can( 'manage_options' ) ) ) {
                 echo '<div class="bns-support">'; /* CSS wrapper */
 
                 /** @var    $before_widget  string - defined by theme */
@@ -268,11 +264,7 @@ class BNS_Support_Widget extends WP_Widget {
                     $current_site = get_current_site();
                     /** @noinspection PhpUndefinedFieldInspection */
                     $home_domain = 'http://' . $current_site->domain . $current_site->path;
-                    /**
-                     * @todo Change to conditional based on `user_capability` not `user_level`
-                     */
-                    /** @noinspection PhpUndefinedFieldInspection */
-                    if ( $current_user->user_level < 10 ) {
+                    if ( current_user_can( 'manage_options' ) ) {
                         /** If multisite is "true" then direct ALL users to main site administrator */
                         echo '<li>' . sprintf( __( 'Please review with your main site administrator at %1$s for additional assistance.', 'bns-support' ), '<a href="' . $home_domain . '">' . $current_site->site_name . '</a>' ) . '</li>';
                     } else {
