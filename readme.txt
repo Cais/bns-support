@@ -79,6 +79,7 @@ Please stay current with your WordPress installation, your active theme, and you
 * Remove deprecated calls to `get_theme_data`
 * Changed user role testing to capability testing
 * Documentation and code format updates
+* Programmatically add version number to enqueue calls
 
 = 1.1.1 =
 * Added conditional checks for WordPress 3.4 deprecation of `get_theme_data`

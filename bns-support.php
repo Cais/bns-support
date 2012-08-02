@@ -46,8 +46,7 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * http://www.gnu.org/licenses/gpl-2.0.html
  *
  * @version 1.2
- * @date    July 13, 2012
- * Remove deprecated calls to wp_get_theme
+ * @date    August 2, 2012
  */
 
 /**
@@ -173,15 +172,21 @@ function wp_list_all_active_plugins() {
  * @uses    plugin_dir_url
  * @uses    wp_enqueue_style
  *
- * @version 1.1
- * @date    November 23, 2011
+ * @version 1.2
+ * @date    August 2, 2012
+ * Programmatically add version number to enqueue calls
  */
 function BNS_Support_Scripts_and_Styles() {
+    /** Call the wp-admin plugin code */
+    require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+    /** @var $bns_support_data - holds the plugin header data */
+    $bns_support_data = get_plugin_data( __FILE__ );
+
     /* Enqueue Scripts */
     /* Enqueue Styles */
-    wp_enqueue_style( 'BNS-Support-Style', plugin_dir_url( __FILE__ ) . 'bns-support-style.css', array(), '1.1', 'screen' );
+    wp_enqueue_style( 'BNS-Support-Style', plugin_dir_url( __FILE__ ) . 'bns-support-style.css', array(), $bns_support_data['Version'], 'screen' );
     if ( is_readable( plugin_dir_path( __FILE__ ) . 'bns-support-custom-style.css' ) ) { // Only enqueue if available
-        wp_enqueue_style( 'BNS-Support-Custom-Style', plugin_dir_url( __FILE__ ) . 'bns-support-custom-style.css', array(), '1.1', 'screen' );
+        wp_enqueue_style( 'BNS-Support-Custom-Style', plugin_dir_url( __FILE__ ) . 'bns-support-custom-style.css', array(), $bns_support_data['Version'], 'screen' );
     }
 }
 add_action( 'wp_enqueue_scripts', 'BNS_Support_Scripts_and_Styles' );
@@ -225,7 +230,6 @@ class BNS_Support_Widget extends WP_Widget {
                      * @var $before_title   string - defined by theme
                      * @var $after_title    string - defined by theme
                      */
-                    /** @noinspection PhpUndefinedVariableInspection */
                     echo $before_title . $title . $after_title;
 
                 /** Start displaying BNS Support information */
