@@ -1,9 +1,9 @@
 === BNS Support ===
 Contributors: cais
 Donate link: http://buynowshop.com/
-Tags: support, widget, multisite compatible
+Tags: support, multisite compatible, widget-only
 Requires at least: 3.4
-Tested up to: 3.4.1
+Tested up to: 3.4.2
 Stable tag: 1.2
 License: GNU General Public License v2
 License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
