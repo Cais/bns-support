@@ -1,10 +1,10 @@
 === BNS Support ===
 Contributors: cais
 Donate link: http://buynowshop.com/
-Tags: support, multisite compatible, widget-only
+Tags: support, widget, multisite compatible, widget-only
 Requires at least: 3.4
-Tested up to: 3.4.2
-Stable tag: 1.2
+Tested up to: 3.5
+Stable tag: 1.3
 License: GNU General Public License v2
 License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
@@ -74,6 +74,11 @@ Yes, this plugin has been made for multi-widget compatibility but it really serv
 Please stay current with your WordPress installation, your active theme, and your plugins.
 
 == Changelog ==
+= 1.3 =
+* Release November 2012
+* Add filter hooks and CSS classes to output strings
+* Remove load_plugin_textdomain as redundant
+
 = 1.2 =
 * Required version set to 3.4
 * Remove deprecated calls to `get_theme_data`
