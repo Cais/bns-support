@@ -187,16 +187,15 @@ class BNS_Support_Widget extends WP_Widget {
 
                 echo apply_filters( 'bns_support_wp_version', '<li class="bns-support-wp-version"><strong>' . __( 'WordPress Version:', 'bns-support' ) . '</strong>' . ' ' . $wp_version . '</li>' );
 
-                /** @var $active_theme_data - array object containing the current theme's data */
-                $active_theme_data = wp_get_theme();
-
-                $wp_tested = $active_theme_data->get( 'WordPress Tested Version' );
-                $wp_required = $active_theme_data->get( 'WordPress Required Version' );
-
                 echo apply_filters( 'bns_support_php_version', '<li class="bns-support-php-version"><strong>' . __( 'PHP version:', 'bns-support' ) . '</strong>' . ' ' . phpversion() . '</li>' );
                 /** @noinspection PhpParamsInspection - MySQLi link not required to get client version */
                 echo apply_filters( 'bns_support_mysql_version', '<li class="bns-support-mysql-version"><strong>' . __( 'MySQL version:', 'bns-support' ) . '</strong> ' . ' ' . mysqli_get_client_info() . '</li>' );
                 echo apply_filters( 'bns_support_ms_enabled', '<li class="bns-support-ms-enabled"><strong>' . __( 'Multisite Enabled:', 'bns-support' ) . '</strong> ' . ' ' . ( ( function_exists( 'is_multisite' ) && is_multisite() ) ? __( 'True', 'bns-support' ) : __( 'False', 'bns-support' ) ) . '</li>' );
+
+                /** @var $active_theme_data - array object containing the current theme's data */
+                $active_theme_data = wp_get_theme();
+                $wp_tested = $active_theme_data->get( 'WordPress Tested Version' );
+                $wp_required = $active_theme_data->get( 'WordPress Required Version' );
 
                 /** Theme Display with Parent/Child-Theme recognition */
                 if ( is_child_theme() ) {
