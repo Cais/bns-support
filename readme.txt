@@ -3,8 +3,8 @@ Contributors: cais
 Donate link: http://buynowshop.com/
 Tags: support, widget, multisite compatible, widget-only
 Requires at least: 3.4
-Tested up to: 3.5
-Stable tag: 1.3
+Tested up to: 3.5.1
+Stable tag: 1.4
 License: GNU General Public License v2
 License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
@@ -50,7 +50,7 @@ Yes, this plugin has been made for multi-widget compatibility but it really serv
 3. The sample information from the sidebar display copied and pasted into a common text editor.
 
 == Other Notes ==
-* Copyright 2009-2012  Edward Caissie  (email : edward.caissie@gmail.com)
+* Copyright 2009-2013  Edward Caissie  (email : edward.caissie@gmail.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -74,6 +74,11 @@ Yes, this plugin has been made for multi-widget compatibility but it really serv
 Please stay current with your WordPress installation, your active theme, and your plugins.
 
 == Changelog ==
+= 1.4 =
+* Release February 2013
+* Added code block termination comments and other minor code formatting
+* Moved all code into class structure
+
 = 1.3 =
 * Release November 2012
 * Add filter hooks and CSS classes to output strings
