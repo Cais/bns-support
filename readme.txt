@@ -77,6 +77,7 @@ Please stay current with your WordPress installation, your active theme, and you
 = 1.4 =
 * Release February 2013
 * Added code block termination comments and other minor code formatting
+* Added theme version checks against custom header data (see core trac ticket #16868)
 * Moved all code into class structure
 
 = 1.3 =

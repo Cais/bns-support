@@ -93,6 +93,9 @@ class BNS_Support_Widget extends WP_Widget {
         /** Add scripts and styles */
         add_action( 'wp_enqueue_scripts', array( $this, 'BNS_Support_Scripts_and_Styles' ) );
 
+        /** Add custom headers */
+        add_filter( 'extra_theme_headers', array( $this, 'BNS_Support_extra_theme_headers' ) );
+
         /** Add widget */
         add_action( 'widgets_init', array( $this, 'load_BNS_Support_Widget' ) );
 
@@ -181,29 +184,39 @@ class BNS_Support_Widget extends WP_Widget {
 
                 /** Versions for various major factors */
                 global $wp_version;
+
                 echo apply_filters( 'bns_support_wp_version', '<li class="bns-support-wp-version"><strong>' . __( 'WordPress Version:', 'bns-support' ) . '</strong>' . ' ' . $wp_version . '</li>' );
+
+                /** @var $active_theme_data - array object containing the current theme's data */
+                $active_theme_data = wp_get_theme();
+
+                $wp_tested = $active_theme_data->get( 'WordPress Tested Version' );
+                $wp_required = $active_theme_data->get( 'WordPress Required Version' );
+
                 echo apply_filters( 'bns_support_php_version', '<li class="bns-support-php-version"><strong>' . __( 'PHP version:', 'bns-support' ) . '</strong>' . ' ' . phpversion() . '</li>' );
                 /** @noinspection PhpParamsInspection - MySQLi link not required to get client version */
                 echo apply_filters( 'bns_support_mysql_version', '<li class="bns-support-mysql-version"><strong>' . __( 'MySQL version:', 'bns-support' ) . '</strong> ' . ' ' . mysqli_get_client_info() . '</li>' );
                 echo apply_filters( 'bns_support_ms_enabled', '<li class="bns-support-ms-enabled"><strong>' . __( 'Multisite Enabled:', 'bns-support' ) . '</strong> ' . ' ' . ( ( function_exists( 'is_multisite' ) && is_multisite() ) ? __( 'True', 'bns-support' ) : __( 'False', 'bns-support' ) ) . '</li>' );
 
                 /** Theme Display with Parent/Child-Theme recognition */
-                /** @var $active_theme_data - array object containing the current theme's data */
-                $active_theme_data = wp_get_theme();
                 if ( is_child_theme() ) {
                     /** @var $parent_theme_data - array object containing the Parent Theme's data */
                     $parent_theme_data = $active_theme_data->parent();
                     /** @noinspection PhpUndefinedMethodInspection - IDE commentary */
-                    $output = sprintf( __( '<li class="bns-support-child-theme"><strong>Theme:</strong> %1$s v%2$s a Child-Theme of %3$s v%4$s</li>', 'bns-support' ),
+                    $output = sprintf( __( '<li class="bns-support-child-theme"><strong>Theme:</strong> %1$s v%2$s a Child-Theme of %3$s v%4$s%5$s</li>', 'bns-support' ),
                         $active_theme_data->get( 'Name' ),
                         $active_theme_data->get( 'Version' ),
                         $parent_theme_data->get( 'Name' ),
-                        $parent_theme_data->get( 'Version' ) );
+                        $parent_theme_data->get( 'Version' ),
+                        $this->theme_version_check( $wp_tested, $wp_required )
+                    );
                     echo apply_filters( 'bns_support_Child_theme', $output );
                 } else {
-                    $output = sprintf( __( '<li class="bns-support-parent-theme"><strong>Theme:</strong> %1$s v%2$s</li>', 'bns-support' ),
+                    $output = sprintf( __( '<li class="bns-support-parent-theme"><strong>Theme:</strong> %1$s v%2$s%3$s</li>', 'bns-support' ),
                         $active_theme_data->get( 'Name' ),
-                        $active_theme_data->get( 'Version' ) );
+                        $active_theme_data->get( 'Version' ),
+                        $this->theme_version_check( $wp_tested, $wp_required )
+                    );
                     echo apply_filters( 'bns_support_parent_theme', $output );
                 } /** End if - is child theme */
 
@@ -256,6 +269,48 @@ class BNS_Support_Widget extends WP_Widget {
         } /** End if - user logged in */
 
     } /** End function - widget */
+
+
+    /**
+     * Theme Version Check
+     * Using custom headers from the theme if they exist, check what version of
+     * WordPress the theme has been tested up to and what version of WordPress
+     * the theme requires.
+     *
+     * @internal see core trac ticket #16868
+     * @link https://core.trac.wordpress.org/ticket/16868
+     *
+     * @package BNS_Support
+     * @since   February 14, 2013
+     *
+     * @uses    apply_filters
+     *
+     * @param   $wp_tested
+     * @param   $wp_required
+     *
+     * @return  string
+     */
+    function theme_version_check($wp_tested, $wp_required) {
+        /** @var $output - initialize as empty string */
+        $output = '';
+
+        if ( ( ! empty( $wp_tested ) ) && ( ! empty( $wp_required ) ) ) {
+            $output .= '<ul>';
+            if ( ! empty( $wp_tested ) ) {
+                $output .= apply_filters('bns_support_theme_tested',
+                    '<li class="bns-support-theme-tested"><strong>' . __('Tested To:', 'bns-support') . '</strong>' . ' ' . $wp_tested . '</li>');
+            } /** End if - not empty tested */
+
+            if ( ! empty( $wp_required ) ) {
+                $output .= apply_filters('bns_support_theme_required',
+                    '<li class="bns-support-theme-required"><strong>' . __('Requires:', 'bns-support') . '</strong>' . ' ' . $wp_required . '</li>');
+            } /** End if - not empty required */
+            $output .= '</ul>';
+        } /** End if - not empty */
+
+        return $output;
+
+    } /** End function - theme version check */
 
 
     /**
@@ -332,6 +387,34 @@ class BNS_Support_Widget extends WP_Widget {
 
     <?php
     } /** End function - form */
+
+
+    /**
+     * BNS Support Extra Theme Headers
+     * Add the 'Tested Up To' and 'WordPress Version Required' custom theme
+     * header details for reference
+     *
+     * @package BNS_Support
+     * @since   1.4
+     *
+     * @param   $headers
+     *
+     * @return  array
+     *
+     * @internal see WordPress core trac ticket #16868
+     * @link https://core.trac.wordpress.org/ticket/16868
+     */
+    function BNS_Support_extra_theme_headers( $headers ) {
+
+        if ( ! in_array( 'WordPress Tested Version', $headers ) )
+            $headers[] = 'WordPress Tested Version';
+
+        if ( !in_array( 'WordPress Required Version', $headers ) )
+            $headers[] = 'WordPress Required Version';
+
+        return $headers;
+
+    } /** End function - extra theme headers */
 
 
     /**
