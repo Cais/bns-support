@@ -288,8 +288,10 @@ class BNS_Support_Widget extends WP_Widget {
      * @param   $wp_required
      *
      * @return  string
+     *
+     * @todo Change filter hooks to go inside the `li` tags
      */
-    function theme_version_check($wp_tested, $wp_required) {
+    function theme_version_check( $wp_tested, $wp_required ) {
         /** @var $output - initialize as empty string */
         $output = '';
 
@@ -297,12 +299,12 @@ class BNS_Support_Widget extends WP_Widget {
             $output .= '<ul>';
             if ( ! empty( $wp_tested ) ) {
                 $output .= apply_filters('bns_support_theme_tested',
-                    '<li class="bns-support-theme-tested"><strong>' . __('Tested To:', 'bns-support') . '</strong>' . ' ' . $wp_tested . '</li>');
+                    '<li class="bns-support-theme-tested"><strong>' . __( 'Tested To:', 'bns-support' ) . '</strong>' . ' ' . $wp_tested . '</li>');
             } /** End if - not empty tested */
 
             if ( ! empty( $wp_required ) ) {
                 $output .= apply_filters('bns_support_theme_required',
-                    '<li class="bns-support-theme-required"><strong>' . __('Requires:', 'bns-support') . '</strong>' . ' ' . $wp_required . '</li>');
+                    '<li class="bns-support-theme-required"><strong>' . __( 'Requires:', 'bns-support' ) . '</strong>' . ' ' . $wp_required . '</li>');
             } /** End if - not empty required */
             $output .= '</ul>';
         } /** End if - not empty */
