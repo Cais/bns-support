@@ -294,25 +294,27 @@ class BNS_Support_Widget extends WP_Widget {
         $output = '';
 
         if ( ( ! empty( $wp_tested ) ) && ( ! empty( $wp_required ) ) ) {
-            $output .= '<ul>';
-            if ( ! empty( $wp_tested ) ) {
-                $output .= '<li class="bns-support-theme-tested">'
-                    . sprintf( '<strong>%1$s</strong>: %2$s',
-                        apply_filters( 'bns_support_theme_tested',
-                            __( 'Tested To', 'bns-support' ) ),
-                        $wp_tested )
-                    . '</li>';
-            } /** End if - not empty tested */
 
-            if ( ! empty( $wp_required ) ) {
-                $output .= '<li class="bns-support-theme-required">'
-                    . sprintf( '<strong>%1$s</strong>: %2$s',
-                        apply_filters( 'bns_support_theme_required',
-                            __( 'Required', 'bns-support') ),
-                        $wp_required )
-                    . '</li>';
-            } /** End if - not empty required */
+            $output .= '<ul>';
+
+                if ( ! empty( $wp_tested ) ) {
+                    $output .= '<li class="bns-support-theme-tested">'
+                        . sprintf( '<strong>%1$s</strong>: %2$s',
+                            apply_filters( 'bns_support_theme_tested', __( 'Tested To', 'bns-support' ) ),
+                            $wp_tested )
+                        . '</li>';
+                } /** End if - not empty tested */
+
+                if ( ! empty( $wp_required ) ) {
+                    $output .= '<li class="bns-support-theme-required">'
+                        . sprintf( '<strong>%1$s</strong>: %2$s',
+                            apply_filters( 'bns_support_theme_required', __( 'Required', 'bns-support') ),
+                            $wp_required )
+                        . '</li>';
+                } /** End if - not empty required */
+
             $output .= '</ul>';
+
         } /** End if - not empty */
 
         return $output;
@@ -413,11 +415,13 @@ class BNS_Support_Widget extends WP_Widget {
      */
     function BNS_Support_extra_theme_headers( $headers ) {
 
-        if ( ! in_array( 'WordPress Tested Version', $headers ) )
+        if ( ! in_array( 'WordPress Tested Version', $headers ) ) {
             $headers[] = 'WordPress Tested Version';
+        } /** End if - not in array */
 
-        if ( !in_array( 'WordPress Required Version', $headers ) )
+        if ( ! in_array( 'WordPress Required Version', $headers ) ) {
             $headers[] = 'WordPress Required Version';
+        } /** End if - not in array */
 
         return $headers;
 
