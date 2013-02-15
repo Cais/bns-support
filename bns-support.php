@@ -53,6 +53,8 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @date    February 14, 2013
  * Added code block termination comments and other minor code formatting
  * Moved all code into class structure
+ * Renamed some functions for more consistency
+ * Reorganized methods order in class
  */
 
 class BNS_Support_Widget extends WP_Widget {
@@ -91,20 +93,49 @@ class BNS_Support_Widget extends WP_Widget {
         } /** End if - version compare */
 
         /** Add scripts and styles */
-        add_action( 'wp_enqueue_scripts', array( $this, 'BNS_Support_Scripts_and_Styles' ) );
+        add_action( 'wp_enqueue_scripts', array( $this, 'BNS_Support_scripts_and_styles' ) );
 
         /** Add custom headers */
         add_filter( 'extra_theme_headers', array( $this, 'BNS_Support_extra_theme_headers' ) );
 
         /** Add widget */
-        add_action( 'widgets_init', array( $this, 'load_BNS_Support_Widget' ) );
+        add_action( 'widgets_init', array( $this, 'BNS_Support_load_widget' ) );
 
     } /** End function - constructor */
 
 
     /**
-     * Enqueue Plugin Scripts and Styles
+     * BNS Support Extra Theme Headers
+     * Add the 'Tested Up To' and 'WordPress Version Required' custom theme
+     * header details for reference
      *
+     * @package BNS_Support
+     * @since   1.4
+     *
+     * @param   $headers
+     *
+     * @return  array
+     *
+     * @internal see WordPress core trac ticket #16868
+     * @link https://core.trac.wordpress.org/ticket/16868
+     */
+    function BNS_Support_extra_theme_headers( $headers ) {
+
+        if ( ! in_array( 'WordPress Tested Version', $headers ) ) {
+            $headers[] = 'WordPress Tested Version';
+        } /** End if - not in array */
+
+        if ( ! in_array( 'WordPress Required Version', $headers ) ) {
+            $headers[] = 'WordPress Required Version';
+        } /** End if - not in array */
+
+        return $headers;
+
+    } /** End function - extra theme headers */
+
+
+    /**
+     * BNS Support Enqueue Plugin Scripts and Styles
      * Adds plugin stylesheet and allows for custom stylesheet to be added by end-user.
      *
      * @package BNS_Support
@@ -118,7 +149,7 @@ class BNS_Support_Widget extends WP_Widget {
      * @date    August 2, 2012
      * Programmatically add version number to enqueue calls
      */
-    function BNS_Support_Scripts_and_Styles() {
+    function BNS_Support_scripts_and_styles() {
         /** Call the wp-admin plugin code */
         require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
         /** @var $bns_support_data - holds the plugin header data */
@@ -132,6 +163,149 @@ class BNS_Support_Widget extends WP_Widget {
         } /** End if - is readable */
 
     } /** End function - scripts and styles */
+
+
+    /**
+     * Theme Version Check
+     * Using custom headers from the theme if they exist, check what version of
+     * WordPress the theme has been tested up to and what version of WordPress
+     * the theme requires.
+     *
+     * @internal see core trac ticket #16868
+     * @link https://core.trac.wordpress.org/ticket/16868
+     *
+     * @package BNS_Support
+     * @since   February 14, 2013
+     *
+     * @uses    apply_filters
+     *
+     * @param   $wp_tested
+     * @param   $wp_required
+     *
+     * @return  string
+     */
+    function theme_version_check( $wp_tested, $wp_required ) {
+        /** @var $output - initialize as empty string */
+        $output = '';
+
+        if ( ( ! empty( $wp_tested ) ) && ( ! empty( $wp_required ) ) ) {
+
+            $output .= '<ul>';
+
+            if ( ! empty( $wp_tested ) ) {
+                $output .= '<li class="bns-support-theme-tested">'
+                    . sprintf( '<strong>%1$s</strong>: %2$s',
+                        apply_filters( 'bns_support_theme_tested', __( 'Tested To', 'bns-support' ) ),
+                        $wp_tested )
+                    . '</li>';
+            } /** End if - not empty tested */
+
+            if ( ! empty( $wp_required ) ) {
+                $output .= '<li class="bns-support-theme-required">'
+                    . sprintf( '<strong>%1$s</strong>: %2$s',
+                        apply_filters( 'bns_support_theme_required', __( 'Required', 'bns-support') ),
+                        $wp_required )
+                    . '</li>';
+            } /** End if - not empty required */
+
+            $output .= '</ul>';
+
+        } /** End if - not empty */
+
+        return $output;
+
+    } /** End function - theme version check */
+
+
+    /**
+     * WP List All Active Plugins
+     * @link    http://wordpress.org/extend/plugins/wp-plugin-lister/
+     * @author  Paul G Petty
+     * @link    http://paulgriffinpetty.com
+     *
+     * Some of the functionality of Paul G Getty's Plugin Lister code has been
+     * used to replace the old code by Lester Chan
+     *
+     * @package BNS_Support
+     * @since   1.1
+     * Completely merged, stripped out excess, and rewritten 'Plugin Lister'
+     *
+     * @version 1.4
+     * @date    February 14, 2013
+     * Sorted out AuthorURI conditional test
+     */
+    function wp_list_all_active_plugins() {
+        if ( ! function_exists( 'get_plugin_data' ) ) {
+            function get_plugin_data( $plugin_file ) {
+                /** We don't need to write to the file, so just open for reading. */
+                $fp = fopen( $plugin_file, 'r' );
+
+                /** Pull only the first 8kB of the file in. */
+                $plugin_data = fread( $fp, 8192 );
+
+                /** PHP will close file handle, but we are good citizens. */
+                fclose( $fp );
+
+                preg_match( '|Plugin Name:(.*)$|mi', $plugin_data, $name );
+                preg_match( '|Plugin URI:(.*)$|mi', $plugin_data, $uri );
+                preg_match( '|Version:(.*)|i', $plugin_data, $version );
+                preg_match( '|Description:(.*)$|mi', $plugin_data, $description );
+                preg_match( '|Author:(.*)$|mi', $plugin_data, $author_name );
+                preg_match( '|Author URI:(.*)$|mi', $plugin_data, $author_uri );
+                preg_match( '|Text Domain:(.*)$|mi', $plugin_data, $text_domain );
+                preg_match( '|Domain Path:(.*)$|mi', $plugin_data, $domain_path );
+
+                foreach ( array( 'name', 'uri', 'version', 'description', 'author_name', 'author_uri', 'text_domain', 'domain_path' ) as $field ) {
+                    if ( ! empty( ${$field} ) ) {
+                        ${$field} = trim(${$field}[1]);
+                    } else {
+                        ${$field} = '';
+                    } /** End if - not empty */
+                } /** End foreach - array */
+
+                $plugin_data = array(
+                    'Name'          => $name,
+                    'Title'         => $name,
+                    'PluginURI'     => $uri,
+                    'Description'   => $description,
+                    'Author'        => $author_name,
+                    'AuthorURI'     => $author_uri,
+                    'Version'       => $version,
+                    'TextDomain'    => $text_domain,
+                    'DomainPath'    => $domain_path
+                );
+
+                return $plugin_data;
+
+            } /** End function - get plugin data */
+
+        } /** End if - not function exists */
+
+        $p = get_option( 'active_plugins' );
+
+        $plugin_list = '';
+        $plugin_list .= '<ul>';
+
+        foreach ( $p as $q ) {
+            $d = get_plugin_data( WP_PLUGIN_DIR . '/' . $q );
+            $plugin_list .= '<li>';
+            $plugin_list .= __( '<strong><a href="' . $d['PluginURI'] . '">' . $d['Title'] . ' ' . $d['Version'] . '</a></strong>', 'bns-support' ) . '<br />';
+
+            if ( ! empty( $d['AuthorURI'] ) ) {
+                $plugin_list .= sprintf( __( 'by %1$s (<a href="' . $d['AuthorURI'] . '">url</a>)', 'bns-support' ), $d['Author'] ) . '<br />';
+            } else {
+                $plugin_list .= sprintf( __( 'by %1$s', 'bns-support' ), $d['Author'] ) . '<br />';
+            } /** End if - not empty */
+
+            $plugin_list .= '</li>';
+
+        } /** End foreach - p as q */
+
+        $plugin_list .= '</ul>';
+
+        echo $plugin_list;
+
+    } /** End function - list all active plugins */
 
 
     /**
@@ -268,58 +442,6 @@ class BNS_Support_Widget extends WP_Widget {
 
 
     /**
-     * Theme Version Check
-     * Using custom headers from the theme if they exist, check what version of
-     * WordPress the theme has been tested up to and what version of WordPress
-     * the theme requires.
-     *
-     * @internal see core trac ticket #16868
-     * @link https://core.trac.wordpress.org/ticket/16868
-     *
-     * @package BNS_Support
-     * @since   February 14, 2013
-     *
-     * @uses    apply_filters
-     *
-     * @param   $wp_tested
-     * @param   $wp_required
-     *
-     * @return  string
-     */
-    function theme_version_check( $wp_tested, $wp_required ) {
-        /** @var $output - initialize as empty string */
-        $output = '';
-
-        if ( ( ! empty( $wp_tested ) ) && ( ! empty( $wp_required ) ) ) {
-
-            $output .= '<ul>';
-
-                if ( ! empty( $wp_tested ) ) {
-                    $output .= '<li class="bns-support-theme-tested">'
-                        . sprintf( '<strong>%1$s</strong>: %2$s',
-                            apply_filters( 'bns_support_theme_tested', __( 'Tested To', 'bns-support' ) ),
-                            $wp_tested )
-                        . '</li>';
-                } /** End if - not empty tested */
-
-                if ( ! empty( $wp_required ) ) {
-                    $output .= '<li class="bns-support-theme-required">'
-                        . sprintf( '<strong>%1$s</strong>: %2$s',
-                            apply_filters( 'bns_support_theme_required', __( 'Required', 'bns-support') ),
-                            $wp_required )
-                        . '</li>';
-                } /** End if - not empty required */
-
-            $output .= '</ul>';
-
-        } /** End if - not empty */
-
-        return $output;
-
-    } /** End function - theme version check */
-
-
-    /**
      * Update
      *
      * @package BNS_Support
@@ -396,137 +518,17 @@ class BNS_Support_Widget extends WP_Widget {
 
 
     /**
-     * BNS Support Extra Theme Headers
-     * Add the 'Tested Up To' and 'WordPress Version Required' custom theme
-     * header details for reference
-     *
-     * @package BNS_Support
-     * @since   1.4
-     *
-     * @param   $headers
-     *
-     * @return  array
-     *
-     * @internal see WordPress core trac ticket #16868
-     * @link https://core.trac.wordpress.org/ticket/16868
-     */
-    function BNS_Support_extra_theme_headers( $headers ) {
-
-        if ( ! in_array( 'WordPress Tested Version', $headers ) ) {
-            $headers[] = 'WordPress Tested Version';
-        } /** End if - not in array */
-
-        if ( ! in_array( 'WordPress Required Version', $headers ) ) {
-            $headers[] = 'WordPress Required Version';
-        } /** End if - not in array */
-
-        return $headers;
-
-    } /** End function - extra theme headers */
-
-
-    /**
-     * WP List All Active Plugins
-     * @link    http://wordpress.org/extend/plugins/wp-plugin-lister/
-     * @author  Paul G Petty
-     * @link    http://paulgriffinpetty.com
-     *
-     * Some of the functionality of Paul G Getty's Plugin Lister code has been
-     * used to replace the old code by Lester Chan
-     *
-     * @package BNS_Support
-     * @since   1.1
-     * Completely merged, stripped out excess, and rewritten 'Plugin Lister'
-     *
-     * @version 1.4
-     * @date    February 14, 2013
-     * Sorted out AuthorURI conditional test
-     */
-    function wp_list_all_active_plugins() {
-        if ( ! function_exists( 'get_plugin_data' ) ) {
-            function get_plugin_data( $plugin_file ) {
-                /** We don't need to write to the file, so just open for reading. */
-                $fp = fopen( $plugin_file, 'r' );
-
-                /** Pull only the first 8kB of the file in. */
-                $plugin_data = fread( $fp, 8192 );
-
-                /** PHP will close file handle, but we are good citizens. */
-                fclose( $fp );
-
-                preg_match( '|Plugin Name:(.*)$|mi', $plugin_data, $name );
-                preg_match( '|Plugin URI:(.*)$|mi', $plugin_data, $uri );
-                preg_match( '|Version:(.*)|i', $plugin_data, $version );
-                preg_match( '|Description:(.*)$|mi', $plugin_data, $description );
-                preg_match( '|Author:(.*)$|mi', $plugin_data, $author_name );
-                preg_match( '|Author URI:(.*)$|mi', $plugin_data, $author_uri );
-                preg_match( '|Text Domain:(.*)$|mi', $plugin_data, $text_domain );
-                preg_match( '|Domain Path:(.*)$|mi', $plugin_data, $domain_path );
-
-                foreach ( array( 'name', 'uri', 'version', 'description', 'author_name', 'author_uri', 'text_domain', 'domain_path' ) as $field ) {
-                    if ( ! empty( ${$field} ) ) {
-                        ${$field} = trim(${$field}[1]);
-                    } else {
-                        ${$field} = '';
-                    } /** End if - not empty */
-                } /** End foreach - array */
-
-                $plugin_data = array(
-                    'Name'          => $name,
-                    'Title'         => $name,
-                    'PluginURI'     => $uri,
-                    'Description'   => $description,
-                    'Author'        => $author_name,
-                    'AuthorURI'     => $author_uri,
-                    'Version'       => $version,
-                    'TextDomain'    => $text_domain,
-                    'DomainPath'    => $domain_path
-                );
-
-                return $plugin_data;
-
-            } /** End function - get plugin data */
-
-        } /** End if - not function exists */
-
-        $p = get_option( 'active_plugins' );
-
-        $plugin_list = '';
-        $plugin_list .= '<ul>';
-
-        foreach ( $p as $q ) {
-            $d = get_plugin_data( WP_PLUGIN_DIR . '/' . $q );
-            $plugin_list .= '<li>';
-            $plugin_list .= __( '<strong><a href="' . $d['PluginURI'] . '">' . $d['Title'] . ' ' . $d['Version'] . '</a></strong>', 'bns-support' ) . '<br />';
-
-            if ( ! empty( $d['AuthorURI'] ) ) {
-                $plugin_list .= sprintf( __( 'by %1$s (<a href="' . $d['AuthorURI'] . '">url</a>)', 'bns-support' ), $d['Author'] ) . '<br />';
-            } else {
-                $plugin_list .= sprintf( __( 'by %1$s', 'bns-support' ), $d['Author'] ) . '<br />';
-            } /** End if - not empty */
-
-            $plugin_list .= '</li>';
-
-        } /** End foreach - p as q */
-
-        $plugin_list .= '</ul>';
-
-        echo $plugin_list;
-
-    } /** End function - list all active plugins */
-
-
-    /**
-     * Register widget
+     * Load Widget
      *
      * @package BNS_Support
      * @since   0.1
      *
      * @uses    register_widget
      */
-    function load_BNS_Support_Widget() {
+    function BNS_Support_load_widget() {
         register_widget( 'BNS_Support_Widget' );
     } /** End function  - register widget */
+
 
 } /** End class */
 
