@@ -233,11 +233,8 @@ class BNS_Support_Widget extends WP_Widget {
 
                 } else {
 
-                    /* ---- Current User Level ---- */
+                    /** ---- Current User Level ---- */
                     $user_roles = $current_user->roles;
-                    /**
-                     * @todo Re-write to show all roles of current user
-                     */
                     $user_role = array_shift($user_roles);
                     echo apply_filters( 'bns_support_current_user', '<li class="bns-support-current-user">' . sprintf( __( '<strong>Current User Role</strong>: %1$s ', 'bns-support' ), $user_role ) . '</li>' );
 
@@ -438,8 +435,12 @@ class BNS_Support_Widget extends WP_Widget {
      * used to replace the old code by Lester Chan
      *
      * @package BNS_Support
-     * @since   1.9.1
+     * @since   1.1
      * Completely merged, stripped out excess, and rewritten 'Plugin Lister'
+     *
+     * @version 1.4
+     * @date    February 14, 2013
+     * Sorted out AuthorURI conditional test
      */
     function wp_list_all_active_plugins() {
         if ( ! function_exists( 'get_plugin_data' ) ) {
@@ -498,15 +499,11 @@ class BNS_Support_Widget extends WP_Widget {
             $plugin_list .= '<li>';
             $plugin_list .= __( '<strong><a href="' . $d['PluginURI'] . '">' . $d['Title'] . ' ' . $d['Version'] . '</a></strong>', 'bns-support' ) . '<br />';
 
-            // if ($d['AuthorURI'] != "") {
-            /** Serious hack ... the following line tests if the above preg_match failed and wrote the conditional check instead of the AuthorURI to the variable
-             * @todo sort out where the root issue is for this; original coded commented out above does not work as expected
-             */
-            if ( substr( $d['AuthorURI'], 0, 8 ) !== '(.*)$|mi' ) {
+            if ( ! empty( $d['AuthorURI'] ) ) {
                 $plugin_list .= sprintf( __( 'by %1$s (<a href="' . $d['AuthorURI'] . '">url</a>)', 'bns-support' ), $d['Author'] ) . '<br />';
             } else {
                 $plugin_list .= sprintf( __( 'by %1$s', 'bns-support' ), $d['Author'] ) . '<br />';
-            } /** End if - sub-string */
+            } /** End if - not empty */
 
             $plugin_list .= '</li>';
 
