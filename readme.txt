@@ -74,6 +74,9 @@ Yes, this plugin has been made for multi-widget compatibility but it really serv
 Please stay current with your WordPress installation, your active theme, and your plugins.
 
 == Changelog ==
+= 1.4.1 =
+* Change the widget output to a better grouping of details
+
 = 1.4 =
 * Release February 2013
 * Added code block termination comments and other minor code formatting
