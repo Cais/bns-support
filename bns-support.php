@@ -372,12 +372,16 @@ class BNS_Support_Widget extends WP_Widget {
                 echo '<ul>';
 
                 /** Blog URL */
-                echo apply_filters( 'bns_support_url', '<li class="bns-support-url"><strong>URL</strong>: ' . get_bloginfo( 'url' ) . '</li>' );
+                echo apply_filters( 'bns_support_url',
+                    '<li class="bns-support-url"><strong>URL</strong>: ' . get_bloginfo( 'url' ) . '</li>'
+                );
 
                 /** Versions for various major factors */
                 global $wp_version;
 
-                echo apply_filters( 'bns_support_wp_version', '<li class="bns-support-wp-version"><strong>' . __( 'WordPress Version:', 'bns-support' ) . '</strong>' . ' ' . $wp_version . '</li>' );
+                echo apply_filters( 'bns_support_wp_version',
+                    '<li class="bns-support-wp-version"><strong>' . __( 'WordPress Version:', 'bns-support' ) . '</strong>' . ' ' . $wp_version . '</li>'
+                );
 
                 /** @var $active_theme_data - array object containing the current theme's data */
                 $active_theme_data = wp_get_theme();
@@ -397,20 +401,30 @@ class BNS_Support_Widget extends WP_Widget {
                         $parent_theme_data->get( 'Version' ),
                         $this->theme_version_check( $wp_tested, $wp_required, $wp_template )
                     );
-                    echo apply_filters( 'bns_support_Child_theme', $output );
+                    echo apply_filters( 'bns_support_Child_theme',
+                        $output
+                    );
                 } else {
                     $output = sprintf( __( '<li class="bns-support-parent-theme"><strong>Theme:</strong> %1$s v%2$s%3$s</li>', 'bns-support' ),
                         $active_theme_data->get( 'Name' ),
                         $active_theme_data->get( 'Version' ),
                         $this->theme_version_check( $wp_tested, $wp_required, $wp_template )
                     );
-                    echo apply_filters( 'bns_support_parent_theme', $output );
+                    echo apply_filters( 'bns_support_parent_theme',
+                        $output
+                    );
                 } /** End if - is child theme */
 
-                echo apply_filters( 'bns_support_ms_enabled', '<li class="bns-support-ms-enabled"><strong>' . __( 'Multisite Enabled:', 'bns-support' ) . '</strong> ' . ' ' . ( ( function_exists( 'is_multisite' ) && is_multisite() ) ? __( 'True', 'bns-support' ) : __( 'False', 'bns-support' ) ) . '</li>' );
-                echo apply_filters( 'bns_support_php_version', '<li class="bns-support-php-version"><strong>' . __( 'PHP version:', 'bns-support' ) . '</strong>' . ' ' . phpversion() . '</li>' );
+                echo apply_filters( 'bns_support_ms_enabled',
+                    '<li class="bns-support-ms-enabled"><strong>' . __( 'Multisite Enabled:', 'bns-support' ) . '</strong> ' . ' ' . ( ( function_exists( 'is_multisite' ) && is_multisite() ) ? __( 'True', 'bns-support' ) : __( 'False', 'bns-support' ) ) . '</li>'
+                );
+                echo apply_filters( 'bns_support_php_version',
+                    '<li class="bns-support-php-version"><strong>' . __( 'PHP version:', 'bns-support' ) . '</strong>' . ' ' . phpversion() . '</li>'
+                );
                 /** @noinspection PhpParamsInspection - MySQLi link not required to get client version */
-                echo apply_filters( 'bns_support_mysql_version', '<li class="bns-support-mysql-version"><strong>' . __( 'MySQL version:', 'bns-support' ) . '</strong> ' . ' ' . mysqli_get_client_info() . '</li>' );
+                echo apply_filters( 'bns_support_mysql_version',
+                    '<li class="bns-support-mysql-version"><strong>' . __( 'MySQL version:', 'bns-support' ) . '</strong> ' . ' ' . mysqli_get_client_info() . '</li>'
+                );
 
                 if ( is_multisite() ) {
 
@@ -419,9 +433,15 @@ class BNS_Support_Widget extends WP_Widget {
                     $home_domain = 'http://' . $current_site->domain . $current_site->path;
                     if ( current_user_can( 'manage_options' ) ) {
                         /** If multisite is "true" then direct ALL users to main site administrator */
-                        echo apply_filters( 'bns_support_ms_user', '<li class="bns-support-ms-user">' . sprintf( __( 'Please review with your main site administrator at %1$s for additional assistance.', 'bns-support' ), '<a href="' . $home_domain . '">' . $current_site->site_name . '</a>' ) . '</li>' );
+                        echo apply_filters( 'bns_support_ms_user',
+                            '<li class="bns-support-ms-user">'
+                                . sprintf( __( 'Please review with your main site administrator at %1$s for additional assistance.', 'bns-support' ), '<a href="' . $home_domain . '">' . $current_site->site_name . '</a>' )
+                            . '</li>'
+                        );
                     } else {
-                        echo apply_filters( 'bns_support_ms_admin', '<li class="bns-support-ms-admin">' . __( 'You are the Admin!', 'bns-support') . '</li>' );
+                        echo apply_filters( 'bns_support_ms_admin',
+                            '<li class="bns-support-ms-admin">' . __( 'You are the Admin!', 'bns-support') . '</li>'
+                        );
                     } /** End if - current user can */
 
                 } else {
@@ -429,10 +449,16 @@ class BNS_Support_Widget extends WP_Widget {
                     /** ---- Current User Level ---- */
                     $user_roles = $current_user->roles;
                     $user_role = array_shift($user_roles);
-                    echo apply_filters( 'bns_support_current_user', '<li class="bns-support-current-user">' . sprintf( __( '<strong>Current User Role</strong>: %1$s ', 'bns-support' ), $user_role ) . '</li>' );
+                    echo apply_filters( 'bns_support_current_user',
+                        '<li class="bns-support-current-user">'
+                            . sprintf( __( '<strong>Current User Role</strong>: %1$s ', 'bns-support' ), $user_role )
+                        . '</li>'
+                    );
 
                     if ( $show_plugins ) {
-                        echo apply_filters( 'bns_support_active_plugins', '<li class="bns-support-active-plugins"><strong>' . __( 'Active Plugins:', 'bns-support') . '</strong></li>' );
+                        echo apply_filters( 'bns_support_active_plugins',
+                            '<li class="bns-support-active-plugins"><strong>' . __( 'Active Plugins:', 'bns-support') . '</strong></li>'
+                        );
 
                         $this->wp_list_all_active_plugins();
                     } /** End if - show plugins */
@@ -444,7 +470,11 @@ class BNS_Support_Widget extends WP_Widget {
 
                 /** Gratuitous self-promotion */
                 if ( $credits ) {
-                    echo apply_filters( 'bns_support_credits', '<h6 class="bns-support-credits">' . sprintf( __( 'Compliments of %1$s at %2$s', 'bns-support' ), '<a href="http://buynowshop.com/wordpress-services" target="_blank">WordPress Services</a>', '<a href="http://buynowshop.com" target="_blank">BuyNowShop.com</a>' ) . '</h6>' );
+                    echo apply_filters( 'bns_support_credits',
+                        '<h6 class="bns-support-credits">'
+                            . sprintf( __( 'Compliments of %1$s at %2$s', 'bns-support' ), '<a href="http://buynowshop.com/wordpress-services" target="_blank">WordPress Services</a>', '<a href="http://buynowshop.com" target="_blank">BuyNowShop.com</a>' )
+                        . '</h6>'
+                    );
                 } /** End if - credits */
 
                 /** @var $after_widget string - defined by theme */
