@@ -3,8 +3,8 @@ Contributors: cais
 Donate link: http://buynowshop.com/
 Tags: support, widget, multisite compatible, widget-only
 Requires at least: 3.4
-Tested up to: 3.5.1
-Stable tag: 1.4
+Tested up to: 3.6
+Stable tag: 1.5
 License: GNU General Public License v2
 License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
@@ -74,8 +74,10 @@ Yes, this plugin has been made for multi-widget compatibility but it really serv
 Please stay current with your WordPress installation, your active theme, and your plugins.
 
 == Changelog ==
-= 1.4.1 =
+= 1.5 =
+* Added 'mod_rewrite' display check
 * Change the widget output to a better grouping of details
+* Refactored 'MultiSite Enabled', 'PHP Version', and 'MySQL Version' to be better filtered
 
 = 1.4 =
 * Release February 2013

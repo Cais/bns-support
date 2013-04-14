@@ -3,7 +3,7 @@
 Plugin Name: BNS Support
 Plugin URI: http://buynowshop.com/plugins/bns-support/
 Description: Simple display of useful support information in the sidebar. Easy to copy and paste details, such as: the blog name; WordPress version; name of installed theme; and, active plugins list. Help for those that help. The information is only viewable by logged-in readers; and, by optional default, the blog administrator(s) only.
-Version: 1.4.1
+Version: 1.5
 Text Domain: bns-support
 Author: Edward Caissie
 Author URI: http://edwardcaissie.com/
@@ -20,7 +20,7 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @link        http://buynowshop.com/plugins/bns-support/
  * @link        https://github.com/Cais/bns-support/
  * @link        http://wordpress.org/extend/plugins/bns-support/
- * @version     1.4.1
+ * @version     1.5
  * @author      Edward Caissie <edward.caissie@gmail.com>
  * @copyright   Copyright (c) 2009-2013, Edward Caissie
  *
@@ -55,6 +55,10 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * Moved all code into class structure
  * Renamed some functions for more consistency
  * Reorganized methods order in class
+ *
+ * @version 1.5
+ * @date    April 14, 2013
+ * Added 'mod_rewrite' display check
  */
 
 class BNS_Support_Widget extends WP_Widget {
@@ -232,6 +236,24 @@ class BNS_Support_Widget extends WP_Widget {
 
 
     /**
+     * Mod Rewrite Check
+     *
+     * @package BNS_Support
+     * @since   1.5
+     *
+     * @return  string - Enabled|Disabled
+     */
+    function mod_rewrite_check() {
+        if ( in_array( 'mod_rewrite', apache_get_modules() ) ) {
+            return 'Enabled';
+        } else {
+            return 'Disabled';
+        } /** End if - in array */
+
+    } /** End function - mod rewrite check */
+
+
+    /**
      * WP List All Active Plugins
      * @link    http://wordpress.org/extend/plugins/wp-plugin-lister/
      * @author  Paul G Petty
@@ -342,6 +364,11 @@ class BNS_Support_Widget extends WP_Widget {
      * @version 1.4.1
      * @date    February 27, 2013
      * Change the widget output to a better grouping of details
+     *
+     * @version 1.5
+     * @date    April 14, 2013
+     * Refactored 'MultiSite Enabled', 'PHP Version', and 'MySQL Version' to be
+     * better filtered
      */
     function widget( $args, $instance) {
         extract( $args );
@@ -415,16 +442,44 @@ class BNS_Support_Widget extends WP_Widget {
                     );
                 } /** End if - is child theme */
 
-                echo apply_filters( 'bns_support_ms_enabled',
-                    '<li class="bns-support-ms-enabled"><strong>' . __( 'Multisite Enabled:', 'bns-support' ) . '</strong> ' . ' ' . ( ( function_exists( 'is_multisite' ) && is_multisite() ) ? __( 'True', 'bns-support' ) : __( 'False', 'bns-support' ) ) . '</li>'
-                );
-                echo apply_filters( 'bns_support_php_version',
-                    '<li class="bns-support-php-version"><strong>' . __( 'PHP version:', 'bns-support' ) . '</strong>' . ' ' . phpversion() . '</li>'
-                );
+                /** MultiSite Enabled */
+                echo '<li class="bns-support-ms-enabled">'
+                        . apply_filters( 'bns_support_ms_enabled',
+                            sprintf( __( '<strong>Multisite Enabled:</strong> %1$s', 'bns-support' ),
+                                function_exists( 'is_multisite' ) && is_multisite()
+                                        ? __( 'True', 'bns-support' )
+                                        : __( 'False', 'bns-support' )
+                            )
+                        )
+                        . '</li><!-- bns-support-ms-enabled -->';
+
+                /** PHP Version */
+                echo '<li class="bns-support-php-version">'
+                        . apply_filters( 'bns_support_php_version',
+                            sprintf( __( '<strong>PHP version:</strong> %1$s', 'bns-support' ),
+                                phpversion()
+                            )
+                        )
+                        . '</li>';
+
+                /** Mod Rewrite Support */
+                echo '<li class="bns-support-mod-rewrite">'
+                        . apply_filters( 'bns_support_mod_rewrite',
+                            sprintf( __( '<strong>Mod Rewrite:</strong> %1$s', 'bns-support' ),
+                                $this->mod_rewrite_check()
+                            )
+                        )
+                        . '</li>';
+
+                /** MySQL Version */
                 /** @noinspection PhpParamsInspection - MySQLi link not required to get client version */
-                echo apply_filters( 'bns_support_mysql_version',
-                    '<li class="bns-support-mysql-version"><strong>' . __( 'MySQL version:', 'bns-support' ) . '</strong> ' . ' ' . mysqli_get_client_info() . '</li>'
-                );
+                echo '<li class="bns-support-mysql-version">'
+                        . apply_filters( 'bns_support_mysql_version',
+                            sprintf( __( '<strong>MySQL version:</strong> %1$s', 'bns-support' ),
+                                mysqli_get_client_info()
+                            )
+                        )
+                        . '</li>';
 
                 if ( is_multisite() ) {
 
