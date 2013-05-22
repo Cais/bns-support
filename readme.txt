@@ -75,6 +75,7 @@ Please stay current with your WordPress installation, your active theme, and you
 
 == Changelog ==
 = 1.5 =
+* Released May 2013
 * Added 'mod_rewrite' display check
 * Change the widget output to a better grouping of details
 * Refactored 'MultiSite Enabled', 'PHP Version', and 'MySQL Version' to be better filtered
