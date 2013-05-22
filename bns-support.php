@@ -44,11 +44,6 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * The license for this software can also likely be found here:
  * http://www.gnu.org/licenses/gpl-2.0.html
  *
- * @version 1.3
- * @date    November 26, 2012
- * Add filter hooks and CSS classes to output strings
- * Remove load_plugin_textdomain as redundant
- *
  * @version 1.4
  * @date    February 14, 2013
  * Added code block termination comments and other minor code formatting
