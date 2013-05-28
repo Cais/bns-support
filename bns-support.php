@@ -3,7 +3,7 @@
 Plugin Name: BNS Support
 Plugin URI: http://buynowshop.com/plugins/bns-support/
 Description: Simple display of useful support information in the sidebar. Easy to copy and paste details, such as: the blog name; WordPress version; name of installed theme; and, active plugins list. Help for those that help. The information is only viewable by logged-in readers; and, by optional default, the blog administrator(s) only.
-Version: 1.5
+Version: 1.5.1
 Text Domain: bns-support
 Author: Edward Caissie
 Author URI: http://edwardcaissie.com/
@@ -20,7 +20,7 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @link        http://buynowshop.com/plugins/bns-support/
  * @link        https://github.com/Cais/bns-support/
  * @link        http://wordpress.org/extend/plugins/bns-support/
- * @version     1.5
+ * @version     1.5.1
  * @author      Edward Caissie <edward.caissie@gmail.com>
  * @copyright   Copyright (c) 2009-2013, Edward Caissie
  *
@@ -54,6 +54,10 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @version 1.5
  * @date    April 14, 2013
  * Added 'mod_rewrite' display check
+ *
+ * @version 1.5.1
+ * @date    May 28, 2013
+ * Added conditional check for 'apache_get_modules'
  */
 
 class BNS_Support_Widget extends WP_Widget {
@@ -457,14 +461,19 @@ class BNS_Support_Widget extends WP_Widget {
                         )
                         . '</li>';
 
-                /** Mod Rewrite Support */
-                echo '<li class="bns-support-mod-rewrite">'
-                        . apply_filters( 'bns_support_mod_rewrite',
-                            sprintf( __( '<strong>Mod Rewrite:</strong> %1$s', 'bns-support' ),
-                                $this->mod_rewrite_check()
+                /**
+                 * Mod Rewrite Support
+                 * @todo Find a method that works with minimum WordPress PHP required version
+                 */
+                if ( function_exists( 'apache_get_modules' ) ) {
+                    echo '<li class="bns-support-mod-rewrite">'
+                            . apply_filters( 'bns_support_mod_rewrite',
+                                sprintf( __( '<strong>Mod Rewrite:</strong> %1$s', 'bns-support' ),
+                                    $this->mod_rewrite_check()
+                                )
                             )
-                        )
-                        . '</li>';
+                            . '</li>';
+                }
 
                 /** MySQL Version */
                 /** @noinspection PhpParamsInspection - MySQLi link not required to get client version */
