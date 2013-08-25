@@ -3,7 +3,7 @@
 Plugin Name: BNS Support
 Plugin URI: http://buynowshop.com/plugins/bns-support/
 Description: Simple display of useful support information in the sidebar. Easy to copy and paste details, such as: the blog name; WordPress version; name of installed theme; and, active plugins list. Help for those that help. The information is only viewable by logged-in readers; and, by optional default, the blog administrator(s) only.
-Version: 1.5.1
+Version: 1.6-beta
 Text Domain: bns-support
 Author: Edward Caissie
 Author URI: http://edwardcaissie.com/
@@ -20,7 +20,7 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @link        http://buynowshop.com/plugins/bns-support/
  * @link        https://github.com/Cais/bns-support/
  * @link        http://wordpress.org/extend/plugins/bns-support/
- * @version     1.5.1
+ * @version     1.6
  * @author      Edward Caissie <edward.caissie@gmail.com>
  * @copyright   Copyright (c) 2009-2013, Edward Caissie
  *
@@ -44,13 +44,6 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * The license for this software can also likely be found here:
  * http://www.gnu.org/licenses/gpl-2.0.html
  *
- * @version 1.4
- * @date    February 14, 2013
- * Added code block termination comments and other minor code formatting
- * Moved all code into class structure
- * Renamed some functions for more consistency
- * Reorganized methods order in class
- *
  * @version 1.5
  * @date    April 14, 2013
  * Added 'mod_rewrite' display check
@@ -58,6 +51,10 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @version 1.5.1
  * @date    May 28, 2013
  * Added conditional check for 'apache_get_modules'
+ *
+ * @version 1.6
+ * @date    August 25, 2013
+ * Added shortcode functionality
  */
 
 class BNS_Support_Widget extends WP_Widget {
@@ -100,6 +97,9 @@ class BNS_Support_Widget extends WP_Widget {
 
         /** Add custom headers */
         add_filter( 'extra_theme_headers', array( $this, 'BNS_Support_extra_theme_headers' ) );
+
+        /** Add shortcode */
+        add_shortcode( 'tech_support', array( $this, 'bns_support_shortcode' ) );
 
         /** Add widget */
         add_action( 'widgets_init', array( $this, 'BNS_Support_load_widget' ) );
@@ -590,7 +590,7 @@ class BNS_Support_Widget extends WP_Widget {
     function form( $instance ) {
         /* Set up some default widget settings. */
         $defaults = array(
-            'title'         => get_bloginfo('name'),
+            'title'         => get_bloginfo( 'name' ),
             'blog_admin'    => true,
             'show_plugins'  => false,
             'credits'       => false,
@@ -636,6 +636,50 @@ class BNS_Support_Widget extends WP_Widget {
     function BNS_Support_load_widget() {
         register_widget( 'BNS_Support_Widget' );
     } /** End function  - register widget */
+
+
+    /**
+     * BNS Support Shortcode
+     *
+     * @package BNS_Support
+     * @since   1.6
+     *
+     * @param   $atts
+     *
+     * @uses    shortcode_atts
+     * @uses    the_widget
+     *
+     * @return  string
+     * @todo Clean up / make dynamic the title / or leave as empty string?
+     */
+    function bns_support_shortcode( $atts ) {
+        /** Let's start by capturing the output */
+        ob_start();
+
+        /** Pull the widget together for use elsewhere */
+        the_widget( 'BNS_Support_Widget',
+            $instance = shortcode_atts( array(
+                'title'         => get_bloginfo( 'name' ),
+                'blog_admin'    => true,
+                'show_plugins'  => true,
+                'credits'       => false,
+            ), $atts ),
+            $args = array(
+                /** clear variables defined by theme for widgets */
+                $before_widget  = '',
+                $after_widget   = '',
+                $before_title   = '',
+                $after_title    = '',
+            )
+        );
+
+        /** Get the_widget output and put it into its own variable */
+        $bns_support_content = ob_get_clean();
+
+        /** Return the widget output for the shortcode to use */
+        return $bns_support_content;
+
+    } /** End function - bns support shortcode */
 
 
 } /** End class */
