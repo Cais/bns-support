@@ -3,7 +3,7 @@
 Plugin Name: BNS Support
 Plugin URI: http://buynowshop.com/plugins/bns-support/
 Description: Simple display of useful support information in the sidebar. Easy to copy and paste details, such as: the blog name; WordPress version; name of installed theme; and, active plugins list. Help for those that help. The information is only viewable by logged-in readers; and, by optional default, the blog administrator(s) only.
-Version: 1.6
+Version: 1.6.1-alpha
 Text Domain: bns-support
 Author: Edward Caissie
 Author URI: http://edwardcaissie.com/
@@ -20,7 +20,7 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @link        http://buynowshop.com/plugins/bns-support/
  * @link        https://github.com/Cais/bns-support/
  * @link        http://wordpress.org/extend/plugins/bns-support/
- * @version     1.6
+ * @version     1.6.1
  * @author      Edward Caissie <edward.caissie@gmail.com>
  * @copyright   Copyright (c) 2009-2013, Edward Caissie
  *
@@ -55,6 +55,10 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @version 1.6
  * @date    August 25, 2013
  * Added shortcode functionality
+ *
+ * @version 1.6.1
+ * @date    September 9, 2013
+ * Added shortcode name parameter for core filter auto-creation
  */
 
 class BNS_Support_Widget extends WP_Widget {
@@ -654,6 +658,10 @@ class BNS_Support_Widget extends WP_Widget {
      * @uses    the_widget
      *
      * @return  string
+     *
+     * @version 1.6.1
+     * @date    September 7, 2013
+     * Added shortcode name parameter for core filter auto-creation
      */
     function bns_support_shortcode( $atts ) {
         /** Let's start by capturing the output */
@@ -666,7 +674,7 @@ class BNS_Support_Widget extends WP_Widget {
                 'blog_admin'    => true,
                 'show_plugins'  => true,
                 'credits'       => false,
-            ), $atts ),
+            ), $atts, 'tech_support' ),
             $args = array(
                 /** clear variables defined by theme for widgets */
                 $before_widget  = '',

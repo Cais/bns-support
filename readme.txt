@@ -4,7 +4,7 @@ Donate link: http://buynowshop.com/
 Tags: support, widget, multisite compatible, widget-only
 Requires at least: 3.4
 Tested up to: 3.6
-Stable tag: 1.6
+Stable tag: 1.6.1-alpha
 License: GNU General Public License v2
 License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
@@ -74,6 +74,10 @@ Yes, this plugin has been made for multi-widget compatibility but it really serv
 Please stay current with your WordPress installation, your active theme, and your plugins.
 
 == Changelog ==
+= 1.6.1 =
+* Released ...
+* Added shortcode name parameter for core filter auto-creation
+
 = 1.6 =
 * Released September 2013
 * Added shortcode functionality
