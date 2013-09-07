@@ -3,7 +3,7 @@
 Plugin Name: BNS Support
 Plugin URI: http://buynowshop.com/plugins/bns-support/
 Description: Simple display of useful support information in the sidebar. Easy to copy and paste details, such as: the blog name; WordPress version; name of installed theme; and, active plugins list. Help for those that help. The information is only viewable by logged-in readers; and, by optional default, the blog administrator(s) only.
-Version: 1.6-beta
+Version: 1.6
 Text Domain: bns-support
 Author: Edward Caissie
 Author URI: http://edwardcaissie.com/
@@ -586,13 +586,17 @@ class BNS_Support_Widget extends WP_Widget {
      * @param   array $instance
      *
      * @return  string|void
+     *
+     * @version 1.6
+     * @date    September 7, 2013
+     * Changed `show_plugins` default to true (more common usage than false)
      */
     function form( $instance ) {
         /* Set up some default widget settings. */
         $defaults = array(
             'title'         => get_bloginfo( 'name' ),
             'blog_admin'    => true,
-            'show_plugins'  => false,
+            'show_plugins'  => true,
             'credits'       => false,
         );
         $instance = wp_parse_args( ( array ) $instance, $defaults ); ?>
@@ -650,7 +654,6 @@ class BNS_Support_Widget extends WP_Widget {
      * @uses    the_widget
      *
      * @return  string
-     * @todo Clean up / make dynamic the title / or leave as empty string?
      */
     function bns_support_shortcode( $atts ) {
         /** Let's start by capturing the output */

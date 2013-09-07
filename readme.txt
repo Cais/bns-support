@@ -4,7 +4,7 @@ Donate link: http://buynowshop.com/
 Tags: support, widget, multisite compatible, widget-only
 Requires at least: 3.4
 Tested up to: 3.6
-Stable tag: 1.6-beta
+Stable tag: 1.6
 License: GNU General Public License v2
 License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
@@ -75,8 +75,9 @@ Please stay current with your WordPress installation, your active theme, and you
 
 == Changelog ==
 = 1.6 =
-* Release August 2013
+* Released September 2013
 * Added shortcode functionality
+* Changed `show_plugins` default to true (more common usage than false)
 
 = 1.5.1 =
 * Released May 2013
