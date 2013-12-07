@@ -60,6 +60,9 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @date    December 2013
  * Added shortcode name parameter for core filter auto-creation
  * Added new method `MySQL Version Details` and corrected the reported data
+ * Minor rearrangement of layout for better readability
+ *
+ * @todo Improve code structures to better allow more details/sub-details to be added
  */
 
 class BNS_Support_Widget extends WP_Widget {
@@ -487,6 +490,17 @@ class BNS_Support_Widget extends WP_Widget {
                         )
                         . '</li></ul><!-- bns-support-wp-debug-status -->';
 
+                /** MultiSite Enabled */
+                echo '<ul><li class="bns-support-ms-enabled">'
+                        . apply_filters( 'bns_support_ms_enabled',
+                            sprintf( __( '<strong>Multisite Enabled:</strong> %1$s', 'bns-support' ),
+                                function_exists( 'is_multisite' ) && is_multisite()
+                                        ? __( 'True', 'bns-support' )
+                                        : __( 'False', 'bns-support' )
+                            )
+                        )
+                        . '</li><!-- bns-support-ms-enabled --></ul>';
+
                 echo '</li><!-- WordPress Details End -->';
 
                 /** @var $active_theme_data - array object containing the current theme's data */
@@ -521,39 +535,30 @@ class BNS_Support_Widget extends WP_Widget {
                     );
                 } /** End if - is child theme */
 
-                /** MultiSite Enabled */
-                echo '<li class="bns-support-ms-enabled">'
-                        . apply_filters( 'bns_support_ms_enabled',
-                            sprintf( __( '<strong>Multisite Enabled:</strong> %1$s', 'bns-support' ),
-                                function_exists( 'is_multisite' ) && is_multisite()
-                                        ? __( 'True', 'bns-support' )
-                                        : __( 'False', 'bns-support' )
-                            )
-                        )
-                        . '</li><!-- bns-support-ms-enabled -->';
-
                 /** PHP Version */
-                echo '<li class="bns-support-php-version">'
-                        . apply_filters( 'bns_support_php_version',
-                            sprintf( __( '<strong>PHP version:</strong> %1$s', 'bns-support' ),
-                                phpversion()
-                            )
-                        )
-                        . '</li>';
+                echo '<li class="bns-support-php-version"><!-- PHP Details Start -->';
+
+                echo apply_filters( 'bns_support_php_version',
+                    sprintf( __( '<strong>PHP version:</strong> %1$s', 'bns-support' ),
+                        phpversion()
+                    )
+                );
 
                 /**
                  * Mod Rewrite Support
                  * @todo Find a method that works with minimum WordPress PHP required version
                  */
                 if ( function_exists( 'apache_get_modules' ) ) {
-                    echo '<li class="bns-support-mod-rewrite">'
+                    echo '<ul><li class="bns-support-mod-rewrite">'
                             . apply_filters( 'bns_support_mod_rewrite',
                                 sprintf( __( '<strong>Mod Rewrite:</strong> %1$s', 'bns-support' ),
                                     $this->mod_rewrite_check()
                                 )
                             )
-                            . '</li>';
+                            . '</li></ul>';
                 }
+
+                echo '</li><!-- PHP Details End -->';
 
                 echo $this->mysql_version_details();
 

@@ -80,6 +80,7 @@ Please stay current with your WordPress installation, your active theme, and you
 * Added the option to put custom stylesheet in `/wp-content/` folder
 * Added `WP_DEBUG` status display
 * Added new method `MySQL Version Details` and corrected the reported data
+* Minor rearrangement of layout for better readability
 
 = 1.6 =
 * Released September 2013
