@@ -75,8 +75,11 @@ Please stay current with your WordPress installation, your active theme, and you
 
 == Changelog ==
 = 1.6.1 =
-* Released ...
+* Released December 2013
 * Added shortcode name parameter for core filter auto-creation
+* Added the option to put custom stylesheet in `/wp-content/` folder
+* Added `WP_DEBUG` status display
+* Added new method `MySQL Version Details` and corrected the reported data
 
 = 1.6 =
 * Released September 2013
