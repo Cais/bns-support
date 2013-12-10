@@ -3,7 +3,7 @@
 Plugin Name: BNS Support
 Plugin URI: http://buynowshop.com/plugins/bns-support/
 Description: Simple display of useful support information in the sidebar. Easy to copy and paste details, such as: the blog name; WordPress version; name of installed theme; and, active plugins list. Help for those that help. The information is only viewable by logged-in readers; and, by optional default, the blog administrator(s) only.
-Version: 1.6.1
+Version: 1.6.2
 Text Domain: bns-support
 Author: Edward Caissie
 Author URI: http://edwardcaissie.com/
@@ -20,7 +20,7 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @link        http://buynowshop.com/plugins/bns-support/
  * @link        https://github.com/Cais/bns-support/
  * @link        http://wordpress.org/extend/plugins/bns-support/
- * @version     1.6.1
+ * @version     1.6.2
  * @author      Edward Caissie <edward.caissie@gmail.com>
  * @copyright   Copyright (c) 2009-2013, Edward Caissie
  *
@@ -61,6 +61,9 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * Added shortcode name parameter for core filter auto-creation
  * Added new method `MySQL Version Details` and corrected the reported data
  * Minor rearrangement of layout for better readability
+ *
+ * @version 1.6.2
+ * @date    December 10, 2013
  *
  * @todo Improve code structures to better allow more details/sub-details to be added
  */
@@ -288,11 +291,15 @@ class BNS_Support_Widget extends WP_Widget {
      * @since   1.6.1
      *
      * @uses    apply_filters
+     *
+     * @version 1.6.2
+     * @date    December 10, 2013
+     * Corrected database connection
      */
     function mysql_version_details() {
         /** MySQL Version */
         /** @var $mysql_version_number - pull MySQL server version details */
-        $mysql_version_number = mysqli_get_server_version( mysqli_connect() );
+        $mysql_version_number = mysqli_get_server_version( mysqli_connect( DB_HOST, DB_USER, DB_PASSWORD ) );
         /** Deconstruct the version number for more easily read output */
         /** @var $main_version - stripped minor and sub versions */
         $main_version = floor( $mysql_version_number / 10000 );
