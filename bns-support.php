@@ -313,19 +313,29 @@ class BNS_Support_Widget extends WP_Widget {
 			)
 		);
 
+		$output .= '<ul class="bns-support-php-sub-details">';
+
+		/** Add PHP Safe Mode status */
+		$output .= ini_get( 'safe_mode' ) ? '<li>' . __( 'Safe Mode: On', 'bns-support' ) . '</li>' : '<li>' . __( 'Safe Mode: Off', 'bns-support' ) . '</li>';
+
+		/** Add PHP Allow URL fopen status */
+		$output .= ini_get( 'allow_url_fopen' ) ? '<li>' . __( 'Allow URL fopen:  On', 'bns-support' ) . '</li>' : '<li>' . __( 'Allow URL fopen:  Off', 'bns-support' ) . '</li>';
+
 		/**
 		 * Mod Rewrite Support
 		 * @todo Find a method that works with minimum WordPress PHP required version
 		 */
 		if ( function_exists( 'apache_get_modules' ) ) {
-			$output .= '<ul><li class="bns-support-mod-rewrite">'
+			$output .= '<li class="bns-support-mod-rewrite">'
 				. apply_filters( 'bns_support_mod_rewrite',
 					sprintf( __( '<strong>Mod Rewrite:</strong> %1$s', 'bns-support' ),
 						$this->mod_rewrite_check()
 					)
 				)
-				. '</li></ul>';
+				. '</li>';
 		}
+
+		$output .= '</ul><!-- .bns-support-php-sub-details -->';
 
 		$output .= '</li><!-- PHP Details End -->';
 

@@ -77,6 +77,8 @@ Please stay current with your WordPress installation, your active theme, and you
 = 1.6.3 =
 * Released January 2014
 * Extract `PHP Details` into its own method
+* Add PHP Safe Mode status
+* Add PHP Allow URL fopen status
 
 = 1.6.2 =
 * Released December 2013
