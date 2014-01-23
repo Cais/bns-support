@@ -3,7 +3,7 @@
 Plugin Name: BNS Support
 Plugin URI: http://buynowshop.com/plugins/bns-support/
 Description: Simple display of useful support information in the sidebar. Easy to copy and paste details, such as: the blog name; WordPress version; name of installed theme; and, active plugins list. Help for those that help. The information is only viewable by logged-in readers; and, by optional default, the blog administrator(s) only.
-Version: 1.6.2
+Version: 1.6.3
 Text Domain: bns-support
 Author: Edward Caissie
 Author URI: http://edwardcaissie.com/
@@ -16,13 +16,13 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * This plugin will allow you to style sections of post content with added
  * emphasis by leveraging a style element from the active theme.
  *
- * @package     BNS_Support
- * @link        http://buynowshop.com/plugins/bns-support/
- * @link        https://github.com/Cais/bns-support/
- * @link        http://wordpress.org/extend/plugins/bns-support/
- * @version     1.6.2
- * @author      Edward Caissie <edward.caissie@gmail.com>
- * @copyright   Copyright (c) 2009-2013, Edward Caissie
+ * @package        BNS_Support
+ * @link           http://buynowshop.com/plugins/bns-support/
+ * @link           https://github.com/Cais/bns-support/
+ * @link           http://wordpress.org/extend/plugins/bns-support/
+ * @version        1.6.3
+ * @author         Edward Caissie <edward.caissie@gmail.com>
+ * @copyright      Copyright (c) 2009-2014, Edward Caissie
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License version 2, as published by the
@@ -44,28 +44,13 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * The license for this software can also likely be found here:
  * http://www.gnu.org/licenses/gpl-2.0.html
  *
- * @version     1.5
- * @date        April 14, 2013
- * Added 'mod_rewrite' display check
+ * @version        1.6.2
+ * @date           December 10, 2013
  *
- * @version     1.5.1
- * @date        May 28, 2013
- * Added conditional check for 'apache_get_modules'
+ * @version        1.6.3
+ * @date           January 23, 2014
  *
- * @version     1.6
- * @date        August 25, 2013
- * Added shortcode functionality
- *
- * @version     1.6.1
- * @date        December 2013
- * Added shortcode name parameter for core filter auto-creation
- * Added new method `MySQL Version Details` and corrected the reported data
- * Minor rearrangement of layout for better readability
- *
- * @version     1.6.2
- * @date        December 10, 2013
- *
- * @todo        Improve code structures to better allow more details/sub-details to be added
+ * @todo           Improve code structures to better allow more details/sub-details to be added
  */
 class BNS_Support_Widget extends WP_Widget {
 	/**
@@ -286,9 +271,9 @@ class BNS_Support_Widget extends WP_Widget {
 	 */
 	function mod_rewrite_check() {
 		if ( in_array( 'mod_rewrite', apache_get_modules() ) ) {
-			return 'Enabled';
+			return __( 'Enabled', 'bns-support' );
 		} else {
-			return 'Disabled';
+			return __( 'Disabled', 'bns-support' );
 		}
 		/** End if - in array */
 
