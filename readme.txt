@@ -34,6 +34,9 @@ This section describes how to install the plugin and get it working.
 Reading this article for further assistance: http://wpfirstaid.com/2009/12/plugin-installation/
 
 == Frequently Asked Questions ==
+= What can I use for a shortcode? =
+The shortcode `[ tech_support ]` (remove the spaces to use correctly) was recently added for those users that would like to use a post or page for the plugin output.
+
 = How can I get support for this plugin? =
 Please note, support may be available on the WordPress Support forums; but, it may be faster to visit http://buynowshop.com/plugins/bns-support/ and leave a comment with the issue you are experiencing.
 
@@ -79,6 +82,7 @@ Please stay current with your WordPress installation, your active theme, and you
 * Extract `PHP Details` into its own method
 * Add PHP Safe Mode status
 * Add PHP Allow URL fopen status
+* Updated `readme.txt` with `tech_support` shortcode reference
 
 = 1.6.2 =
 * Released December 2013
