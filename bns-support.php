@@ -296,6 +296,46 @@ class BNS_Support_Widget extends WP_Widget {
 
 
 	/**
+	 * PHP Details
+	 * Returns the PHP details of the installation server
+	 *
+	 * @since    1.6.3
+	 *
+	 * @uses     apply_filters
+	 */
+	function php_details() {
+		/** PHP Version */
+		$output = '<li class="bns-support-php-version"><!-- PHP Details Start -->';
+
+		$output .= apply_filters( 'bns_support_php_version',
+			sprintf( __( '<strong>PHP version:</strong> %1$s', 'bns-support' ),
+				phpversion()
+			)
+		);
+
+		/**
+		 * Mod Rewrite Support
+		 * @todo Find a method that works with minimum WordPress PHP required version
+		 */
+		if ( function_exists( 'apache_get_modules' ) ) {
+			$output .= '<ul><li class="bns-support-mod-rewrite">'
+				. apply_filters( 'bns_support_mod_rewrite',
+					sprintf( __( '<strong>Mod Rewrite:</strong> %1$s', 'bns-support' ),
+						$this->mod_rewrite_check()
+					)
+				)
+				. '</li></ul>';
+		}
+
+		$output .= '</li><!-- PHP Details End -->';
+
+		return $output;
+
+	}
+	/** End function - bns support shortcode */
+
+
+	/**
 	 * MySQL Version Details
 	 * Returns a human readable version of the MySQL server version
 	 *
@@ -435,33 +475,39 @@ class BNS_Support_Widget extends WP_Widget {
 	/**
 	 * Widget
 	 *
-	 * @package BNS_Support
-	 * @since   0.1
+	 * @package     BNS_Support
+	 * @since       0.1
 	 *
-	 * @uses    BNS_Support::wp_list_all_active_plugins
-	 * @uses    apply_filters
-	 * @uses    current_user_can
-	 * @uses    get_current_site
-	 * @uses    is_child_theme
-	 * @uses    is_multisite
-	 * @uses    wp_get_theme
+	 * @uses        BNS_Support::wp_list_all_active_plugins
+	 * @uses        BNS_Support::mysql_version_details
+	 * @uses        BNS_Support::php_details
+	 * @uses        apply_filters
+	 * @uses        current_user_can
+	 * @uses        get_current_site
+	 * @uses        is_child_theme
+	 * @uses        is_multisite
+	 * @uses        wp_get_theme
 	 *
 	 * @param   array $args
 	 * @param   array $instance
 	 *
-	 * @version 1.4.1
-	 * @date    February 27, 2013
+	 * @version     1.4.1
+	 * @date        February 27, 2013
 	 * Change the widget output to a better grouping of details
 	 *
-	 * @version 1.5
-	 * @date    April 14, 2013
+	 * @version     1.5
+	 * @date        April 14, 2013
 	 * Refactored 'MultiSite Enabled', 'PHP Version', and 'MySQL Version' to be
 	 * better filtered
 	 *
-	 * @version 1.6.1
-	 * @date    December 7, 2013
+	 * @version     1.6.1
+	 * @date        December 7, 2013
 	 * Add `WP_DEBUG` status reference
 	 * Extracted `MySQL Version Details` into its own method
+	 *
+	 * @version     1.6.3
+	 * @date        January 23, 2014
+	 * Extracted `PHP Details` into its own method
 	 */
 	function widget( $args, $instance ) {
 		extract( $args );
@@ -563,31 +609,10 @@ class BNS_Support_Widget extends WP_Widget {
 				}
 				/** End if - is child theme */
 
-				/** PHP Version */
-				echo '<li class="bns-support-php-version"><!-- PHP Details Start -->';
+				/** Display PHP Details */
+				echo $this->php_details();
 
-				echo apply_filters( 'bns_support_php_version',
-					sprintf( __( '<strong>PHP version:</strong> %1$s', 'bns-support' ),
-						phpversion()
-					)
-				);
-
-				/**
-				 * Mod Rewrite Support
-				 * @todo Find a method that works with minimum WordPress PHP required version
-				 */
-				if ( function_exists( 'apache_get_modules' ) ) {
-					echo '<ul><li class="bns-support-mod-rewrite">'
-						. apply_filters( 'bns_support_mod_rewrite',
-							sprintf( __( '<strong>Mod Rewrite:</strong> %1$s', 'bns-support' ),
-								$this->mod_rewrite_check()
-							)
-						)
-						. '</li></ul>';
-				}
-
-				echo '</li><!-- PHP Details End -->';
-
+				/** Display MySQL Version Details */
 				echo $this->mysql_version_details();
 
 				/** Multisite Check */
@@ -800,8 +825,6 @@ class BNS_Support_Widget extends WP_Widget {
 		return $bns_support_content;
 
 	}
-	/** End function - bns support shortcode */
-
 
 }
 
