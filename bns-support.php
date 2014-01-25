@@ -3,7 +3,7 @@
 Plugin Name: BNS Support
 Plugin URI: http://buynowshop.com/plugins/bns-support/
 Description: Simple display of useful support information in the sidebar. Easy to copy and paste details, such as: the blog name; WordPress version; name of installed theme; and, active plugins list. Help for those that help. The information is only viewable by logged-in readers; and, by optional default, the blog administrator(s) only.
-Version: 1.6.3
+Version: 1.6.4
 Text Domain: bns-support
 Author: Edward Caissie
 Author URI: http://edwardcaissie.com/
@@ -20,7 +20,7 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @link           http://buynowshop.com/plugins/bns-support/
  * @link           https://github.com/Cais/bns-support/
  * @link           http://wordpress.org/extend/plugins/bns-support/
- * @version        1.6.3
+ * @version        1.6.4
  * @author         Edward Caissie <edward.caissie@gmail.com>
  * @copyright      Copyright (c) 2009-2014, Edward Caissie
  *
@@ -50,7 +50,8 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @version        1.6.3
  * @date           January 23, 2014
  *
- * @todo           Improve code structures to better allow more details/sub-details to be added
+ * @version        1.6.4
+ * @date           January 25, 2014
  */
 class BNS_Support_Widget extends WP_Widget {
 	/**
@@ -445,20 +446,28 @@ class BNS_Support_Widget extends WP_Widget {
 
 	/**
 	 * WP List All Active Plugins
-	 * @link    http://wordpress.org/extend/plugins/wp-plugin-lister/
-	 * @author  Paul G Petty
-	 * @link    http://paulgriffinpetty.com
+	 * @link       http://wordpress.org/extend/plugins/wp-plugin-lister/
+	 * @author     Paul G Petty
+	 * @link       http://paulgriffinpetty.com
 	 *
 	 * Some of the functionality of Paul G Getty's Plugin Lister code has been
 	 * used to replace the old code by Lester Chan
 	 *
-	 * @package BNS_Support
-	 * @since   1.1
 	 * Completely merged, stripped out excess, and rewritten 'Plugin Lister'
+	 * @package    BNS_Support
+	 * @since      1.1
 	 *
-	 * @version 1.4
-	 * @date    February 14, 2013
+	 * @uses       __
+	 * @uses       get_option
+	 * @uses       get_plugin_data
+	 *
+	 * @version    1.4
+	 * @date       February 14, 2013
 	 * Sorted out AuthorURI conditional test
+	 *
+	 * @version    1.6.4
+	 * @date       January 25, 2014
+	 * Clean up output and improve i18n implementation
 	 */
 	function wp_list_all_active_plugins() {
 		if ( ! function_exists( 'get_plugin_data' ) ) {
@@ -525,17 +534,25 @@ class BNS_Support_Widget extends WP_Widget {
 		$p = get_option( 'active_plugins' );
 
 		$plugin_list = '';
-		$plugin_list .= '<ul>';
+
+		$plugin_list .= '<ul class="bns-support-plugin-list">';
 
 		foreach ( $p as $q ) {
+
 			$d = get_plugin_data( WP_PLUGIN_DIR . '/' . $q );
-			$plugin_list .= '<li>';
-			$plugin_list .= __( '<strong><a href="' . $d['PluginURI'] . '">' . $d['Title'] . ' ' . $d['Version'] . '</a></strong>', 'bns-support' ) . '<br />';
+
+			$plugin_list .= '<li class="bns-support-plugin-list-item">';
+
+			$plugin_list .= sprintf(
+				'<strong><a href="' . $d['PluginURI'] . '">' . __( '%1$s %2$s', 'bns-support' ) . '</a></strong>',
+				$d['Title'],
+				$d['Version']
+			);
 
 			if ( ! empty( $d['AuthorURI'] ) ) {
-				$plugin_list .= sprintf( __( 'by %1$s (<a href="' . $d['AuthorURI'] . '">url</a>)', 'bns-support' ), $d['Author'] ) . '<br />';
+				$plugin_list .= sprintf( __( ' by %1$s (<a href="' . $d['AuthorURI'] . '">url</a>)', 'bns-support' ), $d['Author'] ) . '<br />';
 			} else {
-				$plugin_list .= sprintf( __( 'by %1$s', 'bns-support' ), $d['Author'] ) . '<br />';
+				$plugin_list .= sprintf( __( ' by %1$s', 'bns-support' ), $d['Author'] ) . '<br />';
 			}
 			/** End if - not empty */
 

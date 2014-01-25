@@ -80,6 +80,7 @@ Please stay current with your WordPress installation, your active theme, and you
 = 1.6.4 =
 * Released January 2014
 * Added PHP Memory Limit value
+* Cleaned up output and improve i18n implementation in active plugin list
 * Moved all of the Mod Rewrite code into its own method to better encapsulate
 * Updated inline documentation
 
