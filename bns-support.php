@@ -92,13 +92,28 @@ class BNS_Support_Widget extends WP_Widget {
 		/** End if - version compare */
 
 		/** Add scripts and styles */
-		add_action( 'wp_enqueue_scripts', array( $this, 'BNS_Support_scripts_and_styles' ) );
+		add_action(
+			'wp_enqueue_scripts', array(
+				$this,
+				'BNS_Support_scripts_and_styles'
+			)
+		);
 
 		/** Add custom headers */
-		add_filter( 'extra_theme_headers', array( $this, 'BNS_Support_extra_theme_headers' ) );
+		add_filter(
+			'extra_theme_headers', array(
+				$this,
+				'BNS_Support_extra_theme_headers'
+			)
+		);
 
 		/** Add shortcode */
-		add_shortcode( 'tech_support', array( $this, 'bns_support_shortcode' ) );
+		add_shortcode(
+			'tech_support', array(
+				$this,
+				'bns_support_shortcode'
+			)
+		);
 
 		/** Add widget */
 		add_action( 'widgets_init', array( $this, 'BNS_Support_load_widget' ) );
@@ -309,17 +324,46 @@ class BNS_Support_Widget extends WP_Widget {
 
 
 	/**
+	 * Memory Limit Value
+	 * Returns the value of the PHP Memory Limit or indicates no limit is set
+	 *
+	 * @package    BNS_Support
+	 * @since      1.6.4
+	 *
+	 * @uses       apply_filters
+	 *
+	 * @return    mixed|void
+	 */
+	function memory_limit_value() {
+
+		if ( ini_get( 'memory_limit' ) == '-1' ) {
+			$value = __( 'No Memory Limit Set', 'bns-support' );
+		} else {
+			$value = sprintf( __( 'Memory Limit: %1$s', 'bns-support' ), ini_get( 'memory_limit' ) );
+		}
+
+		/** End if - memory limit */
+
+		return apply_filters( 'bns_support_memory_limit_value', '<li class="bns-support-memory-limit">' . $value . '</li>' );
+
+	} /** End function - memory limit value */
+
+
+	/**
 	 * PHP Details
 	 * Returns the PHP details of the installation server
 	 *
 	 * @package    BNS_Support
 	 * @since      1.6.3
 	 *
+	 * @uses       BNS_Support::memory_limit_value
+	 * @uses       BNS_Support::mod_rewrite_check
 	 * @uses       apply_filters
 	 *
 	 * @version    1.6.4
 	 * @date       January 25, 2014
-	 * Moved all of the Mod Rewrite code into its own method to better encapsulate
+	 * Added `memory_limit_value` to output
+	 * Moved all Mod Rewrite code into `mod_rewrite_check` method
 	 */
 	function php_details() {
 		/** PHP Version */
@@ -336,7 +380,7 @@ class BNS_Support_Widget extends WP_Widget {
 		$output .= '<ul class="bns-support-php-sub-details">';
 
 		/** Add PHP Memory Limit value */
-		$output .= '<li>' . sprintf( __( 'Memory Limit: %1$s', 'bns-support' ), ini_get( 'memory_limit' ) ) . '</li>';
+		$output .= $this->memory_limit_value();
 
 		/** Add PHP Safe Mode status */
 		$output .= ini_get( 'safe_mode' ) ? '<li>' . __( 'Safe Mode: On', 'bns-support' ) . '</li>' : '<li>' . __( 'Safe Mode: Off', 'bns-support' ) . '</li>';

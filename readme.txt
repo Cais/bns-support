@@ -81,6 +81,7 @@ Please stay current with your WordPress installation, your active theme, and you
 * Released January 2014
 * Added PHP Memory Limit value
 * Moved all of the Mod Rewrite code into its own method to better encapsulate
+* Updated inline documentation
 
 = 1.6.3 =
 * Released January 2014
