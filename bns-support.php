@@ -273,18 +273,37 @@ class BNS_Support_Widget extends WP_Widget {
 	/**
 	 * Mod Rewrite Check
 	 *
-	 * @package BNS_Support
-	 * @since   1.5
+	 * @package    BNS_Support
+	 * @since      1.5
 	 *
-	 * @return  string - Enabled|Disabled
+	 * @uses       apply_filters
+	 *
+	 * @return  string|null - Enabled|Disabled
+	 *
+	 * @version    1.6.4
+	 * @date       January 25, 2014
+	 * Refactored to move entire check and output into method
 	 */
 	function mod_rewrite_check() {
-		if ( in_array( 'mod_rewrite', apache_get_modules() ) ) {
-			return __( 'Enabled', 'bns-support' );
+
+		if ( function_exists( 'apache_get_modules' ) ) {
+
+			if ( in_array( 'mod_rewrite', apache_get_modules() ) ) {
+				$rewrite_check = __( 'Mod Rewrite: Enabled', 'bns-support' );
+			} else {
+				$rewrite_check = __( 'Mod Rewrite: Disabled', 'bns-support' );
+			}
+
+			/** End if - in array */
+
+			return apply_filters( 'bns_support_mod_rewrite', '<li class="bns-support-mod-rewrite">' . $rewrite_check . '</li>' );
+
 		} else {
-			return __( 'Disabled', 'bns-support' );
+
+			/** If there is nothing to return then return nothing ... er, null */
+			return null;
+
 		}
-		/** End if - in array */
 
 	} /** End function - mod rewrite check */
 
@@ -293,9 +312,14 @@ class BNS_Support_Widget extends WP_Widget {
 	 * PHP Details
 	 * Returns the PHP details of the installation server
 	 *
-	 * @since    1.6.3
+	 * @package    BNS_Support
+	 * @since      1.6.3
 	 *
-	 * @uses     apply_filters
+	 * @uses       apply_filters
+	 *
+	 * @version    1.6.4
+	 * @date       January 25, 2014
+	 * Moved all of the Mod Rewrite code into its own method to better encapsulate
 	 */
 	function php_details() {
 		/** PHP Version */
@@ -311,27 +335,17 @@ class BNS_Support_Widget extends WP_Widget {
 
 		$output .= '<ul class="bns-support-php-sub-details">';
 
+		/** Add PHP Memory Limit value */
+		$output .= '<li>' . sprintf( __( 'Memory Limit: %1$s', 'bns-support' ), ini_get( 'memory_limit' ) ) . '</li>';
+
 		/** Add PHP Safe Mode status */
 		$output .= ini_get( 'safe_mode' ) ? '<li>' . __( 'Safe Mode: On', 'bns-support' ) . '</li>' : '<li>' . __( 'Safe Mode: Off', 'bns-support' ) . '</li>';
 
 		/** Add PHP Allow URL fopen status */
 		$output .= ini_get( 'allow_url_fopen' ) ? '<li>' . __( 'Allow URL fopen:  On', 'bns-support' ) . '</li>' : '<li>' . __( 'Allow URL fopen:  Off', 'bns-support' ) . '</li>';
 
-		/**
-		 * Mod Rewrite Support
-		 * @todo Find a method that works with minimum WordPress PHP required version
-		 */
-		if ( function_exists( 'apache_get_modules' ) ) {
-			$output .= '<li class="bns-support-mod-rewrite">'
-					   . apply_filters(
-					'bns_support_mod_rewrite',
-					sprintf(
-						__( '<strong>Mod Rewrite:</strong> %1$s', 'bns-support' ),
-						$this->mod_rewrite_check()
-					)
-				)
-					   . '</li>';
-		}
+		/** Add Mod Rewrite status */
+		$output .= $this->mod_rewrite_check();
 
 		$output .= '</ul><!-- .bns-support-php-sub-details -->';
 
