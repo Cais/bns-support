@@ -84,6 +84,7 @@ Please stay current with your WordPress installation, your active theme, and you
 * Changed  echo to return data
 * Cleaned up output and improve i18n implementation in active plugin list
 * Moved all of the Mod Rewrite code into its own method to better encapsulate
+* Moved `get_plugin_data` out of `bns_list_active_plugins` and call as method instead
 * Renamed function `WP List All Active Plugins` to `BNS List Active Plugins`
 * Updated inline documentation
 

@@ -445,6 +445,76 @@ class BNS_Support_Widget extends WP_Widget {
 
 
 	/**
+	 * Get Plugin Data
+	 * Collects the information about the plugin from the first 8192 characters
+	 * of the plugin file
+	 *
+	 * @package	BNS_Support
+	 * @since	1.7
+	 *
+	 * @param	$plugin_file
+	 *
+	 * @return	array|string
+	 */
+	function get_plugin_data( $plugin_file ) {
+		/** We don't need to write to the file, so just open for reading. */
+		$fp = fopen( $plugin_file, 'r' );
+
+		/** Pull only the first 8kB of the file in. */
+		$plugin_data = fread( $fp, 8192 );
+
+		/** PHP will close file handle, but we are good citizens. */
+		fclose( $fp );
+
+		preg_match( '|Plugin Name:(.*)$|mi', $plugin_data, $name );
+		preg_match( '|Plugin URI:(.*)$|mi', $plugin_data, $uri );
+		preg_match( '|Version:(.*)|i', $plugin_data, $version );
+		preg_match( '|Description:(.*)$|mi', $plugin_data, $description );
+		preg_match( '|Author:(.*)$|mi', $plugin_data, $author_name );
+		preg_match( '|Author URI:(.*)$|mi', $plugin_data, $author_uri );
+		preg_match( '|Text Domain:(.*)$|mi', $plugin_data, $text_domain );
+		preg_match( '|Domain Path:(.*)$|mi', $plugin_data, $domain_path );
+
+		foreach (
+			array(
+				'name',
+				'uri',
+				'version',
+				'description',
+				'author_name',
+				'author_uri',
+				'text_domain',
+				'domain_path'
+			) as $field
+		) {
+			if ( ! empty( ${$field} ) ) {
+				${$field} = trim( ${$field}[1] );
+			} else {
+				${$field} = '';
+			}
+			/** End if - not empty */
+		}
+		/** End foreach - array */
+
+		$plugin_data = array(
+			'Name'        => $name,
+			'Title'       => $name,
+			'PluginURI'   => $uri,
+			'Description' => $description,
+			'Author'      => $author_name,
+			'AuthorURI'   => $author_uri,
+			'Version'     => $version,
+			'TextDomain'  => $text_domain,
+			'DomainPath'  => $domain_path
+		);
+
+		return $plugin_data;
+
+	}
+	/** End function - get plugin data */
+
+
+	/**
 	 * BNS List Active Plugins
 	 * @link       http://wordpress.org/extend/plugins/wp-plugin-lister/
 	 * @author     Paul G Petty
@@ -471,70 +541,11 @@ class BNS_Support_Widget extends WP_Widget {
 	 * Clean up output and improve i18n implementation
 	 * Change from echo to return data
 	 * Added filter `bns_support_plugin_list`
+	 * Moved `get_plugin_data` out of function and call as method instead
 	 *
 	 * @todo       Address multiple contributor to plugin (currently only the first AuthorURI is used)
 	 */
 	function bns_list_active_plugins() {
-		if ( ! function_exists( 'get_plugin_data' ) ) {
-			function get_plugin_data( $plugin_file ) {
-				/** We don't need to write to the file, so just open for reading. */
-				$fp = fopen( $plugin_file, 'r' );
-
-				/** Pull only the first 8kB of the file in. */
-				$plugin_data = fread( $fp, 8192 );
-
-				/** PHP will close file handle, but we are good citizens. */
-				fclose( $fp );
-
-				preg_match( '|Plugin Name:(.*)$|mi', $plugin_data, $name );
-				preg_match( '|Plugin URI:(.*)$|mi', $plugin_data, $uri );
-				preg_match( '|Version:(.*)|i', $plugin_data, $version );
-				preg_match( '|Description:(.*)$|mi', $plugin_data, $description );
-				preg_match( '|Author:(.*)$|mi', $plugin_data, $author_name );
-				preg_match( '|Author URI:(.*)$|mi', $plugin_data, $author_uri );
-				preg_match( '|Text Domain:(.*)$|mi', $plugin_data, $text_domain );
-				preg_match( '|Domain Path:(.*)$|mi', $plugin_data, $domain_path );
-
-				foreach (
-					array(
-						'name',
-						'uri',
-						'version',
-						'description',
-						'author_name',
-						'author_uri',
-						'text_domain',
-						'domain_path'
-					) as $field
-				) {
-					if ( ! empty( ${$field} ) ) {
-						${$field} = trim( ${$field}[1] );
-					} else {
-						${$field} = '';
-					}
-					/** End if - not empty */
-				}
-				/** End foreach - array */
-
-				$plugin_data = array(
-					'Name'        => $name,
-					'Title'       => $name,
-					'PluginURI'   => $uri,
-					'Description' => $description,
-					'Author'      => $author_name,
-					'AuthorURI'   => $author_uri,
-					'Version'     => $version,
-					'TextDomain'  => $text_domain,
-					'DomainPath'  => $domain_path
-				);
-
-				return $plugin_data;
-
-			}
-			/** End function - get plugin data */
-
-		}
-		/** End if - not function exists */
 
 		$p = get_option( 'active_plugins' );
 
@@ -544,7 +555,7 @@ class BNS_Support_Widget extends WP_Widget {
 
 		foreach ( $p as $q ) {
 
-			$d = get_plugin_data( WP_PLUGIN_DIR . '/' . $q );
+			$d = $this->get_plugin_data( WP_PLUGIN_DIR . '/' . $q );
 
 			$plugin_list .= '<li class="bns-support-plugin-list-item">';
 
