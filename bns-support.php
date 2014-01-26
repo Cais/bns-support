@@ -3,7 +3,7 @@
 Plugin Name: BNS Support
 Plugin URI: http://buynowshop.com/plugins/bns-support/
 Description: Simple display of useful support information in the sidebar. Easy to copy and paste details, such as: the blog name; WordPress version; name of installed theme; and, active plugins list. Help for those that help. The information is only viewable by logged-in readers; and, by optional default, the blog administrator(s) only.
-Version: 1.6.4
+Version: 1.7
 Text Domain: bns-support
 Author: Edward Caissie
 Author URI: http://edwardcaissie.com/
@@ -20,7 +20,7 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @link           http://buynowshop.com/plugins/bns-support/
  * @link           https://github.com/Cais/bns-support/
  * @link           http://wordpress.org/extend/plugins/bns-support/
- * @version        1.6.4
+ * @version        1.7
  * @author         Edward Caissie <edward.caissie@gmail.com>
  * @copyright      Copyright (c) 2009-2014, Edward Caissie
  *
@@ -50,8 +50,8 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @version        1.6.3
  * @date           January 23, 2014
  *
- * @version        1.6.4
- * @date           January 25, 2014
+ * @version        1.7
+ * @date           January 26, 2014
  */
 class BNS_Support_Widget extends WP_Widget {
 	/**
@@ -296,7 +296,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 *
 	 * @return  string|null - Enabled|Disabled
 	 *
-	 * @version    1.6.4
+	 * @version    1.7
 	 * @date       January 25, 2014
 	 * Refactored to move entire check and output into method
 	 */
@@ -329,7 +329,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 * Returns the value of the PHP Memory Limit or indicates no limit is set
 	 *
 	 * @package    BNS_Support
-	 * @since      1.6.4
+	 * @since      1.7
 	 *
 	 * @uses       apply_filters
 	 *
@@ -361,7 +361,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @uses       BNS_Support::mod_rewrite_check
 	 * @uses       apply_filters
 	 *
-	 * @version    1.6.4
+	 * @version    1.7
 	 * @date       January 25, 2014
 	 * Added `memory_limit_value` to output
 	 * Moved all Mod Rewrite code into `mod_rewrite_check` method
@@ -445,7 +445,7 @@ class BNS_Support_Widget extends WP_Widget {
 
 
 	/**
-	 * WP List All Active Plugins
+	 * BNS List Active Plugins
 	 * @link       http://wordpress.org/extend/plugins/wp-plugin-lister/
 	 * @author     Paul G Petty
 	 * @link       http://paulgriffinpetty.com
@@ -465,13 +465,16 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @date       February 14, 2013
 	 * Sorted out AuthorURI conditional test
 	 *
-	 * @version    1.6.4
-	 * @date       January 25, 2014
+	 * @version    1.7
+	 * @date       January 26, 2014
+	 * Renamed function to `BNS List Active Plugins` from `WP List All Active Plugins`
 	 * Clean up output and improve i18n implementation
+	 * Change from echo to return data
+	 * Added filter `bns_support_plugin_list`
 	 *
 	 * @todo       Address multiple contributor to plugin (currently only the first AuthorURI is used)
 	 */
-	function wp_list_all_active_plugins() {
+	function bns_list_active_plugins() {
 		if ( ! function_exists( 'get_plugin_data' ) ) {
 			function get_plugin_data( $plugin_file ) {
 				/** We don't need to write to the file, so just open for reading. */
@@ -576,7 +579,7 @@ class BNS_Support_Widget extends WP_Widget {
 
 		$plugin_list .= '</ul>';
 
-		echo $plugin_list;
+		return apply_filters( 'bns_support_plugin_list', $plugin_list );
 
 	} /** End function - list all active plugins */
 
@@ -587,7 +590,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @package     BNS_Support
 	 * @since       0.1
 	 *
-	 * @uses        BNS_Support::wp_list_all_active_plugins
+	 * @uses        BNS_Support::bns_list_active_plugins
 	 * @uses        BNS_Support::mysql_version_details
 	 * @uses        BNS_Support::php_details
 	 * @uses        apply_filters
@@ -774,7 +777,8 @@ class BNS_Support_Widget extends WP_Widget {
 							'<li class="bns-support-active-plugins"><strong>' . __( 'Active Plugins:', 'bns-support' ) . '</strong></li>'
 						);
 
-						$this->wp_list_all_active_plugins();
+						/** Show Active Plugins List */
+						echo $this->bns_list_active_plugins();
 					}
 					/** End if - show plugins */
 
