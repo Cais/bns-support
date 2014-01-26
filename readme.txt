@@ -81,6 +81,7 @@ Please stay current with your WordPress installation, your active theme, and you
 * Released January 2014
 * Added PHP Memory Limit value
 * Added filter `bns_support_plugin_list`
+* Added filter `bns_support_plugin_data`
 * Changed  echo to return data
 * Cleaned up output and improve i18n implementation in active plugin list
 * Moved all of the Mod Rewrite code into its own method to better encapsulate

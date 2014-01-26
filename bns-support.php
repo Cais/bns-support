@@ -449,12 +449,12 @@ class BNS_Support_Widget extends WP_Widget {
 	 * Collects the information about the plugin from the first 8192 characters
 	 * of the plugin file
 	 *
-	 * @package	BNS_Support
-	 * @since	1.7
+	 * @package    BNS_Support
+	 * @since      1.7
 	 *
-	 * @param	$plugin_file
+	 * @param    $plugin_file
 	 *
-	 * @return	array|string
+	 * @return    array|string
 	 */
 	function get_plugin_data( $plugin_file ) {
 		/** We don't need to write to the file, so just open for reading. */
@@ -508,7 +508,7 @@ class BNS_Support_Widget extends WP_Widget {
 			'DomainPath'  => $domain_path
 		);
 
-		return $plugin_data;
+		return apply_filters( 'bns_support_plugin_data', $plugin_data );
 
 	}
 	/** End function - get plugin data */
