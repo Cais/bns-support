@@ -550,9 +550,16 @@ class BNS_Support_Widget extends WP_Widget {
 			);
 
 			if ( ! empty( $d['AuthorURI'] ) ) {
-				$plugin_list .= sprintf( __( ' by %1$s (<a href="' . $d['AuthorURI'] . '">url</a>)', 'bns-support' ), $d['Author'] ) . '<br />';
+				$plugin_list .= sprintf(
+									__( ' by %1$s %2$s', 'bns-support' ),
+									$d['Author'],
+									'(<a href="' . $d['AuthorURI'] . '">url</a>)'
+								) . '<br />';
 			} else {
-				$plugin_list .= sprintf( __( ' by %1$s', 'bns-support' ), $d['Author'] ) . '<br />';
+				$plugin_list .= sprintf(
+									__( ' by %1$s', 'bns-support' ),
+									$d['Author']
+								) . '<br />';
 			}
 			/** End if - not empty */
 
