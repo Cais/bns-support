@@ -468,6 +468,8 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @version    1.6.4
 	 * @date       January 25, 2014
 	 * Clean up output and improve i18n implementation
+	 *
+	 * @todo       Address multiple contributor to plugin (currently only the first AuthorURI is used)
 	 */
 	function wp_list_all_active_plugins() {
 		if ( ! function_exists( 'get_plugin_data' ) ) {
@@ -543,25 +545,29 @@ class BNS_Support_Widget extends WP_Widget {
 
 			$plugin_list .= '<li class="bns-support-plugin-list-item">';
 
-			$plugin_list .= sprintf(
-				'<strong><a href="' . $d['PluginURI'] . '">' . __( '%1$s %2$s', 'bns-support' ) . '</a></strong>',
-				$d['Title'],
-				$d['Version']
-			);
-
 			if ( ! empty( $d['AuthorURI'] ) ) {
 				$plugin_list .= sprintf(
-									__( ' by %1$s %2$s', 'bns-support' ),
+									__( '%1$s by %2$s %3$s', 'bns-support' ),
+									sprintf(
+										'<strong><a href="' . $d['PluginURI'] . '">' . __( '%1$s %2$s', 'bns-support' ) . '</a></strong>',
+										$d['Title'],
+										$d['Version']
+									),
 									$d['Author'],
 									'(<a href="' . $d['AuthorURI'] . '">url</a>)'
 								) . '<br />';
 			} else {
 				$plugin_list .= sprintf(
-									__( ' by %1$s', 'bns-support' ),
+									__( '%1$s by %2$s', 'bns-support' ),
+									sprintf(
+										'<strong><a href="' . $d['PluginURI'] . '">' . __( '%1$s %2$s', 'bns-support' ) . '</a></strong>',
+										$d['Title'],
+										$d['Version']
+									),
 									$d['Author']
 								) . '<br />';
 			}
-			/** End if - not empty */
+			/** End if - not empty Author URI */
 
 			$plugin_list .= '</li>';
 
