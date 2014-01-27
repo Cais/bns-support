@@ -51,7 +51,7 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @date           January 23, 2014
  *
  * @version        1.7
- * @date           January 26, 2014
+ * @date           January 27, 2014
  */
 class BNS_Support_Widget extends WP_Widget {
 	/**
@@ -631,6 +631,10 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @version     1.6.3
 	 * @date        January 23, 2014
 	 * Extracted `PHP Details` into its own method
+	 *
+	 * @version	1.7
+	 * @date	January 27, 2014
+	 * Fix unordered list of active plugins
 	 */
 	function widget( $args, $instance ) {
 		extract( $args );
@@ -783,13 +787,15 @@ class BNS_Support_Widget extends WP_Widget {
 					);
 
 					if ( $show_plugins ) {
-						echo apply_filters(
+						echo '<li class="bns-support-active-plugins">' . apply_filters(
 							'bns_support_active_plugins',
-							'<li class="bns-support-active-plugins"><strong>' . __( 'Active Plugins:', 'bns-support' ) . '</strong></li>'
+							'<strong>' . __( 'Active Plugins:', 'bns-support' ) . '</strong>'
 						);
 
 						/** Show Active Plugins List */
 						echo $this->bns_list_active_plugins();
+
+						echo '</li>';
 					}
 					/** End if - show plugins */
 
