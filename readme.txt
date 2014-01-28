@@ -79,15 +79,14 @@ Please stay current with your WordPress installation, your active theme, and you
 == Changelog ==
 = 1.7 =
 * Released January 2014
-* Added PHP Memory Limit value
+* Renamed function `WP List All Active Plugins` to `BNS List Active Plugins`
 * Added filter `bns_support_plugin_list`
 * Added filter `bns_support_plugin_data`
-* Changed  echo to return data
-* Cleaned up output and improve i18n implementation in active plugin list
-* Fix unordered list of active plugins
+* Added PHP Memory Limit value
 * Moved all of the Mod Rewrite code into its own method to better encapsulate
 * Moved `get_plugin_data` out of `bns_list_active_plugins` and call as method instead
-* Renamed function `WP List All Active Plugins` to `BNS List Active Plugins`
+* Cleaned up output and improved i18n implementation in active plugin list
+* Fix unordered list of active plugins
 * Updated inline documentation
 
 = 1.6.3 =
