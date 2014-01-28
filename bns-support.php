@@ -380,14 +380,14 @@ class BNS_Support_Widget extends WP_Widget {
 
 		$output .= '<ul class="bns-support-php-sub-details">';
 
-		/** Add PHP Memory Limit value */
-		$output .= $this->memory_limit_value();
-
 		/** Add PHP Safe Mode status */
 		$output .= ini_get( 'safe_mode' ) ? '<li>' . __( 'Safe Mode: On', 'bns-support' ) . '</li>' : '<li>' . __( 'Safe Mode: Off', 'bns-support' ) . '</li>';
 
 		/** Add PHP Allow URL fopen status */
 		$output .= ini_get( 'allow_url_fopen' ) ? '<li>' . __( 'Allow URL fopen:  On', 'bns-support' ) . '</li>' : '<li>' . __( 'Allow URL fopen:  Off', 'bns-support' ) . '</li>';
+
+		/** Add PHP Memory Limit value */
+		$output .= $this->memory_limit_value();
 
 		/** Add Mod Rewrite status */
 		$output .= $this->mod_rewrite_check();
@@ -400,6 +400,33 @@ class BNS_Support_Widget extends WP_Widget {
 
 	}
 	/** End function - bns support shortcode */
+
+
+	/**
+	 * GD Library Version
+	 * Returns the version of the GD extension.
+	 *
+	 * @package    BNS_Support
+	 * @since      1.7
+	 *
+	 * @uses       __
+	 */
+	function gd_library_version() {
+
+		if ( function_exists( 'gd_info' ) ) {
+
+			$info = gd_info();
+			$keys = array_keys( $info );
+
+			return sprintf( __( '<li><strong>GD Library Support:</strong> %1$s</li>', 'bns-support' ), $info[$keys[0]] );
+
+		} else {
+
+			return __( '<li><strong>GD Library Support:</strong> none</li>', 'bns-support' );
+
+		}
+
+	} /** End function - gd library version */
 
 
 	/**
@@ -632,8 +659,9 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @date        January 23, 2014
 	 * Extracted `PHP Details` into its own method
 	 *
-	 * @version	1.7
-	 * @date	January 27, 2014
+	 * @version     1.7
+	 * @date        January 27, 2014
+	 * Added GD Library Support display
 	 * Fix unordered list of active plugins
 	 */
 	function widget( $args, $instance ) {
@@ -752,6 +780,9 @@ class BNS_Support_Widget extends WP_Widget {
 				/** Display MySQL Version Details */
 				echo $this->mysql_version_details();
 
+				/** Display GD Library Version */
+				echo $this->gd_library_version();
+
 				/** Multisite Check */
 				if ( is_multisite() ) {
 
@@ -788,9 +819,9 @@ class BNS_Support_Widget extends WP_Widget {
 
 					if ( $show_plugins ) {
 						echo '<li class="bns-support-active-plugins">' . apply_filters(
-							'bns_support_active_plugins',
-							'<strong>' . __( 'Active Plugins:', 'bns-support' ) . '</strong>'
-						);
+								'bns_support_active_plugins',
+								'<strong>' . __( 'Active Plugins:', 'bns-support' ) . '</strong>'
+							);
 
 						/** Show Active Plugins List */
 						echo $this->bns_list_active_plugins();

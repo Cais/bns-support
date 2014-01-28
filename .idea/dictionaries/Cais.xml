@@ -5,6 +5,7 @@
       <w>classname</w>
       <w>multisite</w>
       <w>mysqli</w>
+      <w>phpinfo</w>
       <w>textdomain</w>
     </words>
   </dictionary>
