@@ -20,7 +20,7 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @link           http://buynowshop.com/plugins/bns-support/
  * @link           https://github.com/Cais/bns-support/
  * @link           http://wordpress.org/extend/plugins/bns-support/
- * @version        1.7
+ * @version        1.7.1
  * @author         Edward Caissie <edward.caissie@gmail.com>
  * @copyright      Copyright (c) 2009-2014, Edward Caissie
  *
@@ -52,6 +52,11 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  *
  * @version        1.7
  * @date           January 27, 2014
+ *
+ * @version        1.7.1
+ * @date           February 2014
+ *
+ * @todo           Review how shortcode displays when sidebar has display elements such as backgrounds, etc.
  */
 class BNS_Support_Widget extends WP_Widget {
 	/**
@@ -676,7 +681,6 @@ class BNS_Support_Widget extends WP_Widget {
 		/** Must be logged in */
 		if ( ( is_user_logged_in() ) ) {
 			if ( ( ! $blog_admin ) || ( current_user_can( 'manage_options' ) ) ) {
-				echo '<div class="bns-support">'; /* CSS wrapper */
 
 				/** @var    $before_widget  string - defined by theme */
 				echo $before_widget;
@@ -849,9 +853,6 @@ class BNS_Support_Widget extends WP_Widget {
 
 				/** @var $after_widget string - defined by theme */
 				echo $after_widget;
-
-				echo '</div> <!-- .bns-support -->';
-				/** End CSS wrapper */
 
 			}
 			/** End if - admin logged in */

@@ -18,14 +18,14 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/* Last revised November 23, 2011 version 1.1 */
+/* Last revised February 2, 2014 version 1.7.1 */
 
 /* CSS Document for WordPress plugin: BNS Support */
-div.bns-support {
+.widget.bns-support {
 	text-align: left;
 }
 
-div.bns-support h6 {
+h6.bns-support-credits {
 	font-size: x-small;
 	font-style: italic;
 	font-weight: normal;

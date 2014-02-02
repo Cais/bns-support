@@ -77,6 +77,10 @@ Yes, this plugin has been made for multi-widget compatibility but it really serv
 Please stay current with your WordPress installation, your active theme, and your plugins.
 
 == Changelog ==
+= 1.7.1 =
+* Released ...
+* Removed CSS wrapper and adjusted CSS elements accordingly
+
 = 1.7 =
 * Released January 2014
 * Renamed function `WP List All Active Plugins` to `BNS List Active Plugins`
