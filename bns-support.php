@@ -3,7 +3,7 @@
 Plugin Name: BNS Support
 Plugin URI: http://buynowshop.com/plugins/bns-support/
 Description: Simple display of useful support information in the sidebar. Easy to copy and paste details, such as: the blog name; WordPress version; name of installed theme; and, active plugins list. Help for those that help. The information is only viewable by logged-in readers; and, by optional default, the blog administrator(s) only.
-Version: 1.7
+Version: 1.7.1
 Text Domain: bns-support
 Author: Edward Caissie
 Author URI: http://edwardcaissie.com/
@@ -43,12 +43,6 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  *
  * The license for this software can also likely be found here:
  * http://www.gnu.org/licenses/gpl-2.0.html
- *
- * @version        1.6.2
- * @date           December 10, 2013
- *
- * @version        1.6.3
- * @date           January 23, 2014
  *
  * @version        1.7
  * @date           January 27, 2014
@@ -646,28 +640,14 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @param   array $args
 	 * @param   array $instance
 	 *
-	 * @version     1.4.1
-	 * @date        February 27, 2013
-	 * Change the widget output to a better grouping of details
-	 *
-	 * @version     1.5
-	 * @date        April 14, 2013
-	 * Refactored 'MultiSite Enabled', 'PHP Version', and 'MySQL Version' to be
-	 * better filtered
-	 *
-	 * @version     1.6.1
-	 * @date        December 7, 2013
-	 * Add `WP_DEBUG` status reference
-	 * Extracted `MySQL Version Details` into its own method
-	 *
-	 * @version     1.6.3
-	 * @date        January 23, 2014
-	 * Extracted `PHP Details` into its own method
-	 *
 	 * @version     1.7
 	 * @date        January 27, 2014
 	 * Added GD Library Support display
 	 * Fix unordered list of active plugins
+	 *
+	 * @version     1.7.1
+	 * @date        February 2, 2014
+	 * Removed CSS wrapper and adjusted CSS elements accordingly
 	 */
 	function widget( $args, $instance ) {
 		extract( $args );
