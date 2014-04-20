@@ -77,8 +77,10 @@ Yes, this plugin has been made for multi-widget compatibility but it really serv
 Please stay current with your WordPress installation, your active theme, and your plugins.
 
 == Changelog ==
-= 1.7.1 =
+= 1.8 =
 * Released ...
+* Added CSS class wrapper for shortcode output
+* Defined constants `BNS_CUSTOM_PATH` and `BNS_CUSTOM_URL`
 * Removed CSS wrapper and adjusted CSS elements accordingly
 
 = 1.7 =

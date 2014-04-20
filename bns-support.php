@@ -3,7 +3,7 @@
 Plugin Name: BNS Support
 Plugin URI: http://buynowshop.com/plugins/bns-support/
 Description: Simple display of useful support information in the sidebar. Easy to copy and paste details, such as: the blog name; WordPress version; name of installed theme; and, active plugins list. Help for those that help. The information is only viewable by logged-in readers; and, by optional default, the blog administrator(s) only.
-Version: 1.7.1
+Version: 1.8
 Text Domain: bns-support
 Author: Edward Caissie
 Author URI: http://edwardcaissie.com/
@@ -20,7 +20,7 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @link           http://buynowshop.com/plugins/bns-support/
  * @link           https://github.com/Cais/bns-support/
  * @link           http://wordpress.org/extend/plugins/bns-support/
- * @version        1.7.1
+ * @version        1.8
  * @author         Edward Caissie <edward.caissie@gmail.com>
  * @copyright      Copyright (c) 2009-2014, Edward Caissie
  *
@@ -50,17 +50,25 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @version        1.7.1
  * @date           February 2014
  *
+ * @version        1.8
+ * @date           April 2014
+ *
  * @todo           Review how shortcode displays when sidebar has display elements such as backgrounds, etc.
  */
 class BNS_Support_Widget extends WP_Widget {
 	/**
 	 * Constructor / BNS Support Widget
 	 *
-	 * @package BNS_Support
-	 * @since   0.1
+	 * @package            BNS_Support
+	 * @since              0.1
 	 *
-	 * @uses    WP_Widget (class)
-	 * @uses    add_action
+	 * @uses    (class)    WP_Widget
+	 * @uses    (constant) WP_CONTENT_DIR
+	 * @uses               add_action
+	 *
+	 * @version	1.8
+	 * @date	April 20, 2014
+	 * Defined constants `BNS_CUSTOM_PATH` and `BNS_CUSTOM_URL`
 	 */
 	function BNS_Support_Widget() {
 		/** Widget settings */
@@ -91,11 +99,15 @@ class BNS_Support_Widget extends WP_Widget {
 		}
 		/** End if - version compare */
 
+		/** Define location for BNS plugin customizations */
+		define( 'BNS_CUSTOM_PATH', WP_CONTENT_DIR . '/bns-customs/' );
+		define( 'BNS_CUSTOM_URL', content_url( '/bns-customs/' ) );
+
 		/** Add scripts and styles */
 		add_action(
 			'wp_enqueue_scripts', array(
 				$this,
-				'BNS_Support_scripts_and_styles'
+				'scripts_and_styles'
 			)
 		);
 
@@ -160,27 +172,28 @@ class BNS_Support_Widget extends WP_Widget {
 
 
 	/**
-	 * BNS Support Enqueue Plugin Scripts and Styles
+	 * Enqueue Plugin Scripts and Styles
 	 * Adds plugin stylesheet and allows for custom stylesheet to be added by end-user.
 	 *
-	 * @package BNS_Support
-	 * @since   1.0
+	 * @package            BNS_Support
+	 * @since              1.0
 	 *
-	 * @uses    WP_CONTENT_DIR
-	 * @uses    content_url
-	 * @uses    plugin_dir_path
-	 * @uses    plugin_dir_url
-	 * @uses    wp_enqueue_style
+	 * @uses    (constant) BNS_CUSTOM_PATH
+	 * @uses    (constant) BNS_CUSTOM_URL
+	 * @uses               content_url
+	 * @uses               plugin_dir_path
+	 * @uses               plugin_dir_url
+	 * @uses               wp_enqueue_style
 	 *
-	 * @version 1.2
-	 * @date    August 2, 2012
+	 * @version            1.2
+	 * @date               August 2, 2012
 	 * Programmatically add version number to enqueue calls
 	 *
-	 * @version 1.6.1
-	 * @date    December 7, 2013
+	 * @version            1.6.1
+	 * @date               December 7, 2013
 	 * Add the option to put custom stylesheet in `/wp-content/` folder
 	 */
-	function BNS_Support_scripts_and_styles() {
+	function scripts_and_styles() {
 		/** Call the wp-admin plugin code */
 		require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
 		/** @var $bns_support_data - holds the plugin header data */
@@ -195,16 +208,17 @@ class BNS_Support_Widget extends WP_Widget {
 		 * NB: This location will be killed when plugin is updated due to core
 		 * WordPress functionality - place the custom stylesheet directly in
 		 * the /wp-content/ folder for future proofing your custom styles.
+		 *
+		 * @todo - Remove plugin folder custom stylesheet by version 2.0
 		 */
 		if ( is_readable( plugin_dir_path( __FILE__ ) . 'bns-support-custom-style.css' ) ) { // Only enqueue if available
 			wp_enqueue_style( 'BNS-Support-Custom-Style', plugin_dir_url( __FILE__ ) . 'bns-support-custom-style.css', array(), $bns_support_data['Version'], 'screen' );
 		}
 		/** End if - is readable */
 
-		/** For placing the custom stylesheet in the /wp-content/ folder */
-		/** @todo Find alternative to using WP_CONTENT_DIR constant? */
-		if ( is_readable( WP_CONTENT_DIR . '/bns-support-custom-style.css' ) ) {
-			wp_enqueue_style( 'BNS-Support-Custom-Style', content_url() . '/bns-support-custom-style.css', array(), $bns_support_data['Version'], 'screen' );
+		/** For custom stylesheets in the /wp-content/bns-custom/ folder */
+		if ( is_readable( BNS_CUSTOM_PATH . 'bns-support-custom-style.css' ) ) {
+			wp_enqueue_style( 'BNS-Support-Custom-Style', BNS_CUSTOM_URL . 'bns-support-custom-style.css', array(), $bns_support_data['Version'], 'screen' );
 		}
 		/** End if - is readable */
 
@@ -963,10 +977,16 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @version 1.6.1
 	 * @date    September 7, 2013
 	 * Added shortcode name parameter for core filter auto-creation
+	 *
+	 * @version	1.8
+	 * @date	April 20, 2014
+	 * Added CSS class wrapper for shortcode output
 	 */
 	function bns_support_shortcode( $atts ) {
 		/** Let's start by capturing the output */
 		ob_start();
+
+		echo '<div class="bns-support-shortcode">';
 
 		/** Pull the widget together for use elsewhere */
 		the_widget(
@@ -987,6 +1007,8 @@ class BNS_Support_Widget extends WP_Widget {
 				$after_title = '',
 			)
 		);
+
+		echo '</div><!-- bns-support-shortcode -->';
 
 		/** Get the_widget output and put it into its own variable */
 		$bns_support_content = ob_get_clean();
