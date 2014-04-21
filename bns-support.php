@@ -66,8 +66,8 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @uses    (constant) WP_CONTENT_DIR
 	 * @uses               add_action
 	 *
-	 * @version	1.8
-	 * @date	April 20, 2014
+	 * @version            1.8
+	 * @date               April 20, 2014
 	 * Defined constants `BNS_CUSTOM_PATH` and `BNS_CUSTOM_URL`
 	 */
 	function BNS_Support_Widget() {
@@ -180,7 +180,6 @@ class BNS_Support_Widget extends WP_Widget {
 	 *
 	 * @uses    (constant) BNS_CUSTOM_PATH
 	 * @uses    (constant) BNS_CUSTOM_URL
-	 * @uses               content_url
 	 * @uses               plugin_dir_path
 	 * @uses               plugin_dir_url
 	 * @uses               wp_enqueue_style
@@ -192,6 +191,10 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @version            1.6.1
 	 * @date               December 7, 2013
 	 * Add the option to put custom stylesheet in `/wp-content/` folder
+	 *
+	 * @version            1.8
+	 * @date               April 20, 2014
+	 * Move custom stylesheet into `/wp-content/bns-customs/` folder
 	 */
 	function scripts_and_styles() {
 		/** Call the wp-admin plugin code */
@@ -964,22 +967,22 @@ class BNS_Support_Widget extends WP_Widget {
 	/**
 	 * BNS Support Shortcode
 	 *
-	 * @package BNS_Support
-	 * @since   1.6
+	 * @package    BNS_Support
+	 * @since      1.6
 	 *
 	 * @param   $atts
 	 *
-	 * @uses    shortcode_atts
-	 * @uses    the_widget
+	 * @uses       shortcode_atts
+	 * @uses       the_widget
 	 *
 	 * @return  string
 	 *
-	 * @version 1.6.1
-	 * @date    September 7, 2013
+	 * @version    1.6.1
+	 * @date       September 7, 2013
 	 * Added shortcode name parameter for core filter auto-creation
 	 *
-	 * @version	1.8
-	 * @date	April 20, 2014
+	 * @version    1.8
+	 * @date       April 20, 2014
 	 * Added CSS class wrapper for shortcode output
 	 */
 	function bns_support_shortcode( $atts ) {
