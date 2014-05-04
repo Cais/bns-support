@@ -2,9 +2,9 @@
 Contributors: cais
 Donate link: http://buynowshop.com/
 Tags: support, widget, multisite compatible, widget-only
-Requires at least: 3.4
-Tested up to: 3.8.1
-Stable tag: 1.7.1
+Requires at least: 3.6
+Tested up to: 3.9
+Stable tag: 1.8
 License: GNU General Public License v2
 License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Widget to display and share common helpful support details.
 
 == Description ==
 
-Simple display of useful support information in the sidebar. Easy to copy and paste details, such as: the blog name; WordPress version; name of installed theme; and, active plugins list. Help for those that help. The information is only viewable by logged-in readers; and, by optional default, the blog administrator(s) only.
+Displays useful technical support information in a widget area (sidebar); or, via a shortcode on a post or page. The displayed details are easy to share by copying and pasting. Information available includes such things as the web site URL; the WordPress version; the current theme; a list of active plugins ... and much more. This is help for those that help. NB: The information is only viewable by logged-in users, and by default, only the site administrator(s).
 
 == Installation ==
 
@@ -83,6 +83,7 @@ Please stay current with your WordPress installation, your active theme, and you
 * Added `bns_support_exit_message` filter
 * Defined constants `BNS_CUSTOM_PATH` and `BNS_CUSTOM_URL`
 * Modified "short" description for better aesthetics in Appearance > Widgets panel
+* Modified "long" description to be more informative about the functionality
 * Removed `width` array element from `$control_ops` as not necessary
 * Updated required WordPress version to 3.6
 

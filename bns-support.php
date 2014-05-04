@@ -2,7 +2,7 @@
 /*
 Plugin Name: BNS Support
 Plugin URI: http://buynowshop.com/plugins/bns-support/
-Description: Simple display of useful support information in the sidebar. Easy to copy and paste details, such as: the blog name; WordPress version; name of installed theme; and, active plugins list. Help for those that help. The information is only viewable by logged-in readers; and, by optional default, the blog administrator(s) only.
+Description: Displays useful technical support information in a widget area (sidebar); or, via a shortcode on a post or page. The displayed details are easy to share by copying and pasting. Information available includes such things as the web site URL; the WordPress version; the current theme; a list of active plugins ... and much more. This is help for those that help. NB: The information is only viewable by logged-in users, and by default, only the site administrator(s).
 Version: 1.8
 Text Domain: bns-support
 Author: Edward Caissie
@@ -13,8 +13,14 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
 /**
  * BNS Support
- * This plugin will allow you to style sections of post content with added
- * emphasis by leveraging a style element from the active theme.
+ * Displays useful technical support information in a widget area (sidebar); or,
+ * via a shortcode on a post or page. The displayed details are easy to share by
+ * copying and pasting. Information available includes such things as the web
+ * site URL; the WordPress version; the current theme; a list of active plugins
+ * ... and much more. This is help for those that help.
+ *
+ * NB: The information is only viewable by logged-in users, and by default, only
+ * the site administrator(s).
  *
  * @package        BNS_Support
  * @link           http://buynowshop.com/plugins/bns-support/
@@ -52,6 +58,7 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  *
  * @version        1.8
  * @date           May 2014
+ * Modified "long" description to be more informative about the functionality
  */
 class BNS_Support_Widget extends WP_Widget {
 	/**
