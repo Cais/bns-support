@@ -78,10 +78,11 @@ Please stay current with your WordPress installation, your active theme, and you
 
 == Changelog ==
 = 1.8 =
-* Released ...
+* Released May 2014
 * Added CSS class wrapper for shortcode output
 * Defined constants `BNS_CUSTOM_PATH` and `BNS_CUSTOM_URL`
 * Removed CSS wrapper and adjusted CSS elements accordingly
+* Updated required WordPress version to 3.6
 
 = 1.7 =
 * Released January 2014
