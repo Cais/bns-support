@@ -80,8 +80,10 @@ Please stay current with your WordPress installation, your active theme, and you
 = 1.8 =
 * Released May 2014
 * Added CSS class wrapper for shortcode output
+* Added `bns_support_exit_message` filter
 * Defined constants `BNS_CUSTOM_PATH` and `BNS_CUSTOM_URL`
-* Removed CSS wrapper and adjusted CSS elements accordingly
+* Modified "short" description for better aesthetics in Appearance > Widgets panel
+* Removed `width` array element from `$control_ops` as not necessary
 * Updated required WordPress version to 3.6
 
 = 1.7 =

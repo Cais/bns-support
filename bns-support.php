@@ -67,11 +67,15 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @uses    (constant) WP_CONTENT_DIR
 	 * @uses    (global)   $wp_version
 	 * @uses               add_action
+	 * @uses               apply_filters
 	 * @uses               content_url
 	 *
 	 * @version            1.8
 	 * @date               April 20, 2014
+	 * Added `bns_support_exit_message` filter
 	 * Defined constants `BNS_CUSTOM_PATH` and `BNS_CUSTOM_URL`
+	 * Modified "short" description for better aesthetics in Appearance > Widgets panel
+	 * Removed `width` array element from `$control_ops` as not necessary
 	 * Updated required WordPress version to 3.6
 	 */
 	function BNS_Support_Widget() {
@@ -81,7 +85,7 @@ class BNS_Support_Widget extends WP_Widget {
 		 * @internal    @uses shortcode_atts with optional shortcode filter parameter
 		 */
 		global $wp_version;
-		$exit_message = __( 'BNS Support requires WordPress version 3.6 or newer. <a href="http://codex.wordpress.org/Upgrading_WordPress">Please Update!</a>', 'bns-support' );
+		$exit_message = apply_filters( 'bns_support_exit_message', __( 'BNS Support requires WordPress version 3.6 or newer. <a href="http://codex.wordpress.org/Upgrading_WordPress">Please Update!</a>', 'bns-support' ) );
 		if ( version_compare( $wp_version, "3.6", "<" ) ) {
 			exit ( $exit_message );
 		}
@@ -90,11 +94,11 @@ class BNS_Support_Widget extends WP_Widget {
 		/** Widget settings */
 		$widget_ops = array(
 			'classname'   => 'bns-support',
-			'description' => __( 'Widget to display and share common helpful support details.', 'bns-support' )
+			'description' => __( 'Helpful technical support details for logged in users.', 'bns-support' )
 		);
 
 		/** Widget control settings */
-		$control_ops = array( 'width' => 200, 'id_base' => 'bns-support' );
+		$control_ops = array( 'id_base' => 'bns-support' );
 
 		/** Create the widget */
 		$this->WP_Widget( 'bns-support', 'BNS Support', $widget_ops, $control_ops );
