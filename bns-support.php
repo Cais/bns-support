@@ -140,12 +140,18 @@ class BNS_Support_Widget extends WP_Widget {
 		);
 
 		/** Add Plugin Row Meta details */
-		add_filter( 'plugin_row_meta', array( $this, 'bns_support_plugin_meta' ), 10, 2 );
+		add_filter(
+			'plugin_row_meta', array(
+				$this,
+				'bns_support_plugin_meta'
+			), 10, 2
+		);
 
 		/** Add widget */
 		add_action( 'widgets_init', array( $this, 'BNS_Support_load_widget' ) );
 
-	} /** End function - constructor */
+	}
+	/** End function - constructor */
 
 
 	/**
@@ -183,7 +189,8 @@ class BNS_Support_Widget extends WP_Widget {
 
 		return $headers;
 
-	} /** End function - extra theme headers */
+	}
+	/** End function - extra theme headers */
 
 
 	/**
@@ -236,8 +243,8 @@ class BNS_Support_Widget extends WP_Widget {
 		}
 		/** End if - is readable */
 
-
-	} /** End function - scripts and styles */
+	}
+	/** End function - scripts and styles */
 
 
 	/**
@@ -310,7 +317,8 @@ class BNS_Support_Widget extends WP_Widget {
 
 		return $output;
 
-	} /** End function - theme version check */
+	}
+	/** End function - theme version check */
 
 
 	/**
@@ -348,7 +356,8 @@ class BNS_Support_Widget extends WP_Widget {
 
 		}
 
-	} /** End function - mod rewrite check */
+	}
+	/** End function - mod rewrite check */
 
 
 	/**
@@ -374,7 +383,8 @@ class BNS_Support_Widget extends WP_Widget {
 
 		return apply_filters( 'bns_support_memory_limit_value', '<li class="bns-support-memory-limit">' . $value . '</li>' );
 
-	} /** End function - memory limit value */
+	}
+	/** End function - memory limit value */
 
 
 	/**
@@ -453,7 +463,8 @@ class BNS_Support_Widget extends WP_Widget {
 
 		}
 
-	} /** End function - gd library version */
+	}
+	/** End function - gd library version */
 
 
 	/**
@@ -495,7 +506,8 @@ class BNS_Support_Widget extends WP_Widget {
 			)
 		)
 			   . '</li>';
-	} /** End function - mysql version details */
+	}
+	/** End function - mysql version details */
 
 
 	/**
@@ -644,7 +656,8 @@ class BNS_Support_Widget extends WP_Widget {
 
 		return apply_filters( 'bns_support_plugin_list', $plugin_list );
 
-	} /** End function - list all active plugins */
+	}
+	/** End function - list all active plugins */
 
 
 	/**
@@ -866,7 +879,8 @@ class BNS_Support_Widget extends WP_Widget {
 		}
 		/** End if - user logged in */
 
-	} /** End function - widget */
+	}
+	/** End function - widget */
 
 
 	/**
@@ -890,7 +904,8 @@ class BNS_Support_Widget extends WP_Widget {
 
 		return $instance;
 
-	} /** End function - update */
+	}
+	/** End function - update */
 
 
 	/**
@@ -957,7 +972,8 @@ class BNS_Support_Widget extends WP_Widget {
 		</p>
 
 	<?php
-	} /** End function - form */
+	}
+	/** End function - form */
 
 
 	/**
@@ -970,7 +986,8 @@ class BNS_Support_Widget extends WP_Widget {
 	 */
 	function BNS_Support_load_widget() {
 		register_widget( 'BNS_Support_Widget' );
-	} /** End function  - register widget */
+	}
+	/** End function  - register widget */
 
 
 	/**
@@ -1028,7 +1045,8 @@ class BNS_Support_Widget extends WP_Widget {
 
 		return $bns_support_content;
 
-	} /** End function - shortcode */
+	}
+	/** End function - shortcode */
 
 
 	/**
@@ -1088,12 +1106,13 @@ class BNS_Support_Widget extends WP_Widget {
 
 		return $links;
 
-	} /** End function - plugin meta */
+	}
+	/** End function - plugin meta */
 
 
 }
 
-/** End class */
+/** End class - BNS Support Widget */
 
 /** @var $bns_support - instantiate the class */
 $bns_support = new BNS_Support_Widget();
