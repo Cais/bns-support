@@ -80,6 +80,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @version            1.8
 	 * @date               April 20, 2014
 	 * Added `bns_support_exit_message` filter
+	 * Added Plugin Row Meta details
 	 * Defined constants `BNS_CUSTOM_PATH` and `BNS_CUSTOM_URL`
 	 * Modified "short" description for better aesthetics in Appearance > Widgets panel
 	 * Removed `width` array element from `$control_ops` as not necessary
@@ -137,6 +138,9 @@ class BNS_Support_Widget extends WP_Widget {
 				'bns_support_shortcode'
 			)
 		);
+
+		/** Add Plugin Row Meta details */
+		add_filter( 'plugin_row_meta', array( $this, 'bns_support_plugin_meta' ), 10, 2 );
 
 		/** Add widget */
 		add_action( 'widgets_init', array( $this, 'BNS_Support_load_widget' ) );
@@ -1047,6 +1051,44 @@ class BNS_Support_Widget extends WP_Widget {
 		return $plugin_data;
 	}
 	/** End function - plugin data */
+
+
+	/**
+	 * BNS Support Plugin Meta
+	 * Adds additional links to plugin meta links
+	 *
+	 * @package    BNS_SUpport
+	 * @since      1.8
+	 *
+	 * @uses       __
+	 * @uses       plugin_basename
+	 *
+	 * @param   $links
+	 * @param   $file
+	 *
+	 * @return  array $links
+	 */
+	function bns_support_plugin_meta( $links, $file ) {
+
+		$plugin_file = plugin_basename( __FILE__ );
+
+		if ( $file == $plugin_file ) {
+
+			$links = array_merge(
+				$links, array(
+					'fork_link'    => '<a href="https://github.com/Cais/BNS-Support">' . __( 'Fork on GitHub', 'bns-support' ) . '</a>',
+					'wish_link'    => '<a href="http://www.amazon.ca/registry/wishlist/2NNNE1PAQIRUL">' . __( 'Grant a wish?', 'bns-support' ) . '</a>',
+					'support_link' => '<a href="http://wordpress.org/support/plugin/bns-support">' . __( 'WordPress Support Forums', 'bns-support' ) . '</a>'
+				)
+			);
+
+		}
+
+		/** End if - file is the same as plugin */
+
+		return $links;
+
+	} /** End function - plugin meta */
 
 
 }

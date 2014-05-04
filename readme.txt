@@ -81,6 +81,7 @@ Please stay current with your WordPress installation, your active theme, and you
 * Released May 2014
 * Added CSS class wrapper for shortcode output
 * Added `bns_support_exit_message` filter
+* Added Plugin Row Meta details
 * Defined constants `BNS_CUSTOM_PATH` and `BNS_CUSTOM_URL`
 * Modified "short" description for better aesthetics in Appearance > Widgets panel
 * Modified "long" description to be more informative about the functionality
