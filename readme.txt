@@ -3,8 +3,8 @@ Contributors: cais
 Donate link: http://buynowshop.com/
 Tags: support, widget, multisite compatible, widget-only
 Requires at least: 3.6
-Tested up to: 3.9
-Stable tag: 1.8
+Tested up to: 3.9.1
+Stable tag: 1.8.1
 License: GNU General Public License v2
 License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
@@ -77,6 +77,10 @@ Yes, this plugin has been made for multi-widget compatibility but it really serv
 Please stay current with your WordPress installation, your active theme, and your plugins.
 
 == Changelog ==
+= 1.8.1 =
+* Released May 2014
+* Added check for defined constants `BNS_CUSTOM_PATH` and `BNS_CUSTOM_URL`
+
 = 1.8 =
 * Released May 2014
 * Added CSS class wrapper for shortcode output

@@ -3,7 +3,7 @@
 Plugin Name: BNS Support
 Plugin URI: http://buynowshop.com/plugins/bns-support/
 Description: Displays useful technical support information in a widget area (sidebar); or, via a shortcode on a post or page. The displayed details are easy to share by copying and pasting. Information available includes such things as the web site URL; the WordPress version; the current theme; a list of active plugins ... and much more. This is help for those that help. NB: The information is only viewable by logged-in users, and by default, only the site administrator(s).
-Version: 1.8
+Version: 1.8.1
 Text Domain: bns-support
 Author: Edward Caissie
 Author URI: http://edwardcaissie.com/
@@ -26,7 +26,7 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @link           http://buynowshop.com/plugins/bns-support/
  * @link           https://github.com/Cais/bns-support/
  * @link           http://wordpress.org/extend/plugins/bns-support/
- * @version        1.8
+ * @version        1.8.1
  * @author         Edward Caissie <edward.caissie@gmail.com>
  * @copyright      Copyright (c) 2009-2014, Edward Caissie
  *
@@ -50,15 +50,12 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * The license for this software can also likely be found here:
  * http://www.gnu.org/licenses/gpl-2.0.html
  *
- * @version        1.7
- * @date           January 27, 2014
- *
- * @version        1.7.1
- * @date           February 2014
- *
  * @version        1.8
  * @date           May 2014
  * Modified "long" description to be more informative about the functionality
+ *
+ * @version        1.8.1
+ * @date           May 2014
  */
 class BNS_Support_Widget extends WP_Widget {
 	/**
@@ -85,6 +82,10 @@ class BNS_Support_Widget extends WP_Widget {
 	 * Modified "short" description for better aesthetics in Appearance > Widgets panel
 	 * Removed `width` array element from `$control_ops` as not necessary
 	 * Updated required WordPress version to 3.6
+	 *
+	 * @version            1.8.1
+	 * @date               May 19, 2014
+	 * Added check for defined constants `BNS_CUSTOM_PATH` and `BNS_CUSTOM_URL`
 	 */
 	function BNS_Support_Widget() {
 		/**
@@ -112,8 +113,14 @@ class BNS_Support_Widget extends WP_Widget {
 		$this->WP_Widget( 'bns-support', 'BNS Support', $widget_ops, $control_ops );
 
 		/** Define location for BNS plugin customizations */
-		define( 'BNS_CUSTOM_PATH', WP_CONTENT_DIR . '/bns-customs/' );
-		define( 'BNS_CUSTOM_URL', content_url( '/bns-customs/' ) );
+		if ( ! defined( 'BNS_CUSTOM_PATH' ) ) {
+			define( 'BNS_CUSTOM_PATH', WP_CONTENT_DIR . '/bns-customs/' );
+		}
+		/** end if - not defined */
+		if ( ! defined( 'BNS_CUSTOM_URL' ) ) {
+			define( 'BNS_CUSTOM_URL', content_url( '/bns-customs/' ) );
+		}
+		/** end if - not defined */
 
 		/** Add scripts and styles */
 		add_action(
