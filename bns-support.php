@@ -22,13 +22,16 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * NB: The information is only viewable by logged-in users, and by default, only
  * the site administrator(s).
  *
- * @package        BNS_Support
- * @link           http://buynowshop.com/plugins/bns-support/
- * @link           https://github.com/Cais/bns-support/
- * @link           http://wordpress.org/extend/plugins/bns-support/
- * @version        1.8.1
- * @author         Edward Caissie <edward.caissie@gmail.com>
- * @copyright      Copyright (c) 2009-2014, Edward Caissie
+ * @package     BNS_Support
+ * @version     1.9
+ * @date        December 2014
+ *
+ * @link        http://buynowshop.com/plugins/bns-support/
+ * @link        https://github.com/Cais/bns-support/
+ * @link        https://wordpress.org/plugins/bns-support/
+ *
+ * @author      Edward Caissie <edward.caissie@gmail.com>
+ * @copyright   Copyright (c) 2009-2014, Edward Caissie
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License version 2, as published by the
@@ -49,13 +52,6 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  *
  * The license for this software can also likely be found here:
  * http://www.gnu.org/licenses/gpl-2.0.html
- *
- * @version        1.8
- * @date           May 2014
- * Modified "long" description to be more informative about the functionality
- *
- * @version        1.8.1
- * @date           May 2014
  */
 class BNS_Support_Widget extends WP_Widget {
 	/**
@@ -67,10 +63,18 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @internal    Requires WordPress version 3.6
 	 * @internal    @uses shortcode_atts - uses optional filter variable
 	 *
-	 * @uses        (CONSTANT) WP_CONTENT_DIR
-	 * @uses        (GLOBAL) $wp_version
-	 * @uses        (CLASS) WP_Widget
+	 * @uses        (CONSTANT)  WP_CONTENT_DIR
+	 * @uses        (GLOBAL)    $wp_version
+	 * @uses        BNS_Support_Widget::WP_Widget(factory)
+	 * @uses        BNS_Support_Widget::BNS_Support_load_widget
+	 * @uses        BNS_Support_Widget::scripts_and_styles
+	 * @uses        BNS_Support_Widget::extra_theme_headers
+	 * @uses        BNS_Support_Widget::bns_support_shortcode
+	 * @uses        BNS_Support_Widget::bns_support_plugin_meta
+	 * @uses        __
 	 * @uses        add_action
+	 * @uses        add_filter
+	 * @uses        add_shortcode
 	 * @uses        apply_filters
 	 * @uses        content_url
 	 *
@@ -134,7 +138,7 @@ class BNS_Support_Widget extends WP_Widget {
 		add_filter(
 			'extra_theme_headers', array(
 				$this,
-				'BNS_Support_extra_theme_headers'
+				'extra_theme_headers'
 			)
 		);
 
@@ -175,8 +179,12 @@ class BNS_Support_Widget extends WP_Widget {
 	 *
 	 * @internal see WordPress core trac ticket #16868
 	 * @link     https://core.trac.wordpress.org/ticket/16868
+	 *
+	 * @version  1.9
+	 * @date     December 6, 2014
+	 * Renamed to `extra_theme_headers`
 	 */
-	function BNS_Support_extra_theme_headers( $headers ) {
+	function extra_theme_headers( $headers ) {
 
 		if ( ! in_array( 'WordPress Tested Version', $headers ) ) {
 			$headers[] = 'WordPress Tested Version';

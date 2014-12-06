@@ -79,6 +79,8 @@ Please stay current with your WordPress installation, your active theme, and you
 == Changelog ==
 = 1.9 =
 * Released ...
+* Renamed `BNS_Support_extra_theme_headers` to `extra_theme_headers`
+* Updated inline documentation
 
 = 1.8.1 =
 * Released May 2014
