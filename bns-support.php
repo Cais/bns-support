@@ -217,6 +217,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 *
 	 * @uses    (CONSTANT) BNS_CUSTOM_PATH
 	 * @uses    (CONSTANT) BNS_CUSTOM_URL
+	 * @uses    BNS_Support_Widget::plugin_data
 	 * @uses    plugin_dir_path
 	 * @uses    plugin_dir_url
 	 * @uses    wp_enqueue_style
@@ -275,6 +276,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @package  BNS_Support
 	 * @since    1.4
 	 *
+	 * @uses     __
 	 * @uses     apply_filters
 	 *
 	 * @param   $wp_tested
@@ -339,15 +341,16 @@ class BNS_Support_Widget extends WP_Widget {
 	/**
 	 * Mod Rewrite Check
 	 *
-	 * @package    BNS_Support
-	 * @since      1.5
+	 * @package BNS_Support
+	 * @since   1.5
 	 *
-	 * @uses       apply_filters
+	 * @uses    __
+	 * @uses    apply_filters
 	 *
 	 * @return  string|null - Enabled|Disabled
 	 *
-	 * @version    1.7
-	 * @date       January 25, 2014
+	 * @version 1.7
+	 * @date    January 25, 2014
 	 * Refactored to move entire check and output into method
 	 */
 	function mod_rewrite_check() {
@@ -379,12 +382,13 @@ class BNS_Support_Widget extends WP_Widget {
 	 * Memory Limit Value
 	 * Returns the value of the PHP Memory Limit or indicates no limit is set
 	 *
-	 * @package    BNS_Support
-	 * @since      1.7
+	 * @package BNS_Support
+	 * @since   1.7
 	 *
-	 * @uses       apply_filters
+	 * @uses    __
+	 * @uses    apply_filters
 	 *
-	 * @return    mixed|void
+	 * @return  mixed|void
 	 */
 	function memory_limit_value() {
 
@@ -406,15 +410,16 @@ class BNS_Support_Widget extends WP_Widget {
 	 * PHP Details
 	 * Returns the PHP details of the installation server
 	 *
-	 * @package    BNS_Support
-	 * @since      1.6.3
+	 * @package BNS_Support
+	 * @since   1.6.3
 	 *
-	 * @uses       BNS_Support::memory_limit_value
-	 * @uses       BNS_Support::mod_rewrite_check
-	 * @uses       apply_filters
+	 * @uses    BNS_Support::memory_limit_value
+	 * @uses    BNS_Support::mod_rewrite_check
+	 * @uses    __
+	 * @uses    apply_filters
 	 *
-	 * @version    1.7
-	 * @date       January 25, 2014
+	 * @version 1.7
+	 * @date    January 25, 2014
 	 * Added `memory_limit_value` to output
 	 * Moved all Mod Rewrite code into `mod_rewrite_check` method
 	 */
@@ -458,10 +463,10 @@ class BNS_Support_Widget extends WP_Widget {
 	 * GD Library Version
 	 * Returns the version of the GD extension.
 	 *
-	 * @package    BNS_Support
-	 * @since      1.7
+	 * @package BNS_Support
+	 * @since   1.7
 	 *
-	 * @uses       __
+	 * @uses    __
 	 */
 	function gd_library_version() {
 
@@ -477,6 +482,7 @@ class BNS_Support_Widget extends WP_Widget {
 			return __( '<li><strong>GD Library Support:</strong> none</li>', 'bns-support' );
 
 		}
+		/** End if - function exists */
 
 	}
 	/** End function - gd library version */
@@ -489,6 +495,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @package BNS_Support
 	 * @since   1.6.1
 	 *
+	 * @uses    __
 	 * @uses    apply_filters
 	 *
 	 * @version 1.6.2
@@ -532,6 +539,8 @@ class BNS_Support_Widget extends WP_Widget {
 	 *
 	 * @package    BNS_Support
 	 * @since      1.7
+	 *
+	 * @uses       apply_filters
 	 *
 	 * @param    $plugin_file
 	 *
@@ -608,7 +617,9 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @package    BNS_Support
 	 * @since      1.1
 	 *
+	 * @uses       (CONSTANT) WP_PLUGIN_DIR
 	 * @uses       __
+	 * @uses       apply_filters
 	 * @uses       get_option
 	 * @uses       get_plugin_data
 	 *
@@ -681,14 +692,20 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @package BNS_Support
 	 * @since   0.1
 	 *
-	 * @uses    BNS_Support::bns_list_active_plugins
-	 * @uses    BNS_Support::mysql_version_details
-	 * @uses    BNS_Support::php_details
+	 * @uses    (GLOBAL) $current_user
+	 * @uses    (CONSTANT) WP_DEBUG
+	 * @uses    BNS_Support_Widget::bns_list_active_plugins
+	 * @uses    BNS_Support_Widget::gd_library_version
+	 * @uses    BNS_Support_Widget::mysql_version_details
+	 * @uses    BNS_Support_Widget::php_details
+	 * @uses    __
 	 * @uses    apply_filters
 	 * @uses    current_user_can
+	 * @uses    get_bloginfo
 	 * @uses    get_current_site
 	 * @uses    is_child_theme
 	 * @uses    is_multisite
+	 * @uses    is_user_logged_in
 	 * @uses    wp_get_theme
 	 *
 	 * @param   array $args
@@ -825,8 +842,7 @@ class BNS_Support_Widget extends WP_Widget {
 				if ( is_multisite() ) {
 
 					$current_site = get_current_site();
-					/** @noinspection PhpUndefinedFieldInspection */
-					$home_domain = 'http://' . $current_site->domain . $current_site->path;
+					$home_domain  = 'http://' . $current_site->domain . $current_site->path;
 					if ( current_user_can( 'manage_options' ) ) {
 						/** If multisite is "true" then direct ALL users to main site administrator */
 						echo apply_filters(
@@ -870,6 +886,10 @@ class BNS_Support_Widget extends WP_Widget {
 
 				}
 				/** End if - is multisite */
+
+
+
+
 
 				echo '</ul>';
 				/** End - Display BNS Support information */
@@ -929,8 +949,10 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @package BNS_Support
 	 * @since   0.1
 	 *
-	 * @uses    get_field_id
-	 * @uses    get_field_name
+	 * @uses    WP_Widget::get_field_id
+	 * @uses    WP_Widget::get_field_name
+	 * @uses    _e
+	 * @uses    checked
 	 * @uses    wp_parse_args
 	 *
 	 * @param   array $instance
@@ -1008,22 +1030,23 @@ class BNS_Support_Widget extends WP_Widget {
 	/**
 	 * BNS Support Shortcode
 	 *
-	 * @package    BNS_Support
-	 * @since      1.6
+	 * @package BNS_Support
+	 * @since   1.6
 	 *
 	 * @param   $atts
 	 *
-	 * @uses       shortcode_atts
-	 * @uses       the_widget
+	 * @uses    get_bloginfo
+	 * @uses    shortcode_atts
+	 * @uses    the_widget
 	 *
 	 * @return  string
 	 *
-	 * @version    1.6.1
-	 * @date       September 7, 2013
+	 * @version 1.6.1
+	 * @date    September 7, 2013
 	 * Added shortcode name parameter for core filter auto-creation
 	 *
-	 * @version    1.8
-	 * @date       April 20, 2014
+	 * @version 1.8
+	 * @date    April 20, 2014
 	 * Added CSS class wrapper for shortcode output
 	 */
 	function bns_support_shortcode( $atts ) {
