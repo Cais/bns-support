@@ -436,6 +436,10 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @date    January 25, 2014
 	 * Added `memory_limit_value` to output
 	 * Moved all Mod Rewrite code into `mod_rewrite_check` method
+	 *
+	 * @version 1.9
+	 * @date    December 7, 2014
+	 * Added `bns_support_php_details` filter hook to return statement
 	 */
 	function php_details() {
 		/** PHP Version */
@@ -467,7 +471,7 @@ class BNS_Support_Widget extends WP_Widget {
 
 		$output .= '</li><!-- PHP Details End -->';
 
-		return $output;
+		return apply_filters( 'bns_support_php_details', $output );
 
 	}
 	/** End function - bns support shortcode */

@@ -80,6 +80,7 @@ Please stay current with your WordPress installation, your active theme, and you
 = 1.9 =
 * Released ...
 * Added constant defining `BNS_SUPPORT_HOME` as `BuyNowShop.com` for use in reference URL paths
+* Added `bns_support_php_details` filter hook to return statement in "PHP Details" method
 * Left some wiggle room at the end of the output with the `bns_support_extended` filter hook
 * Implemented the `BNS_SUPPORT_HOME` constant
 * Renamed `BNS_Support_extra_theme_headers` to `extra_theme_headers`
