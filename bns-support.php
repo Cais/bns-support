@@ -91,8 +91,8 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @date        May 19, 2014
 	 * Added check for defined constants `BNS_CUSTOM_PATH` and `BNS_CUSTOM_URL`
 	 *
-	 * @version 1.9
-	 * @date    December 7, 2014
+	 * @version     1.9
+	 * @date        December 7, 2014
 	 * Added constant defining `BNS_SUPPORT_HOME` as `BuyNowShop.com` for use in reference URL paths
 	 */
 	function BNS_Support_Widget() {
@@ -362,6 +362,10 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @version 1.7
 	 * @date    January 25, 2014
 	 * Refactored to move entire check and output into method
+	 *
+	 * @version 1.9
+	 * @date    December 7, 2014
+	 * Use `apply_filters` on both `return` statements
 	 */
 	function mod_rewrite_check() {
 
@@ -380,7 +384,7 @@ class BNS_Support_Widget extends WP_Widget {
 		} else {
 
 			/** If there is nothing to return then return nothing ... er, null */
-			return null;
+			return apply_filters( 'bns_support_mod_rewrite', null );
 
 		}
 
@@ -702,9 +706,9 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @package BNS_Support
 	 * @since   0.1
 	 *
-	 * @uses    (GLOBAL) $current_user
 	 * @uses    (CONSTANT) WP_DEBUG
 	 * @uses    (CONSTANT) BNS_SUPPORT_HOME
+	 * @uses    (GLOBAL) $current_user
 	 * @uses    BNS_Support_Widget::bns_list_active_plugins
 	 * @uses    BNS_Support_Widget::gd_library_version
 	 * @uses    BNS_Support_Widget::mysql_version_details
@@ -903,7 +907,7 @@ class BNS_Support_Widget extends WP_Widget {
 				/** End if - is multisite */
 
 				/** Leave some wiggle room at the end of the output */
-				apply_filters( 'bns-support-extended', null );
+				apply_filters( 'bns_support_extended', null );
 
 				echo '</ul>';
 				/** End - Display BNS Support information */
