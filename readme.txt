@@ -78,7 +78,7 @@ Please stay current with your WordPress installation, your active theme, and you
 
 == Changelog ==
 = 1.9 =
-* Released ...
+* Released December 2014
 * Added constant defining `BNS_SUPPORT_HOME` as `BuyNowShop.com` for use in reference URL paths
 * Added `bns_support_php_details` filter hook to return statement in "PHP Details" method
 * Added `bns_support_gd_library_version` in the return statement of "GD Library Version" method
