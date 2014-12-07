@@ -485,6 +485,11 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @since   1.7
 	 *
 	 * @uses    __
+	 * @uses    apply_filters
+	 *
+	 * @version 1.9
+	 * @date    December 7, 2014
+	 * Added `bns_support_gd_library_version` in the return statement
 	 */
 	function gd_library_version() {
 
@@ -493,14 +498,16 @@ class BNS_Support_Widget extends WP_Widget {
 			$info = gd_info();
 			$keys = array_keys( $info );
 
-			return sprintf( __( '<li><strong>GD Library Support:</strong> %1$s</li>', 'bns-support' ), $info[ $keys[0] ] );
+			$results = sprintf( __( '<li><strong>GD Library Support:</strong> %1$s</li>', 'bns-support' ), $info[ $keys[0] ] );
 
 		} else {
 
-			return __( '<li><strong>GD Library Support:</strong> none</li>', 'bns-support' );
+			$results = __( '<li><strong>GD Library Support:</strong> none</li>', 'bns-support' );
 
 		}
 		/** End if - function exists */
+
+		return apply_filters( 'bns_support_gd_library_version', $results );
 
 	}
 	/** End function - gd library version */
