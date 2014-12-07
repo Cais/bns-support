@@ -90,6 +90,10 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @version     1.8.1
 	 * @date        May 19, 2014
 	 * Added check for defined constants `BNS_CUSTOM_PATH` and `BNS_CUSTOM_URL`
+	 *
+	 * @version 1.9
+	 * @date    December 7, 2014
+	 * Added constant defining `BNS_SUPPORT_HOME` as `BuyNowShop.com` for use in reference URL paths
 	 */
 	function BNS_Support_Widget() {
 		/**
@@ -115,6 +119,12 @@ class BNS_Support_Widget extends WP_Widget {
 
 		/** Create the widget */
 		$this->WP_Widget( 'bns-support', 'BNS Support', $widget_ops, $control_ops );
+
+		/** Define plugin home URL */
+		if ( ! defined( 'BNS_SUPPORT_HOME' ) ) {
+			define( 'BNS_SUPPORT_HOME', 'BuyNowShop.com' );
+		}
+		/** End if - not defined */
 
 		/** Define location for BNS plugin customizations */
 		if ( ! defined( 'BNS_CUSTOM_PATH' ) ) {
@@ -694,6 +704,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 *
 	 * @uses    (GLOBAL) $current_user
 	 * @uses    (CONSTANT) WP_DEBUG
+	 * @uses    (CONSTANT) BNS_SUPPORT_HOME
 	 * @uses    BNS_Support_Widget::bns_list_active_plugins
 	 * @uses    BNS_Support_Widget::gd_library_version
 	 * @uses    BNS_Support_Widget::mysql_version_details
@@ -719,6 +730,10 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @version 1.7.1
 	 * @date    February 2, 2014
 	 * Removed CSS wrapper and adjusted CSS elements accordingly
+	 *
+	 * @version 1.9
+	 * @date    December 7, 2014
+	 * Implemented the `BNS_SUPPORT_HOME` constant
 	 */
 	function widget( $args, $instance ) {
 		extract( $args );
@@ -887,9 +902,8 @@ class BNS_Support_Widget extends WP_Widget {
 				}
 				/** End if - is multisite */
 
-
-
-
+				/** Leave some wiggle room at the end of the output */
+				apply_filters( 'bns-support-extended', null );
 
 				echo '</ul>';
 				/** End - Display BNS Support information */
@@ -899,7 +913,7 @@ class BNS_Support_Widget extends WP_Widget {
 					echo apply_filters(
 						'bns_support_credits',
 						'<h6 class="bns-support-credits">'
-						. sprintf( __( 'Compliments of %1$s at %2$s', 'bns-support' ), '<a href="http://buynowshop.com/wordpress-services" target="_blank">WordPress Services</a>', '<a href="http://buynowshop.com" target="_blank">BuyNowShop.com</a>' )
+						. sprintf( __( 'Compliments of %1$s at %2$s', 'bns-support' ), '<a href="http://' . BNS_SUPPORT_HOME . '/wordpress-services/" target="_blank">WordPress Services</a>', '<a href="http://' . BNS_SUPPORT_HOME . '" target="_blank">' . BNS_SUPPORT_HOME . '</a>' )
 						. '</h6>'
 					);
 				}
@@ -949,6 +963,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @package BNS_Support
 	 * @since   0.1
 	 *
+	 * @uses    (CONSTANT) BNS_SUPPORT_HOME
 	 * @uses    WP_Widget::get_field_id
 	 * @uses    WP_Widget::get_field_name
 	 * @uses    _e
@@ -962,6 +977,10 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @version 1.6
 	 * @date    September 7, 2013
 	 * Changed `show_plugins` default to true (more common usage than false)
+	 *
+	 * @version 1.9
+	 * @date    December 7, 2014
+	 * Implemented the `BNS_SUPPORT_HOME` constant
 	 */
 	function form( $instance ) {
 		/* Set up some default widget settings. */
@@ -1004,8 +1023,8 @@ class BNS_Support_Widget extends WP_Widget {
 			       id="<?php echo $this->get_field_id( 'credits' ); ?>"
 			       name="<?php echo $this->get_field_name( 'credits' ); ?>" />
 			<label
-				for="<?php echo $this->get_field_id( 'credits' ); ?>"><?php _e( 'Show complimentary link to ', 'bns-support' ); ?></label><a
-				href="http://buynowshop.com/">BuyNowShop.com</a>?
+				for="<?php echo $this->get_field_id( 'credits' ); ?>"><?php _e( 'Show complimentary link to ', 'bns-support' ); ?></label>
+			<a href="http://<?php echo BNS_SUPPORT_HOME; ?>/"><?php echo BNS_SUPPORT_HOME; ?></a>?
 		</p>
 
 	<?php
