@@ -80,6 +80,7 @@ Please stay current with your WordPress installation, your active theme, and you
 = 2.0 =
 * Released June 2015
 * Cleaned up inline documentation and updated copyright years
+* Change to "singleton" style class structure
 
 = 1.9 =
 * Released December 2014
