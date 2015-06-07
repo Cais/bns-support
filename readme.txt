@@ -81,6 +81,7 @@ Please stay current with your WordPress installation, your active theme, and you
 * Released June 2015
 * Cleaned up inline documentation and updated copyright years
 * Change to "singleton" style class structure
+* Added `update_message` method
 
 = 1.9 =
 * Released December 2014
