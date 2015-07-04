@@ -3,7 +3,7 @@
 Plugin Name: BNS Support
 Plugin URI: http://buynowshop.com/plugins/bns-support/
 Description: Displays useful technical support information in a widget area (sidebar); or, via a shortcode on a post or page. The displayed details are easy to share by copying and pasting. Information available includes such things as the web site URL; the WordPress version; the current theme; a list of active plugins ... and much more. This is help for those that help. NB: The information is only viewable by logged-in users, and by default, only the site administrator(s).
-Version: 2.0
+Version: 2.1
 Text Domain: bns-support
 Author: Edward Caissie
 Author URI: http://edwardcaissie.com/
@@ -23,8 +23,8 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * the site administrator(s).
  *
  * @package     BNS_Support
- * @version     2.0
- * @date        June 2015
+ * @version     2.1
+ * @date        July 2015
  *
  * @link        http://buynowshop.com/plugins/bns-support/
  * @link        https://github.com/Cais/bns-support/
@@ -103,27 +103,14 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @uses        apply_filters
 	 * @uses        content_url
 	 *
-	 * @version     1.8
-	 * @date        April 20, 2014
-	 * Added `bns_support_exit_message` filter
-	 * Added Plugin Row Meta details
-	 * Defined constants `BNS_CUSTOM_PATH` and `BNS_CUSTOM_URL`
-	 * Modified "short" description for better aesthetics in Appearance > Widgets panel
-	 * Removed `width` array element from `$control_ops` as not necessary
-	 * Updated required WordPress version to 3.6
-	 *
-	 * @version     1.8.1
-	 * @date        May 19, 2014
-	 * Added check for defined constants `BNS_CUSTOM_PATH` and `BNS_CUSTOM_URL`
-	 *
-	 * @version     1.9
-	 * @date        December 7, 2014
-	 * Added constant defining `BNS_SUPPORT_HOME` as `BuyNowShop.com` for use in reference URL paths
-	 *
 	 * @version     2.0
 	 * @date        June 7, 2015
+	 *
+	 * @version     2.1
+	 * @date        July 2015
+	 * Renamed constructor method to `__construct`
 	 */
-	function BNS_Support_Widget() {
+	function __construct() {
 
 		/**
 		 * Check installed WordPress version for compatibility
@@ -146,7 +133,7 @@ class BNS_Support_Widget extends WP_Widget {
 		$control_ops = array( 'id_base' => 'bns-support' );
 
 		/** Create the widget */
-		$this->WP_Widget( 'bns-support', 'BNS Support', $widget_ops, $control_ops );
+		parent::__construct( 'bns-support', 'BNS Support', $widget_ops, $control_ops );
 
 		/** Define plugin home URL */
 		if ( ! defined( 'BNS_SUPPORT_HOME' ) ) {

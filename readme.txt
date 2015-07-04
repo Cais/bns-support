@@ -4,7 +4,7 @@ Donate link: http://buynowshop.com/
 Tags: support, widget, multisite compatible, widget-only
 Requires at least: 3.6
 Tested up to: 4.2.2
-Stable tag: 2.0
+Stable tag: 2.1
 License: GNU General Public License v2
 License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
@@ -77,6 +77,10 @@ Yes, this plugin has been made for multi-widget compatibility but it really serv
 Please stay current with your WordPress installation, your active theme, and your plugins.
 
 == Changelog ==
+= 2.1 =
+* Released ...
+* Updated to use PHP5 constructor objects
+
 = 2.0 =
 * Released June 2015
 * Cleaned up inline documentation and updated copyright years
