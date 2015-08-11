@@ -3,7 +3,7 @@ Contributors: cais
 Donate link: http://buynowshop.com/
 Tags: support, widget, multisite compatible, widget-only
 Requires at least: 3.6
-Tested up to: 4.2.2
+Tested up to: 4.3
 Stable tag: 2.1
 License: GNU General Public License v2
 License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -78,7 +78,7 @@ Please stay current with your WordPress installation, your active theme, and you
 
 == Changelog ==
 = 2.1 =
-* Released ...
+* Released August 2015
 * Updated to use PHP5 constructor objects
 
 = 2.0 =
