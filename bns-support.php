@@ -23,8 +23,8 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * the site administrator(s).
  *
  * @package     BNS_Support
- * @version     2.1
- * @date        July 2015
+ * @version     2.2
+ * @date        October 2015
  *
  * @link        http://buynowshop.com/plugins/bns-support/
  * @link        https://github.com/Cais/bns-support/
@@ -544,6 +544,35 @@ class BNS_Support_Widget extends WP_Widget {
 
 
 	/**
+	 * Is There Email
+	 *
+	 * Tests to see if the PHP mail function is available
+	 *
+	 * @package BNS_Support
+	 * @since   2.2
+	 * @date    September 30, 2015
+	 *
+	 * @uses    __
+	 * @uses    apply_filters
+	 *
+	 * @return string
+	 */
+	function is_there_email() {
+
+		if ( function_exists( 'mail' ) ) {
+			$you_have_mail = apply_filters( 'bns_support_mail_yes', __( 'Yes', 'bns-support' ) );
+		} else {
+			$you_have_mail = apply_filters( 'bns_support_mail_no', __( 'No', 'bns-support' ) );
+		}
+
+		return '<li class="bns-support-mail">'
+		       . apply_filters( 'bns_support_mail_label', sprintf( __( '<strong>PHP mail exists:</strong> %1$s', 'bns-support' ), $you_have_mail ) )
+		       . '</li>';
+
+	}
+
+
+	/**
 	 * Get Plugin Data
 	 *
 	 * Collects the information about the plugin from the first 8192 characters
@@ -844,6 +873,9 @@ class BNS_Support_Widget extends WP_Widget {
 
 				/** Display MySQL Version Details */
 				echo $this->mysql_version_details();
+
+				/** Display PHP mail function Details */
+				echo $this->is_there_email();
 
 				/** Display GD Library Version */
 				echo $this->gd_library_version();
