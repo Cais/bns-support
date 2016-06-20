@@ -245,10 +245,6 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @uses    plugin_dir_url
 	 * @uses    wp_enqueue_style
 	 *
-	 * @version 1.2
-	 * @date    August 2, 2012
-	 * Programmatically add version number to enqueue calls
-	 *
 	 * @version 1.6.1
 	 * @date    December 7, 2013
 	 * Add the option to put custom stylesheet in `/wp-content/` folder
@@ -256,25 +252,19 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @version 1.8
 	 * @date    April 20, 2014
 	 * Move custom stylesheet into `/wp-content/bns-customs/` folder
+	 *
+	 * @version 2.3
+	 * @date    2016-06-20
+	 * Removed reference to custom stylesheets within plugin folders as not update safe
 	 */
 	function scripts_and_styles() {
 
 		/** @var string $bns_support_data - holds the plugin header data */
 		$bns_support_data = $this->plugin_data();
 
-		/* Enqueue Scripts */
-		/* Enqueue Styles */
+		/** Enqueue Scripts */
+		/** Enqueue Styles */
 		wp_enqueue_style( 'BNS-Support-Style', plugin_dir_url( __FILE__ ) . 'bns-support-style.css', array(), $bns_support_data['Version'], 'screen' );
-
-		/**
-		 * Add custom styles
-		 * NB: This location will be killed when plugin is updated due to core
-		 * WordPress functionality - place the custom stylesheet directly in
-		 * the /wp-content/ folder for future proofing your custom styles.
-		 */
-		if ( is_readable( plugin_dir_path( __FILE__ ) . 'bns-support-custom-style.css' ) ) {
-			wp_enqueue_style( 'BNS-Support-Custom-Style', plugin_dir_url( __FILE__ ) . 'bns-support-custom-style.css', array(), $bns_support_data['Version'], 'screen' );
-		}
 
 		/** For custom stylesheets in the /wp-content/bns-custom/ folder */
 		if ( is_readable( BNS_CUSTOM_PATH . 'bns-support-custom-style.css' ) ) {

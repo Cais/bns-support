@@ -77,7 +77,8 @@ Yes, this plugin has been made for multi-widget compatibility but it really serv
 Please stay current with your WordPress installation, your active theme, and your plugins.
 
 == Changelog ==
-= 2.2.1 =
+= 2.3 =
+* Removed reference to custom stylesheets within plugin folders as not update safe
 * Updated copyright year in all files
 
 = 2.2 =
