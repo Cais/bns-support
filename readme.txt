@@ -3,7 +3,7 @@ Contributors: cais
 Donate link: http://buynowshop.com/
 Tags: support, widget, multisite compatible, widget-only
 Requires at least: 3.6
-Tested up to: 4.3
+Tested up to: 4.5.2
 Stable tag: 2.2
 License: GNU General Public License v2
 License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -53,7 +53,7 @@ Yes, this plugin has been made for multi-widget compatibility but it really serv
 3. The sample information from the sidebar display copied and pasted into a common text editor.
 
 == Other Notes ==
-* Copyright 2009-2015  Edward Caissie  (email : edward.caissie@gmail.com)
+* Copyright 2009-2016  Edward Caissie  (email : edward.caissie@gmail.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -77,6 +77,9 @@ Yes, this plugin has been made for multi-widget compatibility but it really serv
 Please stay current with your WordPress installation, your active theme, and your plugins.
 
 == Changelog ==
+= 2.2.1 =
+* Updated copyright year in all files
+
 = 2.2 =
 * Released October 2015
 * Added method `is_there_email()` to check for the PHP `mail` function
