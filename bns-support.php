@@ -637,7 +637,7 @@ class BNS_Support_Widget extends WP_Widget {
 	/**
 	 * BNS List Active Plugins
 	 *
-	 * @link       http://wordpress.org/extend/plugins/wp-plugin-lister/
+	 * @link       https://wordpress.org/extend/plugins/wp-plugin-lister/
 	 * @author     Paul G Petty
 	 * @link       http://paulgriffinpetty.com
 	 *
@@ -1170,7 +1170,7 @@ class BNS_Support_Widget extends WP_Widget {
 				$links, array(
 					'fork_link'    => '<a href="https://github.com/Cais/BNS-Support">' . __( 'Fork on GitHub', 'bns-support' ) . '</a>',
 					'wish_link'    => '<a href="http://www.amazon.ca/registry/wishlist/2NNNE1PAQIRUL">' . __( 'Grant a wish?', 'bns-support' ) . '</a>',
-					'support_link' => '<a href="http://wordpress.org/support/plugin/bns-support">' . __( 'WordPress Support Forums', 'bns-support' ) . '</a>'
+					'support_link' => '<a href="https://wordpress.org/support/plugin/bns-support">' . __( 'WordPress Support Forums', 'bns-support' ) . '</a>'
 				)
 			);
 
