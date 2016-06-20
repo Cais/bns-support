@@ -79,6 +79,7 @@ Please stay current with your WordPress installation, your active theme, and you
 == Changelog ==
 = 2.3 =
 * Removed reference to custom stylesheets within plugin folders as not update safe
+* Renamed `BNS_Support_Widget::get_plugin_data` method to `BNS_Support::collect_plugin_data`
 * Updated copyright year in all files
 
 = 2.2 =
@@ -129,7 +130,7 @@ Please stay current with your WordPress installation, your active theme, and you
 * Added PHP Memory Limit value
 * Added GD Library Support display
 * Moved all of the Mod Rewrite code into its own method to better encapsulate
-* Moved `get_plugin_data` out of `bns_list_active_plugins` and call as method instead
+* Moved `collect_plugin_data` out of `bns_list_active_plugins` and call as method instead
 * Cleaned up output and improved i18n implementation in active plugin list
 * Fix unordered list of active plugins
 * Updated inline documentation

@@ -563,7 +563,7 @@ class BNS_Support_Widget extends WP_Widget {
 
 
 	/**
-	 * Get Plugin Data
+	 * Collect Plugin Data
 	 *
 	 * Collects the information about the plugin from the first 8192 characters
 	 * of the plugin file
@@ -576,8 +576,12 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @param    $plugin_file
 	 *
 	 * @return    array|string
+	 *
+	 * @version    2.3
+	 * @date       2016-06-20
+	 * Renamed method to `collect_plugin_data` from `get_plugin_data`
 	 */
-	function get_plugin_data( $plugin_file ) {
+	function collect_plugin_data( $plugin_file ) {
 
 		/** We don't need to write to the file, so just open for reading. */
 		$fp = fopen( $plugin_file, 'r' );
@@ -649,10 +653,10 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @since      1.1
 	 *
 	 * @uses       (CONSTANT) WP_PLUGIN_DIR
+	 * @uses       BNS_Support_Widget::collect_plugin_data
 	 * @uses       __
 	 * @uses       apply_filters
 	 * @uses       get_option
-	 * @uses       get_plugin_data
 	 *
 	 * @version    1.4
 	 * @date       February 14, 2013
@@ -664,7 +668,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 * Clean up output and improve i18n implementation
 	 * Change from echo to return data
 	 * Added filter `bns_support_plugin_list`
-	 * Moved `get_plugin_data` out of function and call as method instead
+	 * Moved `collect_plugin_data` out of function and call as method instead
 	 */
 	function bns_list_active_plugins() {
 
@@ -676,7 +680,7 @@ class BNS_Support_Widget extends WP_Widget {
 
 		foreach ( $p as $q ) {
 
-			$d = $this->get_plugin_data( WP_PLUGIN_DIR . '/' . $q );
+			$d = $this->collect_plugin_data( WP_PLUGIN_DIR . '/' . $q );
 
 			$plugin_list .= '<li class="bns-support-plugin-list-item">';
 
