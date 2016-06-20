@@ -4,7 +4,7 @@ Donate link: http://buynowshop.com/
 Tags: support, widget, multisite compatible, widget-only
 Requires at least: 3.6
 Tested up to: 4.5.2
-Stable tag: 2.2
+Stable tag: 2.3
 License: GNU General Public License v2
 License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
