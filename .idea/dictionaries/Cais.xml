@@ -6,6 +6,7 @@
       <w>multisite</w>
       <w>mysqli</w>
       <w>phpinfo</w>
+      <w>pluginsused</w>
       <w>textdomain</w>
     </words>
   </dictionary>

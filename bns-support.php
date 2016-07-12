@@ -1139,7 +1139,9 @@ class BNS_Support_Widget extends WP_Widget {
 	function plugin_data() {
 
 		/** Call the wp-admin plugin code */
+		/** @noinspection PhpIncludeInspection */
 		require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+		
 		/** @var object $plugin_data - holds the plugin header data */
 		$plugin_data = get_plugin_data( __FILE__ );
 
