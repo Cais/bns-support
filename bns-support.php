@@ -713,9 +713,11 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @see    BNS_Support_Widget::gd_library_version
 	 * @see    BNS_Support_Widget::mysql_version_details
 	 * @see    BNS_Support_Widget::php_details
-	 * @see    __
 	 * @see    apply_filters
 	 * @see    current_user_can
+	 * @see    esc_html
+	 * @see    esc_html__
+	 * @see    esc_url
 	 * @see    get_bloginfo
 	 * @see    get_current_site
 	 * @see    is_child_theme
@@ -741,12 +743,11 @@ class BNS_Support_Widget extends WP_Widget {
 	 */
 	function widget( $args, $instance ) {
 
-		extract( $args );
 		/** User-selected settings */
-		$title        = apply_filters( 'widget_title', $instance['title'] );
-		$blog_admin   = $instance['blog_admin'];
-		$show_plugins = $instance['show_plugins'];
-		$credits      = $instance['credits'];
+		$args['title']        = apply_filters( 'widget_title', $instance['title'] );
+		$args['blog_admin']   = $instance['blog_admin'];
+		$args['show_plugins'] = $instance['show_plugins'];
+		$args['credits']      = $instance['credits'];
 
 		global $current_user;
 
@@ -759,7 +760,6 @@ class BNS_Support_Widget extends WP_Widget {
 				echo $before_widget;
 
 				/** Widget $title, $before_widget, and $after_widget defined by theme */
-
 				if ( $title ) {
 					echo $before_title . $title . $after_title;
 				}
@@ -768,36 +768,28 @@ class BNS_Support_Widget extends WP_Widget {
 				echo '<ul>';
 
 				/** Blog URL */
-				echo apply_filters(
-					'bns_support_url',
-					'<li class="bns-support-url"><strong>URL</strong>: ' . get_bloginfo( 'url' ) . '</li>'
-				);
+				echo '<li class="bns-support-url"><strong>URL</strong>: '
+				     . esc_url( apply_filters( 'bns_support_url', get_bloginfo( 'url' ) ) )
+				     . '</li>';
 
-				/** Versions for various major factors */
+				/** Version for various major factors */
 				global $wp_version;
 
 				echo '<li class="bns-support-wp-version"><!-- WordPress Details start -->';
 
-				echo apply_filters(
-					'bns_support_wp_version',
-					'<strong>' . __( 'WordPress Version:', 'bns-support' ) . '</strong> ' . $wp_version
-				);
+				echo '<strong>'
+				     . esc_html( apply_filters( 'bns_support_wp_version', __( 'WordPress Version:', 'bns-support' ) ) )
+				     . '</strong> '
+				     . esc_html( $wp_version );
 
 				/** WP_DEBUG Status */
-				echo '<ul><li class="bns-support-wp-debug-status">'
-				     . apply_filters( 'bns_support_wp_debug_status',
-						 sprintf( __( '<strong>WP_DEBUG Status:</strong> %1$s', 'bns-support' ), WP_DEBUG ? __( 'True', 'bns-support' ) : __( 'False', 'bns-support' ) )
-				     )
+				echo '<ul><li class="bns-support-wp-debug-status"><strong>'
+				     . esc_html( apply_filters( 'bns_support_wp_debug_status', sprintf( __( 'WP_DEBUG Status: %1$s', 'bns-support' ), WP_DEBUG ? '</strong>' . __( 'True', 'bns-support' ) : '</strong>' . __( 'False', 'bns-support' ) ) ) )
 				     . '</li></ul><!-- bns-support-wp-debug-status -->';
 
 				/** MultiSite Enabled */
-				echo '<ul><li class="bns-support-ms-enabled">' . apply_filters( 'bns_support_ms_enabled',
-					sprintf( __( '<strong>Multisite Enabled:</strong> %1$s', 'bns-support' ),
-						function_exists( 'is_multisite' ) && is_multisite()
-							? __( 'True', 'bns-support' )
-							: __( 'False', 'bns-support' )
-					)
-				)
+				echo '<ul><li class="bns-support-ms-enabled"><strong>'
+				     . esc_html( apply_filters( 'bns_support_ms_enabled', sprintf( __( 'Multisite Enabled: %1$s', 'bns-support' ), function_exists( 'is_multisite' ) && is_multisite() ? '</strong>' . __( 'True', 'bns-support' ) : '</strong>' . __( 'False', 'bns-support' ) ) ) )
 				     . '</li><!-- bns-support-ms-enabled --></ul>';
 
 				echo '</li><!-- WordPress Details End -->';
@@ -813,26 +805,33 @@ class BNS_Support_Widget extends WP_Widget {
 
 					/** Object containing the Parent Theme's data */
 					$parent_theme_data = $active_theme_data->parent();
-					$output            = sprintf(
-						__( '<li class="bns-support-child-theme"><strong>Theme:</strong> %1$s v%2$s a Child-Theme of %3$s v%4$s%5$s</li>', 'bns-support' ),
+					$output            = sprintf( __( '%1$s v%2$s a Child-Theme of %3$s v%4$s%5$s', 'bns-support' ),
 						$active_theme_data->get( 'Name' ),
 						$active_theme_data->get( 'Version' ),
 						$parent_theme_data->get( 'Name' ),
 						$parent_theme_data->get( 'Version' ),
 						$this->theme_version_check( $wp_tested, $wp_required, $wp_template )
 					);
-					echo apply_filters( 'bns_support_Child_theme', $output );
+					echo '<li class="bns-support-child-theme"><strong>'
+					     . esc_html__( 'Theme: ', 'bns-support' )
+					     . '</strong>'
+					     . esc_html( apply_filters( 'bns_support_Child_theme', $output ) )
+					     . '</li>';
 
 				} else {
 
 					$output = sprintf(
-						__( '<li class="bns-support-parent-theme"><strong>Theme:</strong> %1$s v%2$s%3$s</li>', 'bns-support' ),
+						__( '%1$s v%2$s%3$s', 'bns-support' ),
 						$active_theme_data->get( 'Name' ),
 						$active_theme_data->get( 'Version' ),
 						$this->theme_version_check( $wp_tested, $wp_required, $wp_template )
 					);
 
-					echo apply_filters( 'bns_support_parent_theme', $output );
+					echo '<li class="bns-support-parent-theme"><strong>'
+					     . esc_html__( 'Theme: ', 'bns-support' )
+					     . '</strong>'
+					     . esc_html( apply_filters( 'bns_support_parent_theme', $output ) )
+					     . '</li>';
 
 				}
 
@@ -857,16 +856,13 @@ class BNS_Support_Widget extends WP_Widget {
 					if ( current_user_can( 'manage_options' ) ) {
 
 						/** If multisite is "true" then direct ALL users to main site administrator */
-						echo apply_filters(
-							'bns_support_ms_user',
-							'<li class="bns-support-ms-user">'
-							. sprintf( __( 'Please review with your main site administrator at %1$s for additional assistance.', 'bns-support' ), '<a href="' . $home_domain . '">' . $current_site->site_name . '</a>' )
-							. '</li>'
-						);
+						echo '<li class="bns-support-ms-user">'
+						     . esc_html( apply_filters( 'bns_support_ms_user', sprintf( __( 'Please review with your main site administrator at %1$s for additional assistance.', 'bns-support' ), esc_url( '<a href="' . $home_domain . '">' . $current_site->site_name . '</a>' ) ) ) )
+						     . '</li>' ;
 
 					} else {
 
-						echo apply_filters( 'bns_support_ms_admin', '<li class="bns-support-ms-admin">' . __( 'You are the Admin!', 'bns-support' ) . '</li>' );
+						echo '<li class="bns-support-ms-admin">' . esc_html( apply_filters( 'bns_support_ms_admin', __( 'You are the Admin!', 'bns-support' ) ) ) . '</li>';
 
 					}
 				} else {
@@ -874,16 +870,17 @@ class BNS_Support_Widget extends WP_Widget {
 					/** ---- Current User Level ---- */
 					$user_roles = $current_user->roles;
 					$user_role  = array_shift( $user_roles );
-					echo apply_filters(
-						'bns_support_current_user',
-						'<li class="bns-support-current-user">'
-						. sprintf( __( '<strong>Current User Role</strong>: %1$s ', 'bns-support' ), $user_role )
-						. '</li>'
-					);
+					echo '<li class="bns-support-current-user"><strong>'
+					     . esc_html__( 'Current User Role: ', 'bns-support' )
+					     . '</strong>'
+					     . esc_html( apply_filters( 'bns_support_current_user', $user_role ) )
+					     . '</li>';
 
 					if ( $show_plugins ) {
 
-						echo '<li class="bns-support-active-plugins">' . apply_filters( 'bns_support_active_plugins', '<strong>' . __( 'Active Plugins:', 'bns-support' ) . '</strong>' );
+						echo '<li class="bns-support-active-plugins"><strong>'
+						     . esc_html( apply_filters( 'bns_support_active_plugins', __( 'Active Plugins:', 'bns-support' ) ) )
+						     . '</strong>';
 
 						/** Show Active Plugins List */
 						echo $this->bns_list_active_plugins();
@@ -902,12 +899,9 @@ class BNS_Support_Widget extends WP_Widget {
 				/** Gratuitous self-promotion */
 				if ( $credits ) {
 
-					echo apply_filters(
-						'bns_support_credits',
-						'<h6 class="bns-support-credits">'
-						. sprintf( __( 'Compliments of %1$s at %2$s', 'bns-support' ), '<a href="http://' . BNS_SUPPORT_HOME . '/wordpress-services/" target="_blank">WordPress Services</a>', '<a href="http://' . BNS_SUPPORT_HOME . '" target="_blank">' . BNS_SUPPORT_HOME . '</a>' )
-						. '</h6>'
-					);
+					echo '<h6 class="bns-support-credits">'
+					     . esc_html( apply_filters( 'bns_support_credits', sprintf( __( 'Compliments of %1$s at %2$s', 'bns-support' ), esc_url( '<a href="http://' . BNS_SUPPORT_HOME . '/wordpress-services/" target="_blank">WordPress Services</a>' ), esc_url( '<a href="http://' . BNS_SUPPORT_HOME . '" target="_blank">' . BNS_SUPPORT_HOME . '</a>' ) ) ) )
+					     . '</h6>';
 
 				}
 
@@ -951,16 +945,17 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @package BNS_Support
 	 * @since   0.1
 	 *
-	 * @see    (CONSTANT) BNS_SUPPORT_HOME
-	 * @see    WP_Widget::get_field_id
-	 * @see    WP_Widget::get_field_name
-	 * @see    _e
-	 * @see    checked
-	 * @see    wp_parse_args
+	 * @see     (CONSTANT) BNS_SUPPORT_HOME
+	 * @see     WP_Widget::get_field_id
+	 * @see     WP_Widget::get_field_name
+	 * @see     checked
+	 * @see     esc_attr
+	 * @see     esc_html_e
+	 * @see     wp_parse_args
 	 *
 	 * @param   array $instance current widget parameters.
 	 *
-	 * @return  string|void
+	 * @return string|void
 	 *
 	 * @version 1.6
 	 * @date    September 7, 2013
@@ -982,39 +977,41 @@ class BNS_Support_Widget extends WP_Widget {
 		$instance = wp_parse_args( (array) $instance, $defaults ); ?>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', 'bns-support' ); ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>"
-			       name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo $instance['title']; ?>" />
+			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title:', 'bns-support' ); ?></label>
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"
+			       name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" value="<?php esc_html_e( $instance['title'] ); ?>" />
 		</p>
 
 		<p>
 			<input class="checkbox" type="checkbox" <?php checked( (bool) $instance['blog_admin'], true ); ?>
-			       id="<?php echo $this->get_field_id( 'blog_admin' ); ?>"
-			       name="<?php echo $this->get_field_name( 'blog_admin' ); ?>" />
+			       id="<?php echo esc_attr( $this->get_field_id( 'blog_admin' ) ); ?>"
+			       name="<?php echo esc_attr( $this->get_field_name( 'blog_admin' ) ); ?>" />
 			<label
-				for="<?php echo $this->get_field_id( 'blog_admin' ); ?>"><?php _e( 'Only show to administrators?', 'bns-support' ); ?></label>
+				for="<?php echo esc_attr( $this->get_field_id( 'blog_admin' ) ); ?>"><?php esc_html_e( 'Only show to administrators?', 'bns-support' ); ?></label>
 		</p>
 
 		<hr />
 
 		<p>
 			<input class="checkbox" type="checkbox" <?php checked( (bool) $instance['show_plugins'], true ); ?>
-			       id="<?php echo $this->get_field_id( 'show_plugins' ); ?>"
-			       name="<?php echo $this->get_field_name( 'show_plugins' ); ?>" />
+			       id="<?php echo esc_attr( $this->get_field_id( 'show_plugins' ) ); ?>"
+			       name="<?php echo esc_attr( $this->get_field_name( 'show_plugins' ) ); ?>" />
 			<label
-				for="<?php echo $this->get_field_id( 'show_plugins' ); ?>"><?php _e( 'Show active plugins?', 'bns-support' ); ?></label>
+				for="<?php echo esc_attr( $this->get_field_id( 'show_plugins' ) ); ?>"><?php esc_html_e( 'Show active plugins?', 'bns-support' ); ?></label>
 		</p>
 
 		<hr />
 
 		<p>
 			<input class="checkbox" type="checkbox" <?php checked( (bool) $instance['credits'], true ); ?>
-			       id="<?php echo $this->get_field_id( 'credits' ); ?>"
-			       name="<?php echo $this->get_field_name( 'credits' ); ?>" />
+			       id="<?php echo esc_attr( $this->get_field_id( 'credits' ) ); ?>"
+			       name="<?php echo esc_attr( $this->get_field_name( 'credits' ) ); ?>" />
 			<label
-				for="<?php echo $this->get_field_id( 'credits' ); ?>"><?php _e( 'Show complimentary link to ', 'bns-support' ); ?></label>
-			<a href="http://<?php echo BNS_SUPPORT_HOME; ?>/"><?php echo BNS_SUPPORT_HOME; ?></a>?
+				for="<?php echo esc_attr( $this->get_field_id( 'credits' ) ); ?>"><?php esc_html_e( 'Show complimentary link to ', 'bns-support' ); ?></label>
+			<a href="http://<?php echo esc_url( BNS_SUPPORT_HOME ); ?>/"><?php echo esc_url( BNS_SUPPORT_HOME ); ?></a>?
 		</p>
+
+		<?php return; ?>
 
 	<?php }
 
