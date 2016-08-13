@@ -78,6 +78,8 @@ Please stay current with your WordPress installation, your active theme, and you
 
 == Changelog ==
 = 2.3 =
+* Released ...
+* Improved WordPress Coding Standards adherence
 * Removed reference to custom stylesheets within plugin folders as not update safe
 * Renamed `BNS_Support_Widget::get_plugin_data` method to `BNS_Support::collect_plugin_data`
 * Updated copyright year in all files
