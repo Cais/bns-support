@@ -160,6 +160,29 @@ class BNS_Support_Widget extends WP_Widget {
 			define( 'BNS_CUSTOM_URL', content_url( '/bns-customs/' ) );
 		}
 
+	}
+
+	/**
+	 * BNS Support `init` method
+	 *
+	 * Add the available hooks used in the plugin.
+	 *
+	 * @package BNS_Support
+	 * @since   2.3
+	 *
+	 * @see     BNS_Support_Widget::scripts_and_styles
+	 * @see     BNS_Support_Widget::extra_theme_headers
+	 * @see     BNS_Support_Widget::bns_support_shortcode
+	 * @see     BNS_Support_Widget::bns_support_plugin_meta
+	 * @see     BNS_Support_Widget::BNS_Support_load_widget
+	 * @see     BNS_Support_Widget::update_message
+	 * @see     add_action()
+	 * @see     add_filter()
+	 * @see     add_shortcode()
+	 * @see     plugin_basename()
+	 */
+	function init() {
+
 		/** Add scripts and styles */
 		add_action( 'wp_enqueue_scripts', array( $this, 'scripts_and_styles' ) );
 
@@ -179,7 +202,6 @@ class BNS_Support_Widget extends WP_Widget {
 		add_action( 'in_plugin_update_message-' . plugin_basename( __FILE__ ), array( $this, 'update_message' ) );
 
 	}
-
 
 	/**
 	 * BNS Support Extra Theme Headers
@@ -1250,3 +1272,4 @@ class BNS_Support_Widget extends WP_Widget {
 
 /** Instantiate the class */
 $bns_support = new BNS_Support_Widget();
+$bns_support->init();
