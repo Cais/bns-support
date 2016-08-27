@@ -130,7 +130,7 @@ class BNS_Support_Widget extends WP_Widget {
 		 * @internal    @see shortcode_atts with optional shortcode filter parameter
 		 */
 		global $wp_version;
-		$exit_message = apply_filters( 'bns_support_exit_message', __( 'BNS Support requires WordPress version 3.6 or newer. <a href="http://codex.wordpress.org/Upgrading_WordPress">Please Update!</a>', 'bns-support' ) );
+		$exit_message = apply_filters( 'bns_support_exit_message', __( 'BNS Support requires WordPress version 3.6 or newer.', 'bns-support' ) . ' <a href="http://codex.wordpress.org/Upgrading_WordPress">' . __( 'Please Update!', 'bns-support' ) . '</a>' );
 		if ( version_compare( $wp_version, '3.6', '<' ) ) {
 			exit( esc_html( $exit_message ) );
 		}
@@ -538,7 +538,7 @@ class BNS_Support_Widget extends WP_Widget {
 		/** Return the filtered MySQL version */
 
 		return '<li class="bns-support-mysql-version">'
-		       . apply_filters( 'bns_support_mysql_version', sprintf( __( '<strong>MySQL version:</strong> %1$s', 'bns-support' ), $mysql_version_output ) )
+		       . apply_filters( 'bns_support_mysql_version', '<strong>' . __( 'MySQL version: ', 'bns-support' ) . '</strong>' . $mysql_version_output )
 		       . '</li>';
 
 	}
@@ -567,7 +567,7 @@ class BNS_Support_Widget extends WP_Widget {
 		}
 
 		return '<li class="bns-support-mail">'
-		       . apply_filters( 'bns_support_mail_label', sprintf( __( '<strong>PHP mail exists:</strong> %1$s', 'bns-support' ), $you_have_mail ) )
+		       . apply_filters( 'bns_support_mail_label', '<strong>' . __( 'PHP mail exists: ', 'bns-support' ) . '</strong>' . $you_have_mail )
 		       . '</li>';
 
 	}
