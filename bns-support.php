@@ -3,18 +3,13 @@
  * Plugin Name: BNS Support
  * Plugin URI: http://buynowshop.com/plugins/bns-support/
  * Description: Displays useful technical support information in a widget area (sidebar); or, via a shortcode on a post or page. The displayed details are easy to share by copying and pasting. Information available includes such things as the web site URL; the WordPress version; the current theme; a list of active plugins ... and much more. This is help for those that help. NB: The information is only viewable by logged-in users, and by default, only the site administrator(s).
- * Version: 2.3
+ * Version: 1.3
  * Text Domain: bns-support
  * Author: Edward Caissie
  * Author URI: http://edwardcaissie.com/
  * License: GNU General Public License v2
  * License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  *
- * @package BNS_Support
- */
-
-/**
- * BNS Support
  * Displays useful technical support information in a widget area (sidebar); or,
  * via a shortcode on a post or page. The displayed details are easy to share by
  * copying and pasting. Information available includes such things as the web
@@ -893,7 +888,6 @@ class BNS_Support_Widget extends WP_Widget {
 						echo '</li>';
 
 					}
-
 				}
 
 				/** Leave some wiggle room at the end of the output */
@@ -988,7 +982,7 @@ class BNS_Support_Widget extends WP_Widget {
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title:', 'bns-support' ); ?></label>
 			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"
-			       name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" value="<?php echo $instance['title']; ?>" />
+			       name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" value="<?php echo esc_attr( $instance['title'] ); ?>" />
 		</p>
 
 		<p>
@@ -1189,7 +1183,7 @@ class BNS_Support_Widget extends WP_Widget {
 			if ( ! is_wp_error( $response ) && ! empty( $response['body'] ) ) {
 				$matches = null;
 			}
-			$regexp         = '~==\s*Changelog\s*==\s*=\s*(.*)\s*=(.*)(=\s*' . preg_quote( $this->$bns_support_data['Version'] ) . '\s*=|$)~Uis';
+			$regexp         = '~==\s*Changelog\s*==\s*=\s*(.*)\s*=(.*)(=\s*' . preg_quote( $bns_support_data['Version'] ) . '\s*=|$)~Uis';
 			$upgrade_notice = '';
 
 			if ( preg_match( $regexp, $response['body'], $matches ) ) {
