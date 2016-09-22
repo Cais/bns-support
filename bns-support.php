@@ -3,7 +3,7 @@
  * Plugin Name: BNS Support
  * Plugin URI: http://buynowshop.com/plugins/bns-support/
  * Description: Displays useful technical support information in a widget area (sidebar); or, via a shortcode on a post or page. The displayed details are easy to share by copying and pasting. Information available includes such things as the web site URL; the WordPress version; the current theme; a list of active plugins ... and much more. This is help for those that help. NB: The information is only viewable by logged-in users, and by default, only the site administrator(s).
- * Version: 1.3
+ * Version: 2.3
  * Text Domain: bns-support
  * Author: Edward Caissie
  * Author URI: http://edwardcaissie.com/
