@@ -21,14 +21,14 @@
  *
  * @package     BNS_Support
  * @version     2.3
- * @date        August 2016
+ * @date        February 2016
  *
  * @link        http://buynowshop.com/plugins/bns-support/
  * @link        https://github.com/Cais/bns-support/
  * @link        https://wordpress.org/plugins/bns-support/
  *
  * @author      Edward Caissie <edward.caissie@gmail.com>
- * @copyright   Copyright (c) 2009-2016, Edward Caissie
+ * @copyright   Copyright (c) 2009-2017, Edward Caissie
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License version 2, as published by the
