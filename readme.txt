@@ -3,7 +3,7 @@ Contributors: cais
 Donate link: http://buynowshop.com/
 Tags: support, widget, multisite compatible, widget-only
 Requires at least: 3.6
-Tested up to: 4.6.1
+Tested up to: 4.7.2
 Stable tag: 2.3
 License: GNU General Public License v2
 License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -79,6 +79,7 @@ Please stay current with your WordPress installation, your active theme, and you
 == Changelog ==
 = 2.3 =
 * Released ...
+* Added `Log This` method for debugging assistance
 * Improved WordPress Coding Standards adherence
 * Cleaned up some i18n strings
 * Fixed error in `update_message` method

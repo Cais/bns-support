@@ -391,7 +391,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @see    __
 	 * @see    apply_filters
 	 *
-	 * @return  mixed|void
+	 * @return  mixed
 	 */
 	function memory_limit_value() {
 
@@ -860,7 +860,7 @@ class BNS_Support_Widget extends WP_Widget {
 
 						/** If multisite is "true" then direct ALL users to main site administrator */
 						echo '<li class="bns-support-ms-user">'
-						     . apply_filters( 'bns_support_ms_user', sprintf( __( 'Please review with your main site administrator at %1$s for additional assistance.', 'bns-support' ), '<a href="' . esc_url( $home_domain ) . '">' . esc_html( $current_site->site_name ) . '</a>' ) )
+						     . esc_html( apply_filters( 'bns_support_ms_user', sprintf( __( 'Please review with your main site administrator at %1$s for additional assistance.', 'bns-support' ), '<a href="' . esc_url( $home_domain ) . '">' . esc_html( $current_site->site_name ) . '</a>' ) ) )
 						     . '</li>';
 
 					} else {
@@ -899,12 +899,11 @@ class BNS_Support_Widget extends WP_Widget {
 				/** Gratuitous self-promotion */
 				if ( $credits ) {
 
-					echo apply_filters(
-						'bns_support_credits',
-						'<h6 class="bns-support-credits">'
-						. sprintf( __( 'Compliments of %1$s at %2$s', 'bns-support' ), '<a href="http://' . esc_url( BNS_SUPPORT_HOME ) . '/wordpress-services/" target="_blank">WordPress Services</a>', '<a href="http://' . esc_url( BNS_SUPPORT_HOME ) . '" target="_blank">' . esc_url( BNS_SUPPORT_HOME ) . '</a>' )
-						. '</h6>'
-					);
+					$self_promotion = '<h6 class="bns-support-credits">'
+					                  . sprintf( __( 'Compliments of %1$s at %2$s', 'bns-support' ), '<a href="http://' . esc_url( BNS_SUPPORT_HOME ) . '/wordpress-services/" target="_blank">WordPress Services</a>', '<a href="http://' . esc_url( BNS_SUPPORT_HOME ) . '" target="_blank">' . esc_url( BNS_SUPPORT_HOME ) . '</a>' )
+					                  . '</h6>';
+
+					echo apply_filters( 'bns_support_credits', $self_promotion );
 
 				}
 
@@ -1261,6 +1260,31 @@ class BNS_Support_Widget extends WP_Widget {
 
 		echo $upgrade_notice;
 
+	}
+
+	/**
+	 * Log This
+	 *
+	 * A simple function designed for logging information while debugging.
+	 *
+	 * @see WP_DEBUG
+	 *
+	 * @package  BNS_Support
+	 * @since    2.3
+	 *
+	 * @param mixed $log item to be logged.
+	 */
+	function log_this( $log ) {
+
+		// Test if WP_DEBUG is set to true.
+		if ( true === WP_DEBUG ) {
+
+			if ( is_array( $log ) || is_object( $log ) ) {
+				error_log( print_r( $log, true ) );
+			} else {
+				error_log( $log );
+			}
+		}
 	}
 }
 
