@@ -21,7 +21,7 @@
  *
  * @package     BNS_Support
  * @version     2.3
- * @date        February 2016
+ * @date        February 2017
  *
  * @link        http://buynowshop.com/plugins/bns-support/
  * @link        https://github.com/Cais/bns-support/
