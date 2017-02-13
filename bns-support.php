@@ -1265,7 +1265,9 @@ class BNS_Support_Widget extends WP_Widget {
 	/**
 	 * Log This
 	 *
-	 * A simple function designed for logging information while debugging.
+	 * A simple function designed for logging information while debugging. Also
+	 * to note, if you are able to use this function it means you can also edit
+	 * the wp-config.php file to set WP_DEBUG to true as needed.
 	 *
 	 * @see WP_DEBUG
 	 *
@@ -1284,6 +1286,9 @@ class BNS_Support_Widget extends WP_Widget {
 			} else {
 				error_log( $log );
 			}
+		} else {
+			echo 'WP_DEBUG is false!<br />';
+			echo 'Please edit wp-config.php to set WP_DEBUG true; and, do not forget to set it to false when done.';
 		}
 	}
 }
