@@ -20,7 +20,7 @@
  * the site administrator(s).
  *
  * @package     BNS_Support
- * @version     2.3.1
+ * @version     2.3
  * @date        April 2019
  *
  * @link        https://buynowshop.com/plugins/bns-support/
