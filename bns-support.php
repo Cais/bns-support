@@ -251,7 +251,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @date     December 6, 2014
 	 * Renamed to `extra_theme_headers`
 	 */
-	function extra_theme_headers( $headers ) {
+	public function extra_theme_headers( $headers ) {
 
 		if ( ! in_array( 'WordPress Tested Version', $headers, true ) ) {
 			$headers[] = 'WordPress Tested Version';
@@ -296,7 +296,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @date    2016-06-20
 	 * Removed reference to custom stylesheets within plugin folders as not update safe
 	 */
-	function scripts_and_styles() {
+	public function scripts_and_styles() {
 
 		/** Holds the plugin header data */
 		$bns_support_data = $this->plugin_data();
@@ -336,7 +336,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 *
 	 * @return  string
 	 */
-	function theme_version_check( $wp_tested, $wp_required, $wp_template ) {
+	public function theme_version_check( $wp_tested, $wp_required, $wp_template ) {
 
 		/** Initialize as empty string */
 		$output = '';
@@ -385,7 +385,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @date    December 7, 2014
 	 * Use `apply_filters` on both `return` statements
 	 */
-	function mod_rewrite_check() {
+	public function mod_rewrite_check() {
 
 		if ( function_exists( 'apache_get_modules' ) ) {
 
@@ -420,7 +420,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 *
 	 * @package BNS_Support
 	 */
-	function memory_limit_value() {
+	public function memory_limit_value() {
 
 		$value = ini_get( 'memory_limit' ) === '-1' ?
 			esc_html__( 'No Memory Limit Set', 'bns-support' ) :
@@ -454,7 +454,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @date    December 7, 2014
 	 * Added `bns_support_php_details` filter hook to return statement
 	 */
-	function php_details() {
+	public function php_details() {
 
 		/** PHP Version */
 		$output = '<li class="bns-support-php-version"><!-- PHP Details Start -->';
@@ -510,7 +510,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @date    December 7, 2014
 	 * Added `bns_support_gd_library_version` in the return statement
 	 */
-	function gd_library_version() {
+	public function gd_library_version() {
 
 		if ( function_exists( 'gd_info' ) ) {
 
@@ -546,7 +546,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @date    December 10, 2013
 	 * Corrected database connection
 	 */
-	function mysql_version_details() {
+	public function mysql_version_details() {
 
 		/** MySQL Version */
 		/** Pull MySQL server version details */
@@ -583,7 +583,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 *
 	 * @package BNS_Support
 	 */
-	function is_there_email() {
+	public function is_there_email() {
 
 		if ( function_exists( 'mail' ) ) {
 			$you_have_mail = apply_filters( 'bns_support_mail_yes', __( 'Yes', 'bns-support' ) );
@@ -615,7 +615,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @date       2016-06-20
 	 * Renamed method to `collect_plugin_data` from `get_plugin_data`
 	 */
-	function collect_plugin_data( $plugin_file ) {
+	public function collect_plugin_data( $plugin_file ) {
 
 		/** We don't need to write to the file, so just open for reading. */
 		$fp = fopen( $plugin_file, 'r' );
@@ -703,7 +703,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 * Added filter `bns_support_plugin_list`
 	 * Moved `collect_plugin_data` out of function and call as method instead
 	 */
-	function bns_list_active_plugins() {
+	public function bns_list_active_plugins() {
 
 		$p = get_option( 'active_plugins' );
 
@@ -779,7 +779,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @date    December 7, 2014
 	 * Implemented the `BNS_SUPPORT_HOME` constant
 	 */
-	function widget( $args, $instance ) {
+	public function widget( $args, $instance ) {
 
 		/** User-selected settings */
 		$title        = apply_filters( 'widget_title', $instance['title'] );
@@ -942,7 +942,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 *
 	 * @package BNS_Support
 	 */
-	function update( $new_instance, $old_instance ) {
+	public function update( $new_instance, $old_instance ) {
 
 		$instance = $old_instance;
 		/* Strip tags (if needed) and update the widget settings. */
@@ -981,7 +981,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @date    December 7, 2014
 	 * Implemented the `BNS_SUPPORT_HOME` constant
 	 */
-	function form( $instance ) {
+	public function form( $instance ) {
 
 		/* Set up some default widget settings. */
 		$defaults = array(
@@ -1030,7 +1030,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 *
 	 * @see     register_widget
 	 */
-	function BNS_Support_load_widget() {
+	public function BNS_Support_load_widget() {
 		register_widget( 'BNS_Support_Widget' );
 	}
 
@@ -1057,7 +1057,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @date    April 20, 2014
 	 * Added CSS class wrapper for shortcode output
 	 */
-	function bns_support_shortcode( $atts ) {
+	public function bns_support_shortcode( $atts ) {
 
 		/** Let's start by capturing the output */
 		ob_start();
@@ -1110,7 +1110,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 *
 	 * @package    BNS_Support
 	 */
-	function plugin_data() {
+	public function plugin_data() {
 
 		/** Call the wp-admin plugin code */
 		require_once ABSPATH . '/wp-admin/includes/plugin.php';
@@ -1139,7 +1139,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 *
 	 * @see        __
 	 */
-	function bns_support_plugin_meta( $links, $file ) {
+	public function bns_support_plugin_meta( $links, $file ) {
 
 		$plugin_file = plugin_basename( __FILE__ );
 
@@ -1177,7 +1177,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 *
 	 * @package BNS_Support
 	 */
-	function update_message( $args ) {
+	public function update_message( $args ) {
 
 		/** Holds the plugin header data */
 		$bns_support_data = $this->plugin_data();
@@ -1275,35 +1275,6 @@ class BNS_Support_Widget extends WP_Widget {
 
 	}
 
-	/**
-	 * Log This
-	 *
-	 * A simple function designed for logging information while debugging. Also
-	 * to note, if you are able to use this function it means you can also edit
-	 * the wp-config.php file to set WP_DEBUG to true as needed.
-	 *
-	 * @param mixed $log item to be logged.
-	 *
-	 * @package  BNS_Support
-	 * @since    2.3
-	 *
-	 * @see      WP_DEBUG
-	 */
-	function log_this( $log ) {
-
-		// Test if WP_DEBUG is set to true.
-		if ( true === WP_DEBUG ) {
-
-			if ( is_array( $log ) || is_object( $log ) ) {
-				error_log( print_r( $log, true ) );
-			} else {
-				error_log( $log );
-			}
-		} else {
-			echo 'WP_DEBUG is false!<br />';
-			echo 'Please edit wp-config.php to set WP_DEBUG true; and, do not forget to set it to false when done.';
-		}
-	}
 }
 
 /** Instantiate the class */

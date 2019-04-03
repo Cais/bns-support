@@ -79,7 +79,6 @@ Please stay current with your WordPress installation, your active theme, and you
 == Changelog ==
 = 2.3 =
 * Released ...
-* Added `Log This` method for debugging assistance
 * Improved WordPress Coding Standards adherence
 * Cleaned up some i18n strings
 * Fixed error in `update_message` method
