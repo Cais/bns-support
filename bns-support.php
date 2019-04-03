@@ -28,7 +28,7 @@
  * @link        https://wordpress.org/plugins/bns-support/
  *
  * @author      Edward Caissie <edward.caissie@gmail.com>
- * @copyright   Copyright (c) 2009-2017, Edward Caissie
+ * @copyright   Copyright (c) 2009-2019, Edward Caissie
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License version 2, as published by the
