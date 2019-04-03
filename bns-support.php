@@ -94,20 +94,20 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @internal    Requires WordPress version 3.6
 	 * @internal    @see shortcode_atts - uses optional filter variable
 	 *
-	 * @see        (CONSTANT)  WP_CONTENT_DIR
-	 * @see        (GLOBAL)    $wp_version
-	 * @see        BNS_Support_Widget::WP_Widget(factory)
-	 * @see        BNS_Support_Widget::BNS_Support_load_widget
-	 * @see        BNS_Support_Widget::scripts_and_styles
-	 * @see        BNS_Support_Widget::extra_theme_headers
-	 * @see        BNS_Support_Widget::bns_support_shortcode
-	 * @see        BNS_Support_Widget::bns_support_plugin_meta
-	 * @see        __
-	 * @see        add_action
-	 * @see        add_filter
-	 * @see        add_shortcode
-	 * @see        apply_filters
-	 * @see        content_url
+	 * @see         (CONSTANT)  WP_CONTENT_DIR
+	 * @see         (GLOBAL)    $wp_version
+	 * @see         BNS_Support_Widget::WP_Widget(factory)
+	 * @see         BNS_Support_Widget::BNS_Support_load_widget
+	 * @see         BNS_Support_Widget::scripts_and_styles
+	 * @see         BNS_Support_Widget::extra_theme_headers
+	 * @see         BNS_Support_Widget::bns_support_shortcode
+	 * @see         BNS_Support_Widget::bns_support_plugin_meta
+	 * @see         __
+	 * @see         add_action
+	 * @see         add_filter
+	 * @see         add_shortcode
+	 * @see         apply_filters
+	 * @see         content_url
 	 *
 	 * @version     2.0
 	 * @date        June 7, 2015
@@ -116,7 +116,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @date        July 2015
 	 * Renamed constructor method to `__construct`
 	 */
-	function __construct() {
+	public function __construct() {
 
 		/**
 		 * Check installed WordPress version for compatibility
@@ -176,25 +176,57 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @see     add_shortcode()
 	 * @see     plugin_basename()
 	 */
-	function init() {
+	public function init() {
 
 		/** Add scripts and styles */
-		add_action( 'wp_enqueue_scripts', array( $this, 'scripts_and_styles' ) );
+		add_action(
+			'wp_enqueue_scripts',
+			array(
+				$this,
+				'scripts_and_styles',
+			)
+		);
 
 		/** Add custom headers */
-		add_filter( 'extra_theme_headers', array( $this, 'extra_theme_headers' ) );
+		add_filter(
+			'extra_theme_headers',
+			array(
+				$this,
+				'extra_theme_headers',
+			)
+		);
 
 		/** Add shortcode */
-		add_shortcode( 'tech_support', array( $this, 'bns_support_shortcode' ) );
+		add_shortcode(
+			'tech_support',
+			array(
+				$this,
+				'bns_support_shortcode',
+			)
+		);
 
 		/** Add Plugin Row Meta details */
-		add_filter( 'plugin_row_meta', array( $this, 'bns_support_plugin_meta' ), 10, 2 );
+		add_filter(
+			'plugin_row_meta',
+			array(
+				$this,
+				'bns_support_plugin_meta',
+			),
+			10,
+			2
+		);
 
 		/** Add widget */
 		add_action( 'widgets_init', array( $this, 'BNS_Support_load_widget' ) );
 
 		/** Add plugin update message */
-		add_action( 'in_plugin_update_message-' . plugin_basename( __FILE__ ), array( $this, 'update_message' ) );
+		add_action(
+			'in_plugin_update_message-' . plugin_basename( __FILE__ ),
+			array(
+				$this,
+				'update_message',
+			)
+		);
 
 	}
 
@@ -244,12 +276,12 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @package BNS_Support
 	 * @since   1.0
 	 *
-	 * @see    (CONSTANT) BNS_CUSTOM_PATH
-	 * @see    (CONSTANT) BNS_CUSTOM_URL
-	 * @see    BNS_Support_Widget::plugin_data
-	 * @see    plugin_dir_path
-	 * @see    plugin_dir_url
-	 * @see    wp_enqueue_style
+	 * @see     (CONSTANT) BNS_CUSTOM_PATH
+	 * @see     (CONSTANT) BNS_CUSTOM_URL
+	 * @see     BNS_Support_Widget::plugin_data
+	 * @see     plugin_dir_path
+	 * @see     plugin_dir_url
+	 * @see     wp_enqueue_style
 	 *
 	 * @version 1.6.1
 	 * @date    December 7, 2013
@@ -294,10 +326,10 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @package  BNS_Support
 	 * @since    1.4
 	 *
-	 * @see     __
-	 * @see     apply_filters
+	 * @see      __
+	 * @see      apply_filters
 	 *
-	 * @param   string $wp_tested tested theme version.
+	 * @param   string $wp_tested   tested theme version.
 	 * @param   string $wp_required required theme version.
 	 * @param   string $wp_template required theme template version.
 	 *
@@ -345,8 +377,8 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @package BNS_Support
 	 * @since   1.5
 	 *
-	 * @see    __
-	 * @see    apply_filters
+	 * @see     __
+	 * @see     apply_filters
 	 *
 	 * @return  string|null - Enabled|Disabled
 	 *
@@ -388,8 +420,8 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @package BNS_Support
 	 * @since   1.7
 	 *
-	 * @see    __
-	 * @see    apply_filters
+	 * @see     __
+	 * @see     apply_filters
 	 *
 	 * @return  mixed
 	 */
@@ -414,10 +446,10 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @package BNS_Support
 	 * @since   1.6.3
 	 *
-	 * @see    BNS_Support::memory_limit_value
-	 * @see    BNS_Support::mod_rewrite_check
-	 * @see    __
-	 * @see    apply_filters
+	 * @see     BNS_Support::memory_limit_value
+	 * @see     BNS_Support::mod_rewrite_check
+	 * @see     __
+	 * @see     apply_filters
 	 *
 	 * @version 1.7
 	 * @date    January 25, 2014
@@ -472,8 +504,8 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @package BNS_Support
 	 * @since   1.7
 	 *
-	 * @see    __
-	 * @see    apply_filters
+	 * @see     __
+	 * @see     apply_filters
 	 *
 	 * @version 1.9
 	 * @date    December 7, 2014
@@ -507,8 +539,8 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @package BNS_Support
 	 * @since   1.6.1
 	 *
-	 * @see    __
-	 * @see    apply_filters
+	 * @see     __
+	 * @see     apply_filters
 	 *
 	 * @version 1.6.2
 	 * @date    December 10, 2013
@@ -548,8 +580,8 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @since   2.2
 	 * @date    September 30, 2015
 	 *
-	 * @see    __
-	 * @see    apply_filters
+	 * @see     __
+	 * @see     apply_filters
 	 *
 	 * @return string
 	 */
@@ -577,7 +609,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @package    BNS_Support
 	 * @since      1.7
 	 *
-	 * @see       apply_filters
+	 * @see        apply_filters
 	 *
 	 * @param    string $plugin_file first 8000 characters of plugin file.
 	 *
@@ -657,11 +689,11 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @package    BNS_Support
 	 * @since      1.1
 	 *
-	 * @see       (CONSTANT) WP_PLUGIN_DIR
-	 * @see       BNS_Support_Widget::collect_plugin_data
-	 * @see       __
-	 * @see       apply_filters
-	 * @see       get_option
+	 * @see        (CONSTANT) WP_PLUGIN_DIR
+	 * @see        BNS_Support_Widget::collect_plugin_data
+	 * @see        __
+	 * @see        apply_filters
+	 * @see        get_option
 	 *
 	 * @version    1.4
 	 * @date       February 14, 2013
@@ -716,26 +748,26 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @package BNS_Support
 	 * @since   0.1
 	 *
-	 * @see    (CONSTANT) WP_DEBUG
-	 * @see    (CONSTANT) BNS_SUPPORT_HOME
-	 * @see    (GLOBAL) $current_user
-	 * @see    BNS_Support_Widget::bns_list_active_plugins
-	 * @see    BNS_Support_Widget::gd_library_version
-	 * @see    BNS_Support_Widget::mysql_version_details
-	 * @see    BNS_Support_Widget::php_details
-	 * @see    apply_filters
-	 * @see    current_user_can
-	 * @see    esc_html
-	 * @see    esc_html__
-	 * @see    esc_url
-	 * @see    get_bloginfo
-	 * @see    get_current_site
-	 * @see    is_child_theme
-	 * @see    is_multisite
-	 * @see    is_user_logged_in
-	 * @see    wp_get_theme
+	 * @see     (CONSTANT) WP_DEBUG
+	 * @see     (CONSTANT) BNS_SUPPORT_HOME
+	 * @see     (GLOBAL) $current_user
+	 * @see     BNS_Support_Widget::bns_list_active_plugins
+	 * @see     BNS_Support_Widget::gd_library_version
+	 * @see     BNS_Support_Widget::mysql_version_details
+	 * @see     BNS_Support_Widget::php_details
+	 * @see     apply_filters
+	 * @see     current_user_can
+	 * @see     esc_html
+	 * @see     esc_html__
+	 * @see     esc_url
+	 * @see     get_bloginfo
+	 * @see     get_current_site
+	 * @see     is_child_theme
+	 * @see     is_multisite
+	 * @see     is_user_logged_in
+	 * @see     wp_get_theme
 	 *
-	 * @param   array $args display arguments including 'before_title', 'after_title', 'before_widget', and 'after_widget'.
+	 * @param   array $args     display arguments including 'before_title', 'after_title', 'before_widget', and 'after_widget'.
 	 * @param   array $instance specific values used in widget instance.
 	 *
 	 * @version 1.7
@@ -946,14 +978,14 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @package BNS_Support
 	 * @since   0.1
 	 *
-	 * @see    (CONSTANT) BNS_SUPPORT_HOME
-	 * @see    WP_Widget::get_field_id
-	 * @see    WP_Widget::get_field_name
-	 * @see    esc_attr
-	 * @see    esc_html_e
-	 * @see    esc_url
-	 * @see    checked
-	 * @see    wp_parse_args
+	 * @see     (CONSTANT) BNS_SUPPORT_HOME
+	 * @see     WP_Widget::get_field_id
+	 * @see     WP_Widget::get_field_name
+	 * @see     esc_attr
+	 * @see     esc_html_e
+	 * @see     esc_url
+	 * @see     checked
+	 * @see     wp_parse_args
 	 *
 	 * @param   array $instance current widget instance values.
 	 *
@@ -981,13 +1013,13 @@ class BNS_Support_Widget extends WP_Widget {
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title:', 'bns-support' ); ?></label>
 			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"
-			       name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" value="<?php echo esc_attr( $instance['title'] ); ?>" />
+				   name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" value="<?php echo esc_attr( $instance['title'] ); ?>" />
 		</p>
 
 		<p>
 			<input class="checkbox" type="checkbox" <?php checked( (bool) $instance['blog_admin'], true ); ?>
-			       id="<?php echo esc_attr( $this->get_field_id( 'blog_admin' ) ); ?>"
-			       name="<?php echo esc_attr( $this->get_field_name( 'blog_admin' ) ); ?>" />
+				   id="<?php echo esc_attr( $this->get_field_id( 'blog_admin' ) ); ?>"
+				   name="<?php echo esc_attr( $this->get_field_name( 'blog_admin' ) ); ?>" />
 			<label
 				for="<?php echo esc_attr( $this->get_field_id( 'blog_admin' ) ); ?>"><?php esc_html_e( 'Only show to administrators?', 'bns-support' ); ?></label>
 		</p>
@@ -996,8 +1028,8 @@ class BNS_Support_Widget extends WP_Widget {
 
 		<p>
 			<input class="checkbox" type="checkbox" <?php checked( (bool) $instance['show_plugins'], true ); ?>
-			       id="<?php echo esc_attr( $this->get_field_id( 'show_plugins' ) ); ?>"
-			       name="<?php echo esc_attr( $this->get_field_name( 'show_plugins' ) ); ?>" />
+				   id="<?php echo esc_attr( $this->get_field_id( 'show_plugins' ) ); ?>"
+				   name="<?php echo esc_attr( $this->get_field_name( 'show_plugins' ) ); ?>" />
 			<label
 				for="<?php echo esc_attr( $this->get_field_id( 'show_plugins' ) ); ?>"><?php esc_html_e( 'Show active plugins?', 'bns-support' ); ?></label>
 		</p>
@@ -1006,14 +1038,14 @@ class BNS_Support_Widget extends WP_Widget {
 
 		<p>
 			<input class="checkbox" type="checkbox" <?php checked( (bool) $instance['credits'], true ); ?>
-			       id="<?php echo esc_attr( $this->get_field_id( 'credits' ) ); ?>"
-			       name="<?php echo esc_attr( $this->get_field_name( 'credits' ) ); ?>" />
+				   id="<?php echo esc_attr( $this->get_field_id( 'credits' ) ); ?>"
+				   name="<?php echo esc_attr( $this->get_field_name( 'credits' ) ); ?>" />
 			<label
 				for="<?php echo esc_attr( $this->get_field_id( 'credits' ) ); ?>"><?php esc_html_e( 'Show complimentary link to ', 'bns-support' ); ?></label>
 			<a href="http://<?php echo esc_url( BNS_SUPPORT_HOME ); ?>/"><?php echo esc_url( BNS_SUPPORT_HOME ); ?></a>?
 		</p>
 
-	<?php return;
+		<?php return;
 
 	}
 
@@ -1024,7 +1056,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @package BNS_Support
 	 * @since   0.1
 	 *
-	 * @see    register_widget
+	 * @see     register_widget
 	 */
 	function BNS_Support_load_widget() {
 		register_widget( 'BNS_Support_Widget' );
@@ -1039,9 +1071,9 @@ class BNS_Support_Widget extends WP_Widget {
 	 *
 	 * @param   array $atts use defined attributes in shortcode tag.
 	 *
-	 * @see    get_bloginfo
-	 * @see    shortcode_atts
-	 * @see    the_widget
+	 * @see     get_bloginfo
+	 * @see     shortcode_atts
+	 * @see     the_widget
 	 *
 	 * @return  string
 	 *
@@ -1099,7 +1131,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @package    BNS_Support
 	 * @since      1.8
 	 *
-	 * @see       get_plugin_data
+	 * @see        get_plugin_data
 	 *
 	 * @return string
 	 */
@@ -1124,11 +1156,11 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @package    BNS_SUpport
 	 * @since      1.8
 	 *
-	 * @see       __
-	 * @see       plugin_basename
+	 * @see        __
+	 * @see        plugin_basename
 	 *
 	 * @param   array  $links existing links used for the plugin meta details.
-	 * @param   string $file used for the plugin reference.
+	 * @param   string $file  used for the plugin reference.
 	 *
 	 * @return  array $links
 	 */
@@ -1159,12 +1191,12 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @package BNS_Support
 	 * @since   2.0
 	 *
-	 * @see    BNS_Support_Widget::plugin_data
-	 * @see    get_transient
-	 * @see    is_wp_error
-	 * @see    set_transient
-	 * @see    wp_kses_post
-	 * @see    wp_remote_get
+	 * @see     BNS_Support_Widget::plugin_data
+	 * @see     get_transient
+	 * @see     is_wp_error
+	 * @see     set_transient
+	 * @see     wp_kses_post
+	 * @see     wp_remote_get
 	 *
 	 * @param array $args plugin details.
 	 */
@@ -1226,7 +1258,7 @@ class BNS_Support_Widget extends WP_Widget {
 								$ul           = true;
 							}
 
-							$line = preg_replace( '~^\s*\*\s*~', '', htmlspecialchars( $line ) );
+							$line         = preg_replace( '~^\s*\*\s*~', '', htmlspecialchars( $line ) );
 							$return_value .= '<li style=" ' . ( 0 === $index % 2 ? 'clear: left;' : '' ) . '">' . $line . '</li>';
 
 						} else {
@@ -1235,7 +1267,7 @@ class BNS_Support_Widget extends WP_Widget {
 
 								$return_value = '</ul><div style="clear: left;"></div>';
 								$return_value .= '<p>' . $line . '</p>';
-								$ul = false;
+								$ul           = false;
 
 							} else {
 
@@ -1269,7 +1301,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 * to note, if you are able to use this function it means you can also edit
 	 * the wp-config.php file to set WP_DEBUG to true as needed.
 	 *
-	 * @see WP_DEBUG
+	 * @see      WP_DEBUG
 	 *
 	 * @package  BNS_Support
 	 * @since    2.3
