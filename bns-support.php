@@ -110,8 +110,6 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @see         apply_filters
 	 * @see         content_url
 	 *
-	 * @param object $wpdb database holder.
-	 *
 	 * @version     2.0
 	 * @date        June 7, 2015
 	 *
