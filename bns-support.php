@@ -782,6 +782,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @date       2019-04-03
 	 * Removed credits section
 	 * Improved escaping implementation
+	 * Removed credits section
 	 */
 	public function widget( $args, $instance ) {
 
@@ -789,7 +790,6 @@ class BNS_Support_Widget extends WP_Widget {
 		$title        = apply_filters( 'widget_title', $instance['title'] );
 		$blog_admin   = $instance['blog_admin'];
 		$show_plugins = $instance['show_plugins'];
-		$credits      = $instance['credits'];
 
 		global $current_user;
 
