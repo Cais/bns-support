@@ -1041,20 +1041,24 @@ class BNS_Support_Widget extends WP_Widget {
 	 *
 	 * @return  string
 	 *
-	 * @package BNS_Support
-	 * @see     get_bloginfo
-	 * @see     shortcode_atts
-	 * @see     the_widget
+	 * @package    BNS_Support
+	 * @see        get_bloginfo
+	 * @see        shortcode_atts
+	 * @see        the_widget
 	 *
-	 * @since   1.6
+	 * @since      1.6
 	 *
-	 * @version 1.6.1
-	 * @date    September 7, 2013
+	 * @version    1.6.1
+	 * @date       September 7, 2013
 	 * Added shortcode name parameter for core filter auto-creation
 	 *
-	 * @version 1.8
-	 * @date    April 20, 2014
+	 * @version    1.8
+	 * @date       April 20, 2014
 	 * Added CSS class wrapper for shortcode output
+	 *
+	 * @version    2.3
+	 * @date       2019-04-03
+	 * Corrected `$args` array to correctly set values to null.
 	 */
 	public function bns_support_shortcode( $atts ) {
 
@@ -1077,10 +1081,10 @@ class BNS_Support_Widget extends WP_Widget {
 			/** Clear variables defined by theme for widgets */
 			$args =
 				array(
-					$before_widget = '',
-					$after_widget = '',
-					$before_title = '',
-					$after_title = '',
+					$before_widget => '',
+					$after_widget  => '',
+					$before_title  => '',
+					$after_title   => '',
 				)
 		);
 
