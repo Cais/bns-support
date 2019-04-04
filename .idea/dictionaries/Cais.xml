@@ -8,6 +8,7 @@
       <w>phpinfo</w>
       <w>pluginsused</w>
       <w>textdomain</w>
+      <w>wpdb</w>
     </words>
   </dictionary>
 </component>

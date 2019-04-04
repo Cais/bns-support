@@ -110,6 +110,8 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @see         apply_filters
 	 * @see         content_url
 	 *
+	 * @param object $wpdb database holder.
+	 *
 	 * @version     2.0
 	 * @date        June 7, 2015
 	 *
@@ -545,25 +547,18 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @version 1.6.2
 	 * @date    December 10, 2013
 	 * Corrected database connection
+	 *
+	 * @version 2.3
+	 * @date    2019-04-03
+	 * Refactored to use a query on a copy of the $wpdb global
 	 */
 	public function mysql_version_details() {
 
-		/** MySQL Version */
-		/** Pull MySQL server version details */
-		$mysql_version_number = mysqli_get_server_version( mysqli_connect( DB_HOST, DB_USER, DB_PASSWORD ) );
-		/** Deconstruct the version number for more easily read output */
-		/** Stripped minor and sub versions */
-		$main_version = floor( $mysql_version_number / 10000 );
-		/** Stripped major and sub versions */
-		$minor_version = floor( ( $mysql_version_number - $main_version * 10000 ) / 100 );
-		/** Stripped major and minor versions */
-		$sub_version = $mysql_version_number - ( $main_version * 10000 + $minor_version * 100 );
-
-		/** Re-construct the version number to a more easily read output */
-		$mysql_version_output = $main_version . '.' . $minor_version . '.' . $sub_version;
+		global $wpdb;
+		$this->db             = $wpdb;
+		$mysql_version_output = $this->db->get_var( 'SELECT VERSION();' );
 
 		/** Return the filtered MySQL version */
-
 		return '<li class="bns-support-mysql-version">' . apply_filters( 'bns_support_mysql_version', '<strong>' . __( 'MySQL version: ', 'bns-support' ) . '</strong>' . $mysql_version_output ) . '</li>';
 
 	}
@@ -1277,6 +1272,7 @@ class BNS_Support_Widget extends WP_Widget {
 
 }
 
+global $wpdb;
 /** Instantiate the class */
-$bns_support = new BNS_Support_Widget();
+$bns_support = new BNS_Support_Widget( $wpdb );
 $bns_support->init();
