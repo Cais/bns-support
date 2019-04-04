@@ -79,6 +79,7 @@ Please stay current with your WordPress installation, your active theme, and you
 == Changelog ==
 = 2.3 =
 * Released ...
+* Replaced `strip_tags` with `wp_strip_all_tags`
 * MySQL Version Details method refactored to use a query on a copy of the $wpdb global
 * Improved WordPress Coding Standards adherence
 * Cleaned up some i18n strings

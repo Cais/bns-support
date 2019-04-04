@@ -931,15 +931,21 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @param array $old_instance Old settings for this instance.
 	 *
 	 * @return  array
-	 * @since   0.1
+	 * @since      0.1
 	 *
-	 * @package BNS_Support
+	 * @see        wp_strip_all_tags()
+	 *
+	 * @package    BNS_Support
+	 *
+	 * @version    2.3
+	 * @date       2019-04-03
+	 * Replaced `strip_tags` with `wp_strip_all_tags`
 	 */
 	public function update( $new_instance, $old_instance ) {
 
 		$instance = $old_instance;
 		/* Strip tags (if needed) and update the widget settings. */
-		$instance['title']        = strip_tags( $new_instance['title'] );
+		$instance['title']        = wp_strip_all_tags( $new_instance['title'], true );
 		$instance['blog_admin']   = $new_instance['blog_admin'];
 		$instance['show_plugins'] = $new_instance['show_plugins'];
 		$instance['credits']      = $new_instance['credits'];
