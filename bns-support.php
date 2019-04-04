@@ -462,7 +462,7 @@ class BNS_Support_Widget extends WP_Widget {
 		$output .= apply_filters(
 			'bns_support_php_version',
 			sprintf(
-			/* translators: this is expected to be a number */
+				/* translators: this is expected to be a number */
 				__( '<strong>PHP version:</strong> %1$s', 'bns-support' ),
 				phpversion()
 			)
@@ -517,12 +517,11 @@ class BNS_Support_Widget extends WP_Widget {
 			$info = gd_info();
 			$keys = array_keys( $info );
 
-			/* translators: this is expected to be a number */
-			$results = sprintf( __( '<li><strong>GD Library Support:</strong> %1$s</li>', 'bns-support' ), $info[ $keys[0] ] );
+			$results = '<li><strong>' . __( 'GD Library Support', 'bns-support' ) . ':</strong> ' . $info[ $keys[0] ] . '</li>';
 
 		} else {
 
-			$results = __( '<li><strong>GD Library Support:</strong> none</li>', 'bns-support' );
+			$results = '<li><strong>' . __( 'GD Library Support', 'bns-support' ) . ':</strong> ' . __( 'none', 'bns-support' ) . '</li>';
 
 		}
 
@@ -749,6 +748,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @see        BNS_Support_Widget::php_details
 	 * @see        apply_filters
 	 * @see        current_user_can
+	 * @see        esc_attr()
 	 * @see        esc_html
 	 * @see        esc_html__
 	 * @see        esc_url
@@ -775,6 +775,7 @@ class BNS_Support_Widget extends WP_Widget {
 	 * @version    2.3
 	 * @date       2019-04-03
 	 * Removed credits section
+	 * Improved escaping implementation
 	 */
 	public function widget( $args, $instance ) {
 
@@ -794,7 +795,7 @@ class BNS_Support_Widget extends WP_Widget {
 				echo $args['before_widget'];
 
 				if ( $title ) {
-					echo $args['before_title'] . $title . $args['after_title'];
+					echo $args['before_title'] . esc_attr( $title ) . $args['after_title'];
 				}
 
 				/** Start displaying BNS Support information */
@@ -835,8 +836,9 @@ class BNS_Support_Widget extends WP_Widget {
 
 					/** Get parent theme's data */
 					$parent_theme_data = $active_theme_data->parent();
-					$output            = sprintf(
-					/* translators: The variables are the parent theme and its version followed by the child-theme and its version respectively */
+
+					$output = sprintf(
+						/* translators: The variables are the parent theme and its version followed by the child-theme and its version respectively */
 						__( '<li class="bns-support-child-theme"><strong>Theme:</strong> %1$s v%2$s a Child-Theme of %3$s v%4$s%5$s</li>', 'bns-support' ),
 						$active_theme_data->get( 'Name' ),
 						$active_theme_data->get( 'Version' ),
@@ -844,12 +846,13 @@ class BNS_Support_Widget extends WP_Widget {
 						$parent_theme_data->get( 'Version' ),
 						$this->theme_version_check( $wp_tested, $wp_required, $wp_template )
 					);
+
 					echo apply_filters( 'bns_support_Child_theme', $output );
 
 				} else {
 
 					$output = sprintf(
-					/* translators: The variables are the parent theme and its version */
+						/* translators: The variables are the parent theme and its version */
 						__( '<li class="bns-support-parent-theme"><strong>Theme:</strong> %1$s v%2$s%3$s</li>', 'bns-support' ),
 						$active_theme_data->get( 'Name' ),
 						$active_theme_data->get( 'Version' ),
