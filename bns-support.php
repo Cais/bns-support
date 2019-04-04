@@ -1280,7 +1280,6 @@ class BNS_Support_Widget extends WP_Widget {
 
 }
 
-global $wpdb;
 /** Instantiate the class */
-$bns_support = new BNS_Support_Widget( $wpdb );
+$bns_support = new BNS_Support_Widget();
 $bns_support->init();
