@@ -19,17 +19,9 @@ this program; if not, write to the
 	Boston, MA  02110-1301  USA
 */
 
-/* Last revised February 2, 2014 version 1.7.1 */
+/* Last revised 2019-04-03 version 2.3 */
 
 /* CSS Document for WordPress plugin: BNS Support */
 .widget.bns-support {
 	text-align: left;
-}
-
-h6.bns-support-credits {
-	font-size: x-small;
-	font-style: italic;
-	font-weight: normal;
-	margin-bottom: 0;
-	text-align: center;
 }
