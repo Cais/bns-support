@@ -633,18 +633,7 @@ class BNS_Support_Widget extends WP_Widget {
 		preg_match( '|Text Domain:(.*)$|mi', $plugin_data, $text_domain );
 		preg_match( '|Domain Path:(.*)$|mi', $plugin_data, $domain_path );
 
-		foreach (
-			array(
-				'name',
-				'uri',
-				'version',
-				'description',
-				'author_name',
-				'author_uri',
-				'text_domain',
-				'domain_path',
-			) as $field
-		) {
+		foreach ( array( 'name', 'uri', 'version', 'description', 'author_name', 'author_uri', 'text_domain', 'domain_path' ) as $field ) {
 			if ( ! empty( ${$field} ) ) {
 				${$field} = trim( ${$field}[1] );
 			} else {
